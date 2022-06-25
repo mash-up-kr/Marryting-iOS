@@ -132,4 +132,7 @@ Packages
 xcuserdata
 *.xcodeproj
 
+### Tuist ###
+*.xcworkspace
+
 # End of https://www.toptal.com/developers/gitignore/api/xcode,macos,swift,cocoapods,swiftpackagemanager
