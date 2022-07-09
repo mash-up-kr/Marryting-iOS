@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol NetworkProtocol {
-  func send<T: Request>(_ request: T) async throws -> T.Output
+    func send<T: Request>(_ request: T) async throws -> T.Output
 }

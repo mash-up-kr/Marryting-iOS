@@ -10,9 +10,9 @@ import Foundation
 
 /// Restful api Method
 public enum HTTPMethod: String, Encodable {
-  case get = "GET"
-  case post = "POST"
-  case put = "PUT"
+    case get = "GET"
+    case post = "POST"
+    case put = "PUT"
 }
 
 /// Query Params Array
@@ -42,36 +42,36 @@ public struct EmptyRequestBody: RequestBody {}
 
 /// Restful api Request
 public protocol Request {
-  /// Request Body
-  associatedtype Body: RequestBody
-  /// Response
-  associatedtype Output: Response
-  
-  /// path
-  var endpoint: String { get }
-  /// restful api method
-  var method: HTTPMethod { get }
-  /// query params
-  /// default [:]
-  var query: QueryItems { get }
-  /// http header
-  /// default [:]
-  var header: HTTPHeader { get }
-  /// post body
-  /// default nil
-  var body: Body? { get }
+    /// Request Body
+    associatedtype Body: RequestBody
+    /// Response
+    associatedtype Output: Response
+    
+    /// path
+    var endpoint: String { get }
+    /// restful api method
+    var method: HTTPMethod { get }
+    /// query params
+    /// default [:]
+    var query: QueryItems { get }
+    /// http header
+    /// default [:]
+    var header: HTTPHeader { get }
+    /// post body
+    /// default nil
+    var body: Body? { get }
 }
 
 public extension Request {
-  var query: QueryItems {
-    return [:]
-  }
-  
-  var header: HTTPHeader {
-    return [:]
-  }
-  
-  var body: Body? {
-    return nil
-  }
+    var query: QueryItems {
+        return [:]
+    }
+    
+    var header: HTTPHeader {
+        return [:]
+    }
+    
+    var body: Body? {
+        return nil
+    }
 }
