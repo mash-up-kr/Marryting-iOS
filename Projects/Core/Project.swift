@@ -7,25 +7,24 @@ let project = Project.make(
   name: "Core",
   targets: [
     Target(
-      name: "Core",
+      name: "NetworkProtocol",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.Core",
+      bundleId: "kr.mash-up.NetworkProtocol",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
-      sources: ["Sources/**"],
-      resources: ["Resources/**"],
+      sources: ["NetworkProtocol/Sources/**"],
       dependencies: []
     ),
     Target(
-      name: "CoreTests",
+      name: "Network",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.CoreTests",
+      bundleId: "kr.mash-up.Network",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
-      sources: ["Tests/**"],
-      dependencies: [.target(name: "Core")]
+      sources: ["Network/Sources/**"],
+      dependencies: [.target(name: "NetworkProtocol")]
     ),
   ]
 )
