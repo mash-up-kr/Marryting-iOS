@@ -4,30 +4,28 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-  name: "FeatureKit",
+  name: "ProfileRegister",
   targets: [
     Target(
-      name: "FeatureKit",
+      name: "ProfileRegister",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.FeatureKit",
+      bundleId: "kr.mash-up.ProfileRegister",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
-      dependencies: [
-        .project(target: "ProfileRegister", path: "../ProfileRegister")
-      ]
+      dependencies: []
     ),
     Target(
-      name: "FeatureKitTests",
+      name: "ProfileRegisterTests",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.FeatureKitTests",
+      bundleId: "kr.mash-up.ProfileRegisterTests",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Tests/**"],
-      dependencies: [.target(name: "FeatureKit")]
+      dependencies: [.target(name: "ProfileRegister")]
     ),
   ]
 )
