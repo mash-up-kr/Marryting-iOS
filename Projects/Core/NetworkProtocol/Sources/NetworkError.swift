@@ -9,6 +9,6 @@
 import Foundation
 
 public enum NetworkError: Error {
-  case invalidURL(url: String?)
-  case badServerResponse
+    case invalidURL(url: String?)
+    case badServerResponse
 }
