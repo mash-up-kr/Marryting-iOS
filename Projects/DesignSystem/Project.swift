@@ -9,7 +9,7 @@ let project = Project.make(
     Target(
       name: "DesignSystem",
       platform: .iOS,
-      product: .staticLibrary,
+      product: .framework,
       bundleId: "kr.mash-up.DesignSystem",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
@@ -20,7 +20,7 @@ let project = Project.make(
     Target(
       name: "DesignSystemTests",
       platform: .iOS,
-      product: .staticLibrary,
+      product: .framework,
       bundleId: "kr.mash-up.DesignSystemTests",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
