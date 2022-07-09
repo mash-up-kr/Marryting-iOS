@@ -103,7 +103,7 @@ extension RightArrowButton {
 
 extension RightArrowButton {
     
-    enum NextButtonType {
+    enum RightArrowButtonType {
         case enable
         case highlight
         case disable
@@ -131,7 +131,7 @@ extension RightArrowButton {
         }
     }
 
-    private func createButtonImage(buttonType: NextButtonType) -> UIImage {
+    private func createButtonImage(buttonType: RightArrowButtonType) -> UIImage {
         let view = UIView()
         let image = UIImage(named: buttonType.imageName)
         let imageView = UIImageView(image: image)
