@@ -8,9 +8,23 @@ import Foundation
 private class BundleFinder {}
 
 extension Foundation.Bundle {
-    /// Since FeatureKit is a application, the bundle for classes within this module can be used directly.
+    /// Since FeatureKit is a static library, the bundle containing the resources is copied into the final product.
     static var module: Bundle = {
-        return Bundle(for: BundleFinder.self)
+        let bundleName = "FeatureKit_FeatureKit"
+
+        let candidates = [
+            Bundle.main.resourceURL,
+            Bundle(for: BundleFinder.self).resourceURL,
+            Bundle.main.bundleURL,
+        ]
+
+        for candidate in candidates {
+            let bundlePath = candidate?.appendingPathComponent(bundleName + ".bundle")
+            if let bundle = bundlePath.flatMap(Bundle.init(url:)) {
+                return bundle
+            }
+        }
+        fatalError("unable to find bundle named FeatureKit_FeatureKit")
     }()
 }
 
