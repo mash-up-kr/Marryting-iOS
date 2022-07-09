@@ -8,9 +8,9 @@ import Foundation
 private class BundleFinder {}
 
 extension Foundation.Bundle {
-    /// Since Core is a static library, the bundle containing the resources is copied into the final product.
+    /// Since ProfileRegister is a static library, the bundle containing the resources is copied into the final product.
     static var module: Bundle = {
-        let bundleName = "Core_Core"
+        let bundleName = "ProfileRegister_ProfileRegister"
 
         let candidates = [
             Bundle.main.resourceURL,
@@ -24,14 +24,14 @@ extension Foundation.Bundle {
                 return bundle
             }
         }
-        fatalError("unable to find bundle named Core_Core")
+        fatalError("unable to find bundle named ProfileRegister_ProfileRegister")
     }()
 }
 
 // MARK: - Objective-C Bundle Accessor
 
 @objc
-public class CoreResources: NSObject {
+public class ProfileRegisterResources: NSObject {
    @objc public class var bundle: Bundle {
          return .module
    }

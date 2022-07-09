@@ -23,8 +23,7 @@ let project = Project.make(
       resources: ["Resources/**"],
       dependencies: [
         .project(target: "DesignSystem", path: "../DesignSystem"),
-        .project(target: "FeatureKit", path: "../Features/FeatureKit"),
-        .project(target: "Core", path: "../Core")
+        .project(target: "FeatureKit", path: "../Features/FeatureKit")
       ]
     ),
     Target(
