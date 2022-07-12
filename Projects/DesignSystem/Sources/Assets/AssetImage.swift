@@ -8,7 +8,7 @@
 
 import UIKit
 
-public enum AssetIcons: String {
+public enum Assets: String {
     case ic_right_arrow_enable_white
     case ic_right_arrow_enable_black
     case ic_right_arrow_highlight_green

@@ -1,5 +1,5 @@
 //
-//  UIImageView+.swift
+//  UIImage+.swift
 //  DesignSystem
 //
 //  Created by Woody on 2022/07/12.
@@ -8,9 +8,8 @@
 
 import UIKit
 
-extension UIImageView {
-    
-    public convenience init(asset: AssetIcons) {
-        self.init(image: asset.image)
+extension UIImage {
+    public static func create(_ asset: Assets) -> UIImage? {
+        return asset.image
     }
 }
