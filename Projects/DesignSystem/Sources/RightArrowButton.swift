@@ -18,15 +18,15 @@ public final class RightArrowButton: UIButton {
     
     // MARK: 색상
     
-    private let enabledBackgroundColor: UIColor     = Pallete.Dark.subGreen
+    private let enabledBackgroundColor: UIColor?    = Pallete.Dark.subGreen.color
     
-    private let disabledBackgroundColor: UIColor    = Pallete.Dark.grey300
+    private let disabledBackgroundColor: UIColor?   = Pallete.Dark.grey300.color
     
-    private let enabledTextColor: UIColor           = Pallete.Dark.grey800
+    private let enabledTextColor: UIColor?          = Pallete.Dark.grey800.color
     
-    private let disabledTextColor: UIColor          = Pallete.Dark.grey200
+    private let disabledTextColor: UIColor?         = Pallete.Dark.grey200.color
     
-    private let highlightedTextColor: UIColor       = Pallete.white
+    private let highlightedTextColor: UIColor?      = Pallete.Dark.white.color
     
     public var enable: Bool                         = true {
         didSet {
@@ -119,14 +119,14 @@ extension RightArrowButton {
             }
         }
         
-        var backgroundColor: UIColor {
+        var backgroundColor: UIColor? {
             switch self {
             case .enable:
-                return Pallete.Dark.grey800
+                return Pallete.Dark.grey800.color
             case .highlight:
-                return Pallete.white
+                return Pallete.Dark.white.color
             case .disable:
-                return Pallete.Dark.grey200
+                return Pallete.Dark.grey200.color
             }
         }
     }
