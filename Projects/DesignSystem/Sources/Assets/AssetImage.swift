@@ -9,23 +9,28 @@
 import UIKit
 
 public enum Assets: String {
-    case ic_right_arrow_enable_white
-    case ic_right_arrow_enable_black
-    case ic_right_arrow_highlight_green
-    case ic_right_arrow_highlight_red
-    case ic_right_arrow_disable
-    case ic_trash_enable
-    case ic_trash_highlight
-    case ic_edit
-    case ic_heart_black
-    case ic_heart_red
-    case ic_left_arrow_enable
-    case ic_left_arrow_highlight
-    case ic_clover
     case ic_check_black
     case ic_close
+    case ic_clover
     case ic_dropdown
+    case ic_edit_enable
+    case ic_edit_highlight
     case ic_error
+    case ic_heart_enable
+    case ic_heart_highlight // TODO: 이거 사이즈가 이상하다.
+    case ic_main_dark_disable
+    case ic_main_dark_enable
+    case ic_main_dark_highlight
+    case ic_main_light_disable
+    case ic_main_light_enable
+    case ic_main_light_highlight
+    case ic_right_enable
+    case ic_right_highlight
+    case ic_trash_disable
+    case ic_trash_enable
+    case ic_trash_highlight
+    case ic_main_small_dark_enable
+    case ic_main_small_dark_highlight
 
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")
