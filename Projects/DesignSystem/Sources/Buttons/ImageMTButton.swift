@@ -9,63 +9,52 @@
 import UIKit
 
 public final class ImageMTButton: UIButton, CodeBased {
-
-
+    
+    
     // MARK: Parameters
     
-    public var customButtonType: CustomButtonType
-
+    public var customButtonType: CustomButtonType   = .iconMainLight
+    
     public var title: String                        = "" {
         didSet {
             self.setTitle(title, for: .normal)
         }
     }
-
+    
     public convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
         self.customButtonType = customButtonType
 
-        layout()
         attribute()
-    }
-
-    override init(frame: CGRect) {
-        self.customButtonType = .iconMainLight
-        super.init(frame: frame)
-
         layout()
-        attribute()
     }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
+    
     func attribute() {
         self.setBackgroundImage(self.customButtonType.enableImage, for: .normal)
         self.setBackgroundImage(self.customButtonType.highlightedImage, for: .highlighted)
         self.setBackgroundImage(self.customButtonType.disabledImage, for: .disabled)
     }
-
+    
     func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: Constant.circleButtonHeight),
             self.widthAnchor.constraint(equalToConstant: Constant.circleButtonHeight)
-
         ])
     }
-
+    
 }
 
 extension ImageMTButton {
+
+    // MARK: 버튼 타입
 
     public enum CustomButtonType {
         case iconSub1Light
         case iconSub2Light
         case iconMainLight
         case iconSubDark
-
+        
         var enableImage: UIImage? {
             switch self {
             case .iconSub1Light:
@@ -78,7 +67,7 @@ extension ImageMTButton {
                 return .create(.ic_trash_enable)
             }
         }
-
+        
         var highlightedImage: UIImage? {
             switch self {
             case .iconSub1Light:
@@ -91,7 +80,7 @@ extension ImageMTButton {
                 return .create(.ic_trash_highlight)
             }
         }
-
+        
         var disabledImage: UIImage? {
             switch self {
             case .iconSubDark:
@@ -101,6 +90,5 @@ extension ImageMTButton {
             }
         }
     }
-
-
+    
 }

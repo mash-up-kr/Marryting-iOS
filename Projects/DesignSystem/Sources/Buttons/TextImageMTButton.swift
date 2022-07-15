@@ -11,17 +11,11 @@ import UIKit
 /// 텍스트와 이미지가 함께 쓰이는 Marryting 버튼
 /// - Parameters:
 ///   - customButtonType: 3가지 버튼 타입
-public final class TextImageMTButton: UIButton, CodeBased {
+public final class TextImageMTButton: BaseButton {
 
     // MARK: Parameters
 
-    public var customButtonType: CustomButtonType
-
-    public var enable: Bool                         = true {
-        didSet {
-            self.adjustButton(as: self.enable)
-        }
-    }
+    public var customButtonType: CustomButtonType   = .mainLight
 
     public var title: String                        = "" {
         didSet {
@@ -32,24 +26,13 @@ public final class TextImageMTButton: UIButton, CodeBased {
     public convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
         self.customButtonType = customButtonType
-
         layout()
         attribute()
     }
 
-    override init(frame: CGRect) {
-        self.customButtonType = .mainDark
-        super.init(frame: frame)
 
-        layout()
-        attribute()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func attribute() {
+    override func attribute() {
+        self.setBackgroundColor(customButtonType.enabledBackgroundColor!, for: .normal)
         self.setTitleColor(customButtonType.enabledTextColor, for: .normal)
         self.setImage(customButtonType.enableImage, for: .normal)
 
@@ -57,12 +40,15 @@ public final class TextImageMTButton: UIButton, CodeBased {
         self.setTitleColor(customButtonType.highlightedTextColor, for: .highlighted)
         self.setImage(customButtonType.highlightImage, for: .highlighted)
 
+        self.setBackgroundColor(customButtonType.disabledBackgroundColor!, for: .disabled)
+        self.setTitleColor(customButtonType.disabledTextColor, for: .disabled)
+        self.setImage(customButtonType.disableImage, for: .disabled)
         self.titleLabel?.font = .subtitle1(name: .montserrat)
         self.layer.cornerRadius = Constant.buttonHeight / 2
         self.layer.masksToBounds = true
     }
 
-    func layout() {
+    override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: Constant.buttonHeight)
@@ -78,30 +64,12 @@ public final class TextImageMTButton: UIButton, CodeBased {
                                        right: 8)
         self.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
     }
-
-    func adjustButton(as enable: Bool) {
-        if enable == true { self.makeEnable()  }
-        else              { self.makeDisable() }
-    }
-
-    func makeEnable() {
-        self.isUserInteractionEnabled   = true
-        self.backgroundColor            = customButtonType.enabledBackgroundColor
-        self.setTitleColor(customButtonType.enabledTextColor, for: .normal)
-        self.setImage(customButtonType.enableImage, for: .normal)
-    }
-
-    func makeDisable() {
-        self.isUserInteractionEnabled   = false
-        self.backgroundColor            = customButtonType.disabledBackgroundColor
-        self.setTitleColor(customButtonType.disabledTextColor, for: .normal)
-        self.setImage(customButtonType.disableImage, for: .normal)
-    }
 }
 
-// MARK: 버튼 타입
-
 extension TextImageMTButton {
+
+    // MARK: 버튼 타입
+
     public enum CustomButtonType {
         case mainDark
         case mainLight
@@ -210,7 +178,6 @@ extension TextImageMTButton {
             }
         }
 
-
         var imagePadding: CGFloat {
             switch self {
             case .mainDark:
@@ -223,7 +190,7 @@ extension TextImageMTButton {
         }
 
         var imageViewWidth: CGFloat {
-           return 40
+            return 40
         }
 
     }

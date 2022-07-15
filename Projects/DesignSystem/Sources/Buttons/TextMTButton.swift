@@ -8,10 +8,10 @@
 
 import UIKit
 
-public final class TextMTButton: UIButton, CodeBased {
+public final class TextMTButton: BaseButton {
 
     // MARK: Parameters
-    public var customButtonType: CustomButtonType
+    public var customButtonType: CustomButtonType   = .subLight
 
     public var title: String                        = "" {
         didSet {
@@ -19,19 +19,7 @@ public final class TextMTButton: UIButton, CodeBased {
         }
     }
 
-    override init(frame: CGRect) {
-        self.customButtonType = .subLight
-        super.init(frame: frame)
-
-        layout()
-        attribute()
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    func attribute() {
+    override func attribute() {
         self.setTitleColor(customButtonType.enableTextColor, for: .normal)
         self.backgroundColor = customButtonType.enableBackgroundColor
 
@@ -42,25 +30,26 @@ public final class TextMTButton: UIButton, CodeBased {
         self.layer.masksToBounds = true
     }
 
-    func layout() {
+    override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: Constant.buttonHeight),
             self.widthAnchor.constraint(equalToConstant: Constant.longButtonWidth)
         ])
     }
-
 }
 
 extension TextMTButton {
 
+    // MARK: 버튼 타입
+    
     public enum CustomButtonType {
         case subLight
 
         var enableTextColor: UIColor? {
             return Pallete.Light.white.color
         }
-
+        
         var enableBackgroundColor: UIColor? {
             return Pallete.Light.grey800.color
         }
