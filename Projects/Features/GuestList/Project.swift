@@ -17,7 +17,8 @@ let project = Project.make(
       resources: ["Resources/**"],
       dependencies: [
         .project(target: "DesignSystem", path: "../../DesignSystem"),
-        .project(target: "Models", path: "../../Core/CoreKit")
+        .project(target: "Models", path: "../../Core/CoreKit"),
+        .external(name: "SnapKit")
       ]
     ),
     Target(
