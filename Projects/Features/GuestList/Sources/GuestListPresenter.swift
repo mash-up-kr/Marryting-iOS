@@ -23,6 +23,17 @@ class GuestListPresenter: GuestListPresentationLogic {
     
     
     func presentGuests(response: GuestList.FetchGuests.Response) {
-        
+        self.viewController?.displayGuests(
+            viewModel: .init(
+                guestCardViewModels: response.guests.map {
+                    .init(
+                        imageUrl: $0.user.pictures[0],
+                        name: $0.user.name,
+                        info: "\($0.user.address)  ∙  \($0.user.career)",
+                        isLiked: $0.isLiked
+                    )
+                }
+            )
+        )
     }
 }

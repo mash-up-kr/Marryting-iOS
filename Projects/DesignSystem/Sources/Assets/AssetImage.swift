@@ -31,6 +31,9 @@ public enum Assets: String {
     case ic_trash_highlight
     case ic_main_small_dark_enable
     case ic_main_small_dark_highlight
+    case ic_edit
+    case ic_heart
+    case logo
 
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")

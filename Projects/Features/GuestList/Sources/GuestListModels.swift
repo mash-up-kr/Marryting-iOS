@@ -13,14 +13,6 @@
 import UIKit
 import Models
 
-struct GuestCardViewModel {
-    var profileImageUrl: String
-    var name: String
-    var address: String
-    var career: String
-    var isLiked: Bool
-}
-
 enum GuestList
 {
     // MARK: Use cases

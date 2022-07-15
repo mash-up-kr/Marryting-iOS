@@ -7,52 +7,114 @@
 //
 
 import UIKit
-//import DesignSystem
+import SnapKit
+import DesignSystem
+import Kingfisher
+
+struct GuestCardViewModel {
+    var imageUrl: String
+    var name: String
+    var info: String
+    var isLiked: Bool
+}
 
 final class GuestCardView: UIView {
     
     lazy var profileImageView: UIImageView = {
         let v = UIImageView()
-        
-        let gradient: CAGradientLayer = CAGradientLayer()
-        gradient.locations = [0.0 , 1.0]
-        gradient.startPoint = CGPoint(x: 0.0, y: 1.0)
-        gradient.endPoint = CGPoint(x: 1.0, y: 1.0)
-        gradient.frame = bounds
-        layer.addSublayer(gradient)
-        
-        layer.cornerRadius = 16
-
+        v.layer.cornerRadius = 16
+        v.clipsToBounds = true
+        v.backgroundColor = Pallete.Light.background.color
+        v.contentMode = .scaleAspectFill
         return v
     }()
     
     lazy var nameLabel: UILabel = {
         let v = UILabel()
-        
+        v.font = .h3()
+        v.textColor = .white
+        return v
     }()
+    
+    lazy var infoLabel: UILabel = {
+        let v = UILabel()
+        v.font = .body3()
+        v.textColor = Pallete.Light.grey200.color
+        return v
+    }()
+    
+    lazy var likeButton: ImageMTButton = {
+        let v = ImageMTButton(customButtonType: .iconMainLight)
+        return v
+    }()
+    
+    var viewModel: GuestCardViewModel? {
+        didSet {
+            // TODO: Image KF 사용 로드
+            _ = self.profileImageView
+            self.nameLabel.text = viewModel?.name ?? ""
+            self.infoLabel.text = viewModel?.info ?? ""
+            self.likeButton.isHighlighted = viewModel?.isLiked ?? false
+            if let urlString = viewModel?.imageUrl,
+               let url = URL(string: urlString) {
+                self.profileImageView.kf.setImage(with: url)
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
+        setUI()
     }
 
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
+        setUI()
     }
 
-    func setup() {
+    private func setUI() {
+        self.layer.cornerRadius = 16
+        self.layer.shadowPath = UIBezierPath(rect: self.bounds).cgPath
+        self.layer.shadowColor = UIColor.black.cgColor
+        self.layer.shadowOpacity = 0.1
+        self.layer.shadowOffset = CGSize.zero
+        self.layer.shadowRadius = 4
         
-        // Corner Radius
-        layer.cornerRadius = 16
+        self.addSubview(self.profileImageView)
+        self.addSubview(self.likeButton)
+        self.profileImageView.addSubview(self.nameLabel)
+        self.profileImageView.addSubview(self.infoLabel)
         
-        addSubview(profileImageView)
+        self.profileImageView.snp.makeConstraints { make in
+            make.leading.trailing.top.equalToSuperview().inset(8)
+            make.height.equalTo(self.profileImageView.snp.width).multipliedBy(1.33)
+            make.bottom.lessThanOrEqualToSuperview().inset(80)
+        }
+        self.likeButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(16)
+            make.top.equalTo(self.profileImageView.snp.bottom).offset(16)
+            make.height.width.equalTo(48)
+            make.centerX.equalToSuperview()
+        }
+        self.nameLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(24)
+            make.bottom.equalTo(self.infoLabel.snp.top).offset(2)
+        }
+        self.infoLabel.snp.makeConstraints { make in
+            make.leading.bottom.equalToSuperview().inset(24)
+        }
         
-        NSLayoutConstraint.activate([
-            profileImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 8),
-            profileImageView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8),
-            profileImageView.topAnchor.constraint(equalTo: topAnchor, constant: 8),
-            profileImageView.heightAnchor.constraint(equalToConstant: 374)
-        ])
+        self.setProfileImageViewBackgroundGradient()
+    }
+    
+    private func setProfileImageViewBackgroundGradient() {
+        self.layoutIfNeeded()
+        let gradient: CAGradientLayer = CAGradientLayer()
+        gradient.locations = [0.0 , 1.0]
+        gradient.colors = [UIColor.black.withAlphaComponent(0).cgColor, UIColor.black.withAlphaComponent(0.7).cgColor]
+        gradient.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradient.endPoint = CGPoint(x: 0.0, y: 1.0)
+        gradient.frame = .init(x: 0, y: 0, width: self.profileImageView.frame.width, height: self.profileImageView.frame.height)
+        self.profileImageView.layer.insertSublayer(gradient, at:0)
     }
 }

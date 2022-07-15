@@ -26,11 +26,26 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore
     var presenter: GuestListPresentationLogic?
     var worker: GuestListWorkerProtocol?
     
+    init(worker: GuestListWorkerProtocol = GuestListWorker()) {
+        self.worker = worker
+    }
+    
     var selectedGuest: Guest?
     
     // MARK: Business Logic
     
     func fetchGuests() {
-        
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let guests = try await worker.fetchGuests()
+                self.presenter?.presentGuests(response: .init(guests: guests))
+            }
+            catch {
+                // TODO: 에러처리
+            }
+        }
     }
 }

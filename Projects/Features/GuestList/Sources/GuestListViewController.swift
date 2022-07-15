@@ -11,12 +11,15 @@
 //
 
 import UIKit
+import SnapKit
+import DesignSystem
+import Kingfisher
 
 protocol GuestListDisplayLogic: AnyObject {
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel)
 }
 
-class GuestListViewController: UIViewController, GuestListDisplayLogic {
+public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     var interactor: GuestListBusinessLogic?
     var router: (NSObjectProtocol & GuestListRoutingLogic & GuestListDataPassing)?
     
@@ -49,26 +52,156 @@ class GuestListViewController: UIViewController, GuestListDisplayLogic {
         router.dataStore = interactor
     }
     
-    // MARK: Routing
+    // MARK: Store Properties
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
+    private var guestCardIndex: Int = 0
+    
+    private var guestCardViewModels: [GuestCardViewModel] = []
+    
+    // MARK: UI
+    
+    lazy var navigationView: UIView = {
+        let v = UIView()
+        return v
+    }()
+    
+    lazy var logoImageView: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.logo)
+        return v
+    }()
+    
+    lazy var likeListButton: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_heart)
+        return v
+    }()
+    
+    lazy var myInfoButton: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_edit)
+        return v
+    }()
+    
+    lazy var firstTitleLabel: UILabel = {
+        let v = UILabel()
+        v.font = .montserrat(weight: .medium, size: ._30)
+        v.textColor = .black
+        v.text = "Who is your"
+        return v
+    }()
+    
+    lazy var secondTitleLabel: UILabel = {
+        let v = UILabel()
+        v.font = .montserrat(weight: .bold, size: ._30)
+        v.textColor = .black
+        v.text = "MARRY-TING"
+        return v
+    }()
+    
+    lazy var guestSwipeableView: ZLSwipeableView = {
+        let v = ZLSwipeableView()
+        v.shouldSwipeView = { _, _, _ in true }
+        return v
+    }()
+    
+    var guestCardView: GuestCardView? {
+        if self.guestCardViewModels.isEmpty { return nil }
+        if self.guestCardIndex >= self.guestCardViewModels.count {
+            self.guestCardIndex = 0
+        }
+        let v = GuestCardView(frame: self.guestSwipeableView.bounds)
+        v.viewModel = self.guestCardViewModels[self.guestCardIndex]
+        v.backgroundColor = self.getGuestCardViewColor(for: self.guestCardIndex)
+        self.guestCardIndex += 1
+        return v
+    }
+    
+    private func getGuestCardViewColor(for index: Int) -> UIColor? {
+        switch index % 4 {
+            case 0:
+                return .white
+            case 1:
+                return Pallete.Light.main300.color
+            case 2:
+                return Pallete.Light.subPurple.color
+            case 3:
+                return Pallete.Light.subGreen.color
+            default:
+                return .white
         }
     }
     
     // MARK: View lifecycle
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
+        self.setUI()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.interactor?.fetchGuests()
+    }
+    
+    public override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        self.guestSwipeableView.nextView = {
+            return self.guestCardView
+        }
+    }
+    
+    private func setUI() {
+        self.view.backgroundColor = Pallete.Light.background.color
+        
+        self.view.addSubview(self.navigationView)
+        self.view.addSubview(self.firstTitleLabel)
+        self.view.addSubview(self.secondTitleLabel)
+        self.view.addSubview(self.guestSwipeableView)
+        self.navigationView.addSubview(self.logoImageView)
+        self.navigationView.addSubview(self.likeListButton)
+        self.navigationView.addSubview(self.myInfoButton)
+        
+        self.navigationView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
+        self.firstTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.navigationView.snp.bottom).offset(30)
+            make.centerX.equalToSuperview()
+        }
+        self.secondTitleLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.firstTitleLabel.snp.bottom)
+            make.centerX.equalToSuperview()
+        }
+        self.guestSwipeableView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview().inset(32)
+            make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
+            make.bottom.equalToSuperview().inset(84)
+        }
+        self.logoImageView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(20)
+            make.centerY.equalToSuperview()
+            make.height.equalTo(25)
+            make.width.equalTo(81)
+        }
+        self.likeListButton.snp.makeConstraints { make in
+            make.height.width.equalTo(40)
+            make.trailing.equalTo(self.myInfoButton.snp.leading)
+            make.centerY.equalToSuperview()
+        }
+        self.myInfoButton.snp.makeConstraints { make in
+            make.height.width.equalTo(40)
+            make.trailing.equalToSuperview().inset(20)
+            make.centerY.equalToSuperview()
+        }
     }
     
     // MARK: Display Logic
     
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel) {
-        
+        self.guestCardViewModels = viewModel.guestCardViewModels
     }
 }

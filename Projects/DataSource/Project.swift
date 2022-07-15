@@ -4,34 +4,31 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-  name: "GuestList",
+  name: "DataSource",
   targets: [
     Target(
-      name: "GuestList",
+      name: "DataSource",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestList",
+      bundleId: "kr.mash-up.DataSource",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Sources/**"],
-      resources: ["Resources/**"],
+      resources: [],
       dependencies: [
-        .project(target: "DesignSystem", path: "../../DesignSystem"),
-        .project(target: "Models", path: "../../Core/CoreKit"),
-        .project(target: "DataSource", path: "../../DataSource"),
-        .external(name: "SnapKit"),
-        .external(name: "Kingfisher")
+        .project(target: "NetworkProtocol", path: "../Core/CoreKit"),
+        .project(target: "Network", path: "../Core/CoreKit")
       ]
     ),
     Target(
-      name: "GuestListTests",
+      name: "DataSourceTests",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestListTests",
+      bundleId: "kr.mash-up.DataSourceTests",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Tests/**"],
-      dependencies: [.target(name: "GuestList")]
+      dependencies: [.target(name: "DataSource")]
     ),
   ]
 )

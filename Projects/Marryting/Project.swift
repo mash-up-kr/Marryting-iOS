@@ -23,6 +23,7 @@ let project = Project.make(
       resources: ["Resources/**"],
       dependencies: [
         .project(target: "DesignSystem", path: "../DesignSystem"),
+        .project(target: "DataSource", path: "../DataSource"),
         .project(target: "FeatureKit", path: "../Features/FeatureKit"),
         .project(target: "CoreKit", path: "../Core/CoreKit")
       ]
