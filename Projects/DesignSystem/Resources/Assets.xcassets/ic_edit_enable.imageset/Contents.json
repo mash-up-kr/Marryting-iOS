@@ -1,24 +1,8 @@
 {
   "images" : [
     {
-<<<<<<< HEAD:Projects/DesignSystem/Resources/Assets.xcassets/ic_edit_enable.imageset/Contents.json
       "filename" : "ic_edit_enable.svg",
       "idiom" : "universal"
-=======
-      "filename" : "my.png",
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "filename" : "my@2x.png",
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "my@3x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
->>>>>>> c928ff5 (✨ 하객 리스트 화면 UI 구현):Projects/DesignSystem/Resources/Assets.xcassets/ic_edit.imageset/Contents.json
     }
   ],
   "info" : {

@@ -25,6 +25,7 @@ public enum DesignSystemAsset {
     public static let icEditEnable = DesignSystemImages(name: "ic_edit_enable")
     public static let icEditHighlight = DesignSystemImages(name: "ic_edit_highlight")
     public static let icError = DesignSystemImages(name: "ic_error")
+    public static let icHeart = DesignSystemImages(name: "ic_heart")
     public static let icHeartEnable = DesignSystemImages(name: "ic_heart_enable")
     public static let icHeartHighlight = DesignSystemImages(name: "ic_heart_highlight")
     public static let icMainDarkDisable = DesignSystemImages(name: "ic_main_dark_disable")
@@ -40,6 +41,7 @@ public enum DesignSystemAsset {
     public static let icTrashDisable = DesignSystemImages(name: "ic_trash_disable")
     public static let icTrashEnable = DesignSystemImages(name: "ic_trash_enable")
     public static let icTrashHighlight = DesignSystemImages(name: "ic_trash_highlight")
+    public static let logo = DesignSystemImages(name: "logo")
   }
   public enum Colors {
     public static let background = DesignSystemColors(name: "Background")
