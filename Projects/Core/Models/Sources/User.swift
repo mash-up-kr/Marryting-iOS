@@ -10,6 +10,8 @@ import Foundation
 
 public struct User {
     
+    public var id: Int
+    
     public var name: String
     
     public var gender: Gender
@@ -29,6 +31,7 @@ public struct User {
     public var keyword: [Keyword]
     
     public init(
+        id: Int,
         name: String,
         gender: Gender,
         career: String,
@@ -39,6 +42,7 @@ public struct User {
         answers: [Answer],
         keyword: [Keyword]
     ) {
+        self.id = id
         self.name = name
         self.gender = gender
         self.career = career

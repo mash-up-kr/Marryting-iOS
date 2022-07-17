@@ -13,6 +13,8 @@ public enum Assets: String {
     case ic_close
     case ic_clover
     case ic_dropdown
+    case ic_arrow_back
+    case ic_enlarge
     case ic_edit_enable
     case ic_edit_highlight
     case ic_error
@@ -33,6 +35,9 @@ public enum Assets: String {
     case ic_main_small_dark_highlight
     case ic_edit
     case ic_heart
+    case ic_ring
+    case img_bubble
+    case img_bubble_back
     case logo
 
     public var image: UIImage? {

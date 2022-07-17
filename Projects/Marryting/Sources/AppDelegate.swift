@@ -1,5 +1,6 @@
 import UIKit
-import GuestList
+import GuestListScene
+import LikeRequestScene
 import DesignSystem
 
 @main
@@ -13,10 +14,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         Font.registerFonts()
         window = UIWindow(frame: UIScreen.main.bounds)
-        let viewController = TestComponentsViewController()
-        viewController.view.backgroundColor = Pallete.Dark.errorRed.color
-        window?.rootViewController = viewController
+        
+        let navigationController = UINavigationController()
+        navigationController.isNavigationBarHidden = true
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
+        
+        navigationController.pushViewController(GuestListViewController(), animated: true)
 
         return true
     }

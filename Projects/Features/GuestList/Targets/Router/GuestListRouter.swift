@@ -11,20 +11,26 @@
 //
 
 import UIKit
+import GuestListRoutingProtocol
+import LikeRequestScene
 
-@objc protocol GuestListRoutingLogic {
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-}
-
-protocol GuestListDataPassing {
-    var dataStore: GuestListDataStore? { get }
-}
-
-class GuestListRouter: NSObject, GuestListRoutingLogic, GuestListDataPassing {
-    weak var viewController: GuestListViewController?
-    var dataStore: GuestListDataStore?
+public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
+    public weak var viewController: UIViewController?
+    public var dataStore: GuestListDataStore?
+    
+    public init() {}
     
     // MARK: Routing
+    
+    public func routeToLikeRequestScene(targetId id: Int) {
+        guard let dataStore = dataStore,
+              let guest = dataStore.guests.filter({ $0.user.id == id }).first else {
+            return
+        }
+        let destinationVC = LikeRequestViewController()
+        destinationVC.router?.dataStore?.targetGuest = guest
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
     
     //func routeToSomewhere(segue: UIStoryboardSegue?)
     //{

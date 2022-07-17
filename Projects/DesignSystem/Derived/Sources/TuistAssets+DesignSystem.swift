@@ -18,12 +18,15 @@
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum DesignSystemAsset {
   public enum Assets {
+    public static let icArrowBack = DesignSystemImages(name: "ic_arrow_back")
     public static let icCheckBlack = DesignSystemImages(name: "ic_check_black")
     public static let icClose = DesignSystemImages(name: "ic_close")
     public static let icClover = DesignSystemImages(name: "ic_clover")
     public static let icDropdown = DesignSystemImages(name: "ic_dropdown")
+    public static let icEdit = DesignSystemImages(name: "ic_edit")
     public static let icEditEnable = DesignSystemImages(name: "ic_edit_enable")
     public static let icEditHighlight = DesignSystemImages(name: "ic_edit_highlight")
+    public static let icEnlarge = DesignSystemImages(name: "ic_enlarge")
     public static let icError = DesignSystemImages(name: "ic_error")
     public static let icHeart = DesignSystemImages(name: "ic_heart")
     public static let icHeartEnable = DesignSystemImages(name: "ic_heart_enable")
@@ -38,9 +41,12 @@ public enum DesignSystemAsset {
     public static let icMainSmallDarkHighlight = DesignSystemImages(name: "ic_main_small_dark_highlight")
     public static let icRightEnable = DesignSystemImages(name: "ic_right_enable")
     public static let icRightHighlight = DesignSystemImages(name: "ic_right_highlight")
+    public static let icRing = DesignSystemImages(name: "ic_ring")
     public static let icTrashDisable = DesignSystemImages(name: "ic_trash_disable")
     public static let icTrashEnable = DesignSystemImages(name: "ic_trash_enable")
     public static let icTrashHighlight = DesignSystemImages(name: "ic_trash_highlight")
+    public static let imgBubble = DesignSystemImages(name: "img_bubble")
+    public static let imgBubbleBack = DesignSystemImages(name: "img_bubble_back")
     public static let logo = DesignSystemImages(name: "logo")
   }
   public enum Colors {

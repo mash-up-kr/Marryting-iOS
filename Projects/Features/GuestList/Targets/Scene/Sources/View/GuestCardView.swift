@@ -12,10 +12,15 @@ import DesignSystem
 import Kingfisher
 
 struct GuestCardViewModel {
+    var id: Int
     var imageUrl: String
     var name: String
     var info: String
     var isLiked: Bool
+}
+
+protocol GuestCardViewDelegate: AnyObject {
+    func didTapLikeButton(id: Int)
 }
 
 final class GuestCardView: UIView {
@@ -45,8 +50,36 @@ final class GuestCardView: UIView {
     
     lazy var likeButton: ImageMTButton = {
         let v = ImageMTButton(customButtonType: .iconMainLight)
+        v.setBackgroundImage(
+            v.customButtonType.enableImage,
+            for: .highlighted
+        )
+        v.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
+        v.addTarget(self, action: #selector(didTouchDownLikeButton), for: .touchDown)
         return v
     }()
+    
+    @objc func didTapLikeButton() {
+        guard let viewModel = viewModel else {
+            return
+        }
+        UIView.animate(
+            withDuration: 0.05,
+            animations: {
+                self.likeButton.transform = CGAffineTransform.identity
+            }
+        )
+        delegate?.didTapLikeButton(id: viewModel.id)
+    }
+    
+    @objc func didTouchDownLikeButton() {
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                self.likeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }
+        )
+    }
     
     var viewModel: GuestCardViewModel? {
         didSet {
@@ -54,13 +87,14 @@ final class GuestCardView: UIView {
             _ = self.profileImageView
             self.nameLabel.text = viewModel?.name ?? ""
             self.infoLabel.text = viewModel?.info ?? ""
-            self.likeButton.isHighlighted = viewModel?.isLiked ?? false
             if let urlString = viewModel?.imageUrl,
                let url = URL(string: urlString) {
                 self.profileImageView.kf.setImage(with: url)
             }
         }
     }
+    
+    weak var delegate: GuestCardViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -17,7 +17,8 @@ let project = Project.make(
       resources: ["Resources/**"],
       dependencies: [
         .project(target: "ProfileRegister", path: "../ProfileRegister"),
-        .project(target: "GuestList", path: "../GuestList")
+        .project(target: "GuestListScene", path: "../GuestList"),
+        .project(target: "LikeRequestScene", path: "../LikeRequest"),
       ]
     ),
     Target(

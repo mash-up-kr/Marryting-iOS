@@ -10,6 +10,7 @@
 //  see http://clean-swift.com
 //
 
+import GuestListRoutingProtocol
 import UIKit
 import Models
 
@@ -17,12 +18,7 @@ protocol GuestListBusinessLogic {
     func fetchGuests()
 }
 
-protocol GuestListDataStore {
-    var selectedGuest: Guest? { get set }
-}
-
-class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore
-{
+class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
     var presenter: GuestListPresentationLogic?
     var worker: GuestListWorkerProtocol?
     
@@ -30,7 +26,7 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore
         self.worker = worker
     }
     
-    var selectedGuest: Guest?
+    var guests: [Guest] = []
     
     // MARK: Business Logic
     
@@ -41,6 +37,7 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore
         Task {
             do {
                 let guests = try await worker.fetchGuests()
+                self.guests = guests
                 self.presenter?.presentGuests(response: .init(guests: guests))
             }
             catch {
