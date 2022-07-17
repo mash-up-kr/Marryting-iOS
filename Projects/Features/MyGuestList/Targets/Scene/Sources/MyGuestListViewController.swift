@@ -10,11 +10,13 @@
 //  see http://clean-swift.com
 //
 
-import UIKit
 import DesignSystem
-import SnapKit
-import MyGuestListRoutingProtocol
 import MyGuestListRouter
+import MyGuestListRoutingProtocol
+
+import UIKit
+
+import SnapKit
 
 protocol MyGuestListDisplayLogic: AnyObject {}
 
@@ -64,11 +66,11 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         return v
     }()
 
-    private let myLikeButton: UIButton = {
-        $0.setTitleColor(Pallete.Light.grey800.color, for: .normal)
+    private lazy var myGuestMenuView: MyGuestMenuView = {
+        $0.delegate = self
         return $0
-    }(UIButton(type: .system))
-
+    }(MyGuestMenuView())
+   
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -78,8 +80,11 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
 
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
+
         self.view.addSubview(self.navigationView)
+        self.view.addSubview(self.myGuestMenuView)
         self.navigationView.addSubview(self.backButton)
+
         self.navigationView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
@@ -89,6 +94,10 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
         }
+        self.myGuestMenuView.snp.makeConstraints { make in
+            make.top.equalTo(self.navigationView.snp.bottom).offset(10)
+            make.leading.trailing.equalToSuperview()
+        }
     }
     
     // MARK: Display Logic
@@ -96,4 +105,12 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     @objc func didTapBackButton() {
         router?.removeFromParent()
     }
+}
+
+extension MyGuestListViewController: MyGuestMenuViewDelegate {
+    func myLikeButtonDidTap() {}
+
+    func matchingButtonDidTap() {}
+
+
 }
