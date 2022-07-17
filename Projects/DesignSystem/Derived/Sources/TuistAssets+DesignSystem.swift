@@ -18,6 +18,7 @@
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 public enum DesignSystemAsset {
   public enum Assets {
+    public static let btnAppleLogin = DesignSystemImages(name: "btn_apple_login")
     public static let icArrowBack = DesignSystemImages(name: "ic_arrow_back")
     public static let icCheckBlack = DesignSystemImages(name: "ic_check_black")
     public static let icClose = DesignSystemImages(name: "ic_close")

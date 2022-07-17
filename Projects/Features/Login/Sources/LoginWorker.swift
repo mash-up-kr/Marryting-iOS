@@ -80,6 +80,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
 private extension LoginWorker {
     var dummyUser: User {
         .init(
+            id: 1,
             name: "박건우",
             gender: .male,
             career: "IT회사 개발자",
