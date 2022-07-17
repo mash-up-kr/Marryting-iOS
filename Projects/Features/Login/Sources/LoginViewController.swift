@@ -67,9 +67,9 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     func alert() {
         DispatchQueue.main.async {
             self.present(UIAlertController(title: "로그인 성공",
-                                      message: nil,
-                                      preferredStyle: .alert),
-                    animated: true)
+                                           message: nil,
+                                           preferredStyle: .alert),
+                         animated: true)
         }
 
     }
@@ -77,8 +77,9 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     func alertFail() {
         // TODO: 실패처리
     }
-    // MARK: Routing
 
+    // MARK: Routing
+    
     public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")

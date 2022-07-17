@@ -22,26 +22,26 @@ protocol LoginDataStore {
 }
 
 class LoginInteractor: LoginBusinessLogic, LoginDataStore {
-
+    
     var user: User?
-
+    
     var presenter: LoginPresentationLogic?
     var worker: LoginWorker?
     var appleLoginManager: AppleLoginManager?
-
+    
     func appleLogin() {
         worker = LoginWorker()
         worker?.doneLogin = { [weak self] in
             self?.presenter?.presentLogin()
         }
-
+        
         worker?.failLogin = { [weak self] in
             self?.presenter?.failLogin()
         }
-
+        
         Task {
             worker?.appleLogin()
         }
-
+        
     }
 }

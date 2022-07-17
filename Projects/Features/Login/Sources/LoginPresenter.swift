@@ -19,12 +19,12 @@ protocol LoginPresentationLogic {
 
 class LoginPresenter: LoginPresentationLogic {
     weak var viewController: LoginDisplayLogic?
-
+    
     func presentLogin() {
         viewController?.alert()
         // TODO: VC의 라우팅 작업
     }
-
+    
     func failLogin() {
         viewController?.alertFail()
     }
