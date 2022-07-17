@@ -27,6 +27,7 @@ public enum Font {
         case _16 = 16
         case _20 = 20
         case _24 = 24
+        case _30 = 30
         case _34 = 34
         case _40 = 40
     }

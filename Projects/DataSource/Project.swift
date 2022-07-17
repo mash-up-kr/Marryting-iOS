@@ -4,31 +4,31 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-  name: "FeatureKit",
+  name: "DataSource",
   targets: [
     Target(
-      name: "FeatureKit",
+      name: "DataSource",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.FeatureKit",
+      bundleId: "kr.mash-up.DataSource",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Sources/**"],
-      resources: ["Resources/**"],
+      resources: [],
       dependencies: [
-        .project(target: "ProfileRegister", path: "../ProfileRegister"),
-        .project(target: "GuestList", path: "../GuestList")
+        .project(target: "NetworkProtocol", path: "../Core/CoreKit"),
+        .project(target: "Network", path: "../Core/CoreKit")
       ]
     ),
     Target(
-      name: "FeatureKitTests",
+      name: "DataSourceTests",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.FeatureKitTests",
+      bundleId: "kr.mash-up.DataSourceTests",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Tests/**"],
-      dependencies: [.target(name: "FeatureKit")]
+      dependencies: [.target(name: "DataSource")]
     ),
   ]
 )
