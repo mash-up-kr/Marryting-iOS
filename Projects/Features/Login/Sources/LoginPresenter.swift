@@ -21,11 +21,10 @@ class LoginPresenter: LoginPresentationLogic {
     weak var viewController: LoginDisplayLogic?
     
     func presentLogin() {
-        viewController?.alert()
-        // TODO: VC의 라우팅 작업
+        viewController?.displayLoginSucees()
     }
     
     func failLogin() {
-        viewController?.alertFail()
+        viewController?.displayLoginFail()
     }
 }

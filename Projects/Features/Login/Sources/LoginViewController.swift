@@ -17,8 +17,8 @@ import AuthenticationServices
 import SnapKit
 
 protocol LoginDisplayLogic: AnyObject {
-    func alert()
-    func alertFail()
+    func displayLoginSucees()
+    func displayLoginFail()
 }
 
 public class LoginViewController: UIViewController, LoginDisplayLogic {
@@ -64,29 +64,15 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         interactor?.appleLogin()
     }
 
-    func alert() {
-        DispatchQueue.main.async {
-            self.present(UIAlertController(title: "로그인 성공",
-                                           message: nil,
-                                           preferredStyle: .alert),
-                         animated: true)
-        }
-
-    }
-
-    func alertFail() {
-        // TODO: 실패처리
-    }
-
     // MARK: Routing
-    
-    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let scene = segue.identifier {
-            let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
-            if let router = router, router.responds(to: selector) {
-                router.perform(selector, with: segue)
-            }
-        }
+
+    func displayLoginSucees() {
+        // TODO: Login 성공
+        print("displayLoginSucees")
+    }
+
+    func displayLoginFail() {
+        // TODO: Login 실패
     }
 
     // MARK: View lifecycle

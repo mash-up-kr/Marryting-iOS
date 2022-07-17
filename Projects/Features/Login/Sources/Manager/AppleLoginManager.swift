@@ -14,8 +14,6 @@ protocol AppleLoginManagerDelegate: AnyObject {
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser)
 }
 
-protocol AppleLoginManagerProtocol { }
-
 final class AppleLoginManager: NSObject {
     weak var viewController: UIViewController?
     weak var delegate: AppleLoginManagerDelegate?
@@ -29,16 +27,17 @@ extension AppleLoginManager: ASAuthorizationControllerPresentationContextProvidi
 }
 
 extension AppleLoginManager: ASAuthorizationControllerDelegate {
+    
     func authorizationController(
         controller: ASAuthorizationController,
         didCompleteWithAuthorization authorization: ASAuthorization
     ) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-//            let userIdentifier = appleIDCredential.user
-//            let userName = appleIDCredential.fullName
-//            let userEmail = appleIDCredential.email
+            //            let userIdentifier = appleIDCredential.user
+            //            let userName = appleIDCredential.fullName
+            //            let userEmail = appleIDCredential.email
 
-            let appleUser: AppleUser = dummyAppleUser
+            let appleUser = dummyAppleUser
             delegate?.appleLoginSuccess(appleUser)
         }
     }
@@ -52,6 +51,7 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
 }
 
 extension AppleLoginManager {
+
     struct AppleUser {
         let userIdentifier: String
         let userName: String

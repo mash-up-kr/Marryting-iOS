@@ -16,6 +16,8 @@ import UIKit
 import AuthenticationServices
 
 protocol LoginWorkerProtocol {
+    var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
+
     func appleLogin()
 }
 
@@ -23,8 +25,7 @@ class LoginWorker: LoginWorkerProtocol {
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
 
-    var doneLogin: (() -> Void)?
-    var failLogin: (() -> Void)?
+    var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource()) {
@@ -50,17 +51,16 @@ class LoginWorker: LoginWorkerProtocol {
 extension LoginWorker: AppleLoginManagerDelegate {
 
     func appleLoginFail() {
-        failLogin?()
+        fetchUser?(.failure(.appleLoginError))
     }
 
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
         Task {
             do {
                 let user = try await login()
-                print("appleLoginSuccess", user)
-                doneLogin?()
+                fetchUser?(.success(user))
             } catch {
-                failLogin?()
+                fetchUser?(.failure(.loginDataSourceError))
             }
         }
     }
@@ -68,6 +68,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
     private func login() async throws -> User {
         do {
             let dto = try await loginDataSource.login(request: .init())
+            // TODO: dto 명세후 매핑 로직 작성
             return dummyUser
         } catch {
             return dummyUser

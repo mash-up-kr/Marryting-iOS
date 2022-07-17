@@ -18,25 +18,28 @@ protocol LoginBusinessLogic {
 }
 
 protocol LoginDataStore {
-    
+
 }
 
 class LoginInteractor: LoginBusinessLogic, LoginDataStore {
 
     var presenter: LoginPresentationLogic?
-    var worker: LoginWorker?
-    var appleLoginManager: AppleLoginManager?
+    var worker: LoginWorkerProtocol?
+
+    init(worker: LoginWorkerProtocol = LoginWorker()) {
+        self.worker = worker
+    }
     
     func appleLogin() {
-        worker = LoginWorker()
-        worker?.doneLogin = { [weak self] in
-            self?.presenter?.presentLogin()
+        worker?.fetchUser = { [weak self] result in
+            switch result {
+            case .success(_):
+                // TODO: 비즈니스로직 작성
+                self?.presenter?.presentLogin()
+            case .failure:
+                self?.presenter?.failLogin()
+            }
         }
-        
-        worker?.failLogin = { [weak self] in
-            self?.presenter?.failLogin()
-        }
-
         worker?.appleLogin()
     }
 }
