@@ -29,7 +29,6 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
 
     func doSomething(request: Login.Something.Request) {
         worker = LoginWorker()
-        worker?.doSomeWork()
 
         let response = Login.Something.Response()
         presenter?.presentSomething(response: response)

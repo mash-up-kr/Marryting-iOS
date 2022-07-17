@@ -12,7 +12,16 @@
 
 import UIKit
 
-class LoginWorker {
-    func doSomeWork() {
+protocol LoginWorkerProtocol {
+
+}
+class LoginWorker: LoginWorkerProtocol {
+    private let appleLoginManager: AppleLoginManagerProtocol
+//    private let loginDataSource: AppleLogin
+    init(appleLoginManager: AppleLoginManagerProtocol = AppleLoginManager()) {
+        self.appleLoginManager = appleLoginManager
     }
+
+
+
 }

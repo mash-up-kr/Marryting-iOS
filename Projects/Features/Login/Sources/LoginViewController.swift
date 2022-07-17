@@ -10,13 +10,17 @@
 //  see http://clean-swift.com
 //
 
+import DesignSystem
 import UIKit
+import AuthenticationServices
 
-protocol LoginDisplayLogic: class {
+import SnapKit
+
+protocol LoginDisplayLogic: AnyObject {
     func displaySomething(viewModel: Login.Something.ViewModel)
 }
 
-class LoginViewController: UIViewController, LoginDisplayLogi {
+public class LoginViewController: UIViewController, LoginDisplayLogic {
     var interactor: LoginBusinessLogic?
     var router: (NSObjectProtocol & LoginRoutingLogic & LoginDataPassing)?
 
@@ -47,9 +51,32 @@ class LoginViewController: UIViewController, LoginDisplayLogi {
         router.dataStore = interactor
     }
 
+    // MARK: Manager
+
+    let appleLoginManager = AppleLoginManager()
+    // MARK: UI
+
+    lazy var appleLoginButton: UIButton = {
+        $0.setBackgroundImage(.create(.btn_apple_login), for: .normal)
+        $0.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
+        return $0
+    }(UIButton(type: .system))
+
+
+    @objc private func handleAuthorizationAppleIDButtonPress() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+
+        authorizationController.delegate = appleLoginManager
+        authorizationController.presentationContextProvider = appleLoginManager
+        authorizationController.performRequests()
+    }
     // MARK: Routing
 
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    public override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let scene = segue.identifier {
             let selector = NSSelectorFromString("routeTo\(scene)WithSegue:")
             if let router = router, router.responds(to: selector) {
@@ -60,9 +87,19 @@ class LoginViewController: UIViewController, LoginDisplayLogi {
 
     // MARK: View lifecycle
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
-        doSomething()
+        self.setUI()
+    }
+
+    private func setUI() {
+        self.view.addSubview(self.appleLoginButton)
+
+        self.appleLoginButton.snp.makeConstraints { make in
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(40)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().inset(24)
+        }
     }
 
     // MARK: Do something
@@ -77,4 +114,15 @@ class LoginViewController: UIViewController, LoginDisplayLogi {
     func displaySomething(viewModel: Login.Something.ViewModel) {
         //nameTextField.text = viewModel.name
     }
+}
+
+extension LoginViewController: AppleLoginManagerDelegate {
+    func appleLoginFail() {
+        // TODO: 실패 처리
+    }
+
+    func appleLoginSuccess() {
+    }
+
+
 }

@@ -2,6 +2,7 @@ import UIKit
 import GuestListScene
 import LikeRequestScene
 import DesignSystem
+import Login
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,7 +15,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         Font.registerFonts()
         window = UIWindow(frame: UIScreen.main.bounds)
-        
         let navigationController = UINavigationController()
         navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
