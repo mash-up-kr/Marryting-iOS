@@ -1,8 +1,8 @@
-import UIKit
+import DesignSystem
 import GuestListScene
 import LikeRequestScene
-import DesignSystem
-import Login
+import LoginScene
+import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

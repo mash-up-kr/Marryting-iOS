@@ -11,14 +11,11 @@
 //
 
 import UIKit
+import LoginRoutingProtocol
 import Models
 
 protocol LoginBusinessLogic {
     func appleLogin()
-}
-
-protocol LoginDataStore {
-
 }
 
 class LoginInteractor: LoginBusinessLogic, LoginDataStore {
