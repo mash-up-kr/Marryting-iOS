@@ -13,21 +13,59 @@
 import DataSource
 import Models
 import UIKit
+import AuthenticationServices
 
 protocol LoginWorkerProtocol {
-
+    func appleLogin()
 }
+
 class LoginWorker: LoginWorkerProtocol {
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
 
-    init(appleLoginManager: AppleLoginManager,
+    var doneLogin: (() -> Void)?
+    var failLogin: (() -> Void)?
+
+    init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource()) {
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
+
+        appleLoginManager.delegate = self
     }
 
-    func login() async throws -> User {
+    func appleLogin() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+
+        authorizationController.delegate = appleLoginManager
+        authorizationController.presentationContextProvider = appleLoginManager
+        authorizationController.performRequests()
+    }
+}
+
+extension LoginWorker: AppleLoginManagerDelegate {
+
+    func appleLoginFail() {
+        failLogin?()
+    }
+
+    func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
+        Task {
+            do {
+                let user = try await login()
+                print("appleLoginSuccess", user)
+                doneLogin?()
+            } catch {
+                failLogin?()
+            }
+        }
+    }
+
+    private func login() async throws -> User {
         do {
             let dto = try await loginDataSource.login(request: .init())
             return dummyUser
@@ -35,9 +73,8 @@ class LoginWorker: LoginWorkerProtocol {
             return dummyUser
         }
     }
-
-
 }
+
 
 private extension LoginWorker {
     var dummyUser: User {

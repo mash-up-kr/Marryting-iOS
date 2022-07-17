@@ -13,16 +13,19 @@
 import UIKit
 
 protocol LoginPresentationLogic {
-    func presentSomething(response: Login.Something.Response)
+    func presentLogin()
+    func failLogin()
 }
 
 class LoginPresenter: LoginPresentationLogic {
     weak var viewController: LoginDisplayLogic?
 
-    // MARK: Do something
+    func presentLogin() {
+        viewController?.alert()
+        // TODO: VC의 라우팅 작업
+    }
 
-    func presentSomething(response: Login.Something.Response) {
-        let viewModel = Login.Something.ViewModel()
-        viewController?.displaySomething(viewModel: viewModel)
+    func failLogin() {
+        viewController?.alertFail()
     }
 }

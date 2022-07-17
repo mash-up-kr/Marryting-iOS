@@ -11,7 +11,7 @@ import AuthenticationServices
 
 protocol AppleLoginManagerDelegate: AnyObject {
     func appleLoginFail()
-    func appleLoginSuccess()
+    func appleLoginSuccess(_ user: AppleLoginManager.AppleUser)
 }
 
 protocol AppleLoginManagerProtocol { }
@@ -29,19 +29,38 @@ extension AppleLoginManager: ASAuthorizationControllerPresentationContextProvidi
 }
 
 extension AppleLoginManager: ASAuthorizationControllerDelegate {
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithAuthorization authorization: ASAuthorization
+    ) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-            let userIdentifier = appleIDCredential.user
-            let userName = appleIDCredential.fullName
-            let userEmail = appleIDCredential.email
+            // let userIdentifier = appleIDCredential.user
+            // let userName = appleIDCredential.fullName
+            // let userEmail = appleIDCredential.email
 
-            print(userIdentifier, userName, userEmail)
-            delegate?.appleLoginSuccess()
-
+            let appleUser: AppleUser = dummyAppleUser
+            delegate?.appleLoginSuccess(appleUser)
         }
     }
 
-    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+    func authorizationController(
+        controller: ASAuthorizationController,
+        didCompleteWithError error: Error)
+    {
         delegate?.appleLoginFail()
+    }
+}
+
+extension AppleLoginManager {
+    struct AppleUser {
+        let userIdentifier: String
+        let userName: String
+        let userEmail: String
+    }
+
+    fileprivate var dummyAppleUser: AppleUser {
+        .init(userIdentifier: "1234",
+              userName: "Gunwoo Park",
+              userEmail: "marryting0810@gmail.com")
     }
 }

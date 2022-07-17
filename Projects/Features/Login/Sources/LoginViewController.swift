@@ -17,7 +17,8 @@ import AuthenticationServices
 import SnapKit
 
 protocol LoginDisplayLogic: AnyObject {
-    func displaySomething(viewModel: Login.Something.ViewModel)
+    func alert()
+    func alertFail()
 }
 
 public class LoginViewController: UIViewController, LoginDisplayLogic {
@@ -36,10 +37,6 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         setup()
     }
 
-    // MARK: Manager
-
-    let appleLoginManager = AppleLoginManager()
-
     // MARK: Setup
 
     private func setup() {
@@ -50,7 +47,6 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
-        interactor.appleLoginManager = appleLoginManager
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
@@ -60,21 +56,31 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
 
     lazy var appleLoginButton: UIButton = {
         $0.setBackgroundImage(.create(.btn_apple_login), for: .normal)
-        $0.addTarget(self, action: #selector(handleAuthorizationAppleIDButtonPress), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(appleLoginButtonPressed), for: .touchUpInside)
         return $0
     }(UIButton(type: .system))
 
+    @objc private func appleLoginButtonPressed() {
+        interactor?.appleLogin()
+    }
 
-    @objc private func handleAuthorizationAppleIDButtonPress() {
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
+    func alert() {
+        DispatchQueue.main.async {
+            self.present(UIAlertController(title: "로그인 성공",
+                                      message: nil,
+                                      preferredStyle: .alert),
+                    animated: true)
+        }
 
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+    }
 
-        authorizationController.delegate = appleLoginManager
-        authorizationController.presentationContextProvider = appleLoginManager
-        authorizationController.performRequests()
+    func alertFail() {
+        DispatchQueue.main.async {
+            self.present(UIAlertController(title: "로그인 실패",
+                                      message: nil,
+                                      preferredStyle: .alert),
+                    animated: true)
+        }
     }
     // MARK: Routing
 
@@ -103,28 +109,4 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
             make.trailing.equalToSuperview().inset(24)
         }
     }
-
-    // MARK: Do something
-
-    //@IBOutlet weak var nameTextField: UITextField!
-
-    func doSomething() {
-        let request = Login.Something.Request()
-        interactor?.doSomething(request: request)
-    }
-
-    func displaySomething(viewModel: Login.Something.ViewModel) {
-        //nameTextField.text = viewModel.name
-    }
-}
-
-extension LoginViewController: AppleLoginManagerDelegate {
-    func appleLoginFail() {
-        // TODO: 실패 처리
-    }
-
-    func appleLoginSuccess() {
-    }
-
-
 }

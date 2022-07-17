@@ -11,25 +11,37 @@
 //
 
 import UIKit
+import Models
 
 protocol LoginBusinessLogic {
-    func doSomething(request: Login.Something.Request)
+    func appleLogin()
 }
 
 protocol LoginDataStore {
-    //var name: String { get set }
+    var user: User? { get set }
 }
 
 class LoginInteractor: LoginBusinessLogic, LoginDataStore {
+
+    var user: User?
+
     var presenter: LoginPresentationLogic?
     var worker: LoginWorker?
     var appleLoginManager: AppleLoginManager?
-    // MARK: Do something
 
-    func doSomething(request: Login.Something.Request) {
-        worker = LoginWorker(appleLoginManager: appleLoginManager ?? AppleLoginManager())
+    func appleLogin() {
+        worker = LoginWorker()
+        worker?.doneLogin = { [weak self] in
+            self?.presenter?.presentLogin()
+        }
 
-        let response = Login.Something.Response()
-        presenter?.presentSomething(response: response)
+        worker?.failLogin = { [weak self] in
+            self?.presenter?.failLogin()
+        }
+
+        Task {
+            worker?.appleLogin()
+        }
+
     }
 }
