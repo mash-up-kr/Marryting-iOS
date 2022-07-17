@@ -75,12 +75,7 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     }
 
     func alertFail() {
-        DispatchQueue.main.async {
-            self.present(UIAlertController(title: "로그인 실패",
-                                      message: nil,
-                                      preferredStyle: .alert),
-                    animated: true)
-        }
+        // TODO: 실패처리
     }
     // MARK: Routing
 
