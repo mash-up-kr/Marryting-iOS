@@ -36,6 +36,10 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         setup()
     }
 
+    // MARK: Manager
+
+    let appleLoginManager = AppleLoginManager()
+
     // MARK: Setup
 
     private func setup() {
@@ -46,14 +50,12 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         viewController.interactor = interactor
         viewController.router = router
         interactor.presenter = presenter
+        interactor.appleLoginManager = appleLoginManager
         presenter.viewController = viewController
         router.viewController = viewController
         router.dataStore = interactor
     }
 
-    // MARK: Manager
-
-    let appleLoginManager = AppleLoginManager()
     // MARK: UI
 
     lazy var appleLoginButton: UIButton = {

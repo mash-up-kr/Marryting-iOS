@@ -16,7 +16,7 @@ protocol AppleLoginManagerDelegate: AnyObject {
 
 protocol AppleLoginManagerProtocol { }
 
-final class AppleLoginManager: NSObject, AppleLoginManagerProtocol {
+final class AppleLoginManager: NSObject {
     weak var viewController: UIViewController?
     weak var delegate: AppleLoginManagerDelegate?
 

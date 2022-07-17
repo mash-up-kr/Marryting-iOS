@@ -10,18 +10,47 @@
 //  see http://clean-swift.com
 //
 
+import DataSource
+import Models
 import UIKit
 
 protocol LoginWorkerProtocol {
 
 }
 class LoginWorker: LoginWorkerProtocol {
-    private let appleLoginManager: AppleLoginManagerProtocol
-//    private let loginDataSource: AppleLogin
-    init(appleLoginManager: AppleLoginManagerProtocol = AppleLoginManager()) {
+    private let appleLoginManager: AppleLoginManager
+    private let loginDataSource: LoginDataSourceProtocol
+
+    init(appleLoginManager: AppleLoginManager,
+         loginDataSource: LoginDataSourceProtocol = LoginDataSource()) {
         self.appleLoginManager = appleLoginManager
+        self.loginDataSource = loginDataSource
+    }
+
+    func login() async throws -> User {
+        do {
+            let dto = try await loginDataSource.login(request: .init())
+            return dummyUser
+        } catch {
+            return dummyUser
+        }
     }
 
 
+}
 
+private extension LoginWorker {
+    var dummyUser: User {
+        .init(
+            name: "박건우",
+            gender: .male,
+            career: "IT회사 개발자",
+            birth: .init(),
+            age: 21,
+            address: "서울시 금천구",
+            pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
+            answers: [],
+            keyword: []
+        )
+    }
 }
