@@ -13,6 +13,7 @@
 import UIKit
 import GuestListRoutingProtocol
 import LikeRequestScene
+import MyGuestListScene
 
 public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
     public weak var viewController: UIViewController?
@@ -31,7 +32,11 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
         destinationVC.router?.dataStore?.targetGuest = guest
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
-    
+
+    public func routeToMyGuestListScene() {
+        let destinationVC = MyGuestListViewController()
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
     //func routeToSomewhere(segue: UIStoryboardSegue?)
     //{
     //  if let segue = segue {

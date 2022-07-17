@@ -50,18 +50,50 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     }
     
     // MARK: UI
-    
+
+    private let navigationView: UIView = {
+        let v = UIView()
+        return v
+    }()
+
+    private lazy var backButton: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_arrow_back)
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
+        return v
+    }()
+
+    private let myLikeButton: UIButton = {
+        $0.setTitleColor(Pallete.Light.grey800.color, for: .normal)
+        return $0
+    }(UIButton(type: .system))
+
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
     }
-    
+
     private func setUI() {
-        
+        self.view.backgroundColor = Pallete.Light.background.color
+        self.view.addSubview(self.navigationView)
+        self.navigationView.addSubview(self.backButton)
+        self.navigationView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
+        self.backButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(20)
+        }
     }
     
     // MARK: Display Logic
-    
+
+    @objc func didTapBackButton() {
+        router?.removeFromParent()
+    }
 }
