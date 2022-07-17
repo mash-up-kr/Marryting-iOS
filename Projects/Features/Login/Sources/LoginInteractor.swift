@@ -18,13 +18,11 @@ protocol LoginBusinessLogic {
 }
 
 protocol LoginDataStore {
-    var user: User? { get set }
+    
 }
 
 class LoginInteractor: LoginBusinessLogic, LoginDataStore {
-    
-    var user: User?
-    
+
     var presenter: LoginPresentationLogic?
     var worker: LoginWorker?
     var appleLoginManager: AppleLoginManager?
@@ -38,10 +36,7 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
         worker?.failLogin = { [weak self] in
             self?.presenter?.failLogin()
         }
-        
-        Task {
-            worker?.appleLogin()
-        }
-        
+
+        worker?.appleLogin()
     }
 }
