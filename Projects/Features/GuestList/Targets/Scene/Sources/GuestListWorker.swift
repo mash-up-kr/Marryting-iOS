@@ -43,6 +43,7 @@ private extension GuestListWorker {
         [
             .init(
                 user: .init(
+                    id: 1,
                     name: "박건우",
                     gender: .male,
                     career: "IT회사 개발자",
@@ -57,6 +58,7 @@ private extension GuestListWorker {
             ),
             .init(
                 user: .init(
+                    id: 2,
                     name: "이재용",
                     gender: .male,
                     career: "학생",
@@ -71,6 +73,7 @@ private extension GuestListWorker {
             ),
             .init(
                 user: .init(
+                    id: 3,
                     name: "박재민",
                     gender: .male,
                     career: "IT회사 개발자",
@@ -85,6 +88,7 @@ private extension GuestListWorker {
             ),
             .init(
                 user: .init(
+                    id: 4,
                     name: "강진호",
                     gender: .male,
                     career: "IT회사 개발자",

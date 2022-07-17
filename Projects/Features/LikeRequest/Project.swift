@@ -4,13 +4,13 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-  name: "GuestList",
+  name: "LikeRequest",
   targets: [
     Target(
-      name: "GuestListRoutingProtocol",
+      name: "LikeRequestRoutingProtocol",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestListRoutingProtocol",
+      bundleId: "kr.mash-up.LikeRequestRoutingProtocol",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Targets/RoutingProtocol/**"],
@@ -18,42 +18,29 @@ let project = Project.make(
       dependencies: []
     ),
     Target(
-      name: "GuestListRouter",
+      name: "LikeRequestRouter",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestListRouter",
+      bundleId: "kr.mash-up.LikeRequestRouter",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Targets/Router/**"],
       resources: [],
       dependencies: [
-        .target(name: "GuestListRoutingProtocol"),
-        .project(target: "LikeRequestScene", path: "../LikeRequest"),
+        .target(name: "LikeRequestRoutingProtocol")
       ]
     ),
     Target(
-      name: "CardSideManager",
+      name: "LikeRequestScene",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestList",
-      deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
-      infoPlist: .default,
-      sources: ["Targets/CardSideManager/**"],
-      resources: [],
-      dependencies: []
-    ),
-    Target(
-      name: "GuestListScene",
-      platform: .iOS,
-      product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestListScene",
+      bundleId: "kr.mash-up.LikeRequestScene",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Targets/Scene/Sources/**"],
       resources: ["Targets/Scene/Resources/**"],
       dependencies: [
-        .target(name: "GuestListRouter"),
-        .target(name: "CardSideManager"),
+        .target(name: "LikeRequestRouter"),
         .project(target: "DesignSystem", path: "../../DesignSystem"),
         .project(target: "Models", path: "../../Core/CoreKit"),
         .project(target: "DataSource", path: "../../DataSource"),
@@ -62,14 +49,14 @@ let project = Project.make(
       ]
     ),
     Target(
-      name: "GuestListSceneTests",
+      name: "LikeRequestSceneTests",
       platform: .iOS,
       product: .staticLibrary,
-      bundleId: "kr.mash-up.GuestListTests",
+      bundleId: "kr.mash-up.LikeRequestSceneTests",
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["Targets/Scene/Tests/**"],
-      dependencies: [.target(name: "GuestListScene")]
+      dependencies: [.target(name: "LikeRequestScene")]
     ),
   ]
 )

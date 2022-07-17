@@ -55,7 +55,7 @@ extension ImageMTButton {
         case iconMainLight
         case iconSubDark
         
-        var enableImage: UIImage? {
+        public var enableImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_enable)
@@ -68,7 +68,7 @@ extension ImageMTButton {
             }
         }
         
-        var highlightedImage: UIImage? {
+        public var highlightedImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_highlight)
@@ -81,7 +81,7 @@ extension ImageMTButton {
             }
         }
         
-        var disabledImage: UIImage? {
+        public var disabledImage: UIImage? {
             switch self {
             case .iconSubDark:
                 return .create(.ic_trash_disable)

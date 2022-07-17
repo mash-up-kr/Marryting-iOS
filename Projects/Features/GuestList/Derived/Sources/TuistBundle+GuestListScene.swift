@@ -8,9 +8,9 @@ import Foundation
 private class BundleFinder {}
 
 extension Foundation.Bundle {
-    /// Since GuestList is a static library, the bundle containing the resources is copied into the final product.
+    /// Since GuestListScene is a static library, the bundle containing the resources is copied into the final product.
     static var module: Bundle = {
-        let bundleName = "GuestList_GuestList"
+        let bundleName = "GuestList_GuestListScene"
 
         let candidates = [
             Bundle.main.resourceURL,
@@ -24,14 +24,14 @@ extension Foundation.Bundle {
                 return bundle
             }
         }
-        fatalError("unable to find bundle named GuestList_GuestList")
+        fatalError("unable to find bundle named GuestList_GuestListScene")
     }()
 }
 
 // MARK: - Objective-C Bundle Accessor
 
 @objc
-public class GuestListResources: NSObject {
+public class GuestListSceneResources: NSObject {
    @objc public class var bundle: Bundle {
          return .module
    }

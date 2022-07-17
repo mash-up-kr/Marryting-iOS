@@ -14,6 +14,9 @@ import UIKit
 import SnapKit
 import DesignSystem
 import Kingfisher
+import CardSideManager
+import GuestListRoutingProtocol
+import GuestListRouter
 
 protocol GuestListDisplayLogic: AnyObject {
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel)
@@ -21,7 +24,7 @@ protocol GuestListDisplayLogic: AnyObject {
 
 public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     var interactor: GuestListBusinessLogic?
-    var router: (NSObjectProtocol & GuestListRoutingLogic & GuestListDataPassing)?
+    var router: (GuestListRoutingLogic & GuestListDataPassing)?
     
     // MARK: Object lifecycle
     
@@ -113,6 +116,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         let v = GuestCardView(frame: self.guestSwipeableView.bounds)
         v.viewModel = self.guestCardViewModels[self.guestCardIndex]
         v.backgroundColor = self.getGuestCardViewColor(for: self.guestCardIndex)
+        v.delegate = self
         self.guestCardIndex += 1
         return v
     }
@@ -203,5 +207,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel) {
         self.guestCardViewModels = viewModel.guestCardViewModels
+    }
+}
+
+extension GuestListViewController: GuestCardViewDelegate {
+    func didTapLikeButton(id: Int) {
+        router?.routeToLikeRequestScene(targetId: id)
     }
 }

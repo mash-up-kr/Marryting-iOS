@@ -13,8 +13,7 @@
 import UIKit
 import Models
 
-enum GuestList
-{
+enum GuestList {
     // MARK: Use cases
     
     enum FetchGuests {
@@ -23,6 +22,16 @@ enum GuestList
         }
         struct ViewModel {
             var guestCardViewModels: [GuestCardViewModel]
+        }
+    }
+    
+    enum DidTapLike {
+        struct Request {
+            var targetId: Int
+        }
+        
+        struct Response {
+            var target: Guest
         }
     }
 }
