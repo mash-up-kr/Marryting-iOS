@@ -20,6 +20,10 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         return $0
     }(MyGuestCardView())
 
+    private let dialogIconImageView: UIImageView = {
+        $0.image = .create(.ic_trianlge)
+        return $0
+    }(UIImageView())
     private let loveMentView: UIView = {
         $0.backgroundColor = Pallete.Light.background.color
         return $0
@@ -50,11 +54,15 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
     }
 
     private func setUI() {
-        self.contentView.addSubviews(myGuestCardView, loveMentView)
+        self.contentView.addSubviews(myGuestCardView, loveMentView, dialogIconImageView)
 
         self.loveMentView.addSubview(loveMentView)
         self.myGuestCardView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
+        }
+        self.dialogIconImageView.snp.makeConstraints { make in
+            make.trailing.equalTo(self.loveMentView).inset(32)
+            make.bottom.equalTo(self.loveMentView.top).offset(10)
         }
         self.loveMentView.snp.makeConstraints { make in
             make.top.equalTo(myGuestCardView.snp.bottom)
