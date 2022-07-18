@@ -15,7 +15,15 @@ let project = Project.make(
       infoPlist: .default,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
-      dependencies: []
+      dependencies: [
+        .project(target: "DesignSystem", path: "../../DesignSystem"),
+        .project(target: "Models", path: "../../Core/CoreKit"),
+        .project(target: "DataSource", path: "../../DataSource"),
+        .external(name: "SnapKit"),
+        .external(name: "Kingfisher"),
+        .external(name: "RxSwift"),
+        .external(name: "RxCocoa")
+      ]
     ),
     Target(
       name: "ProfileRegisterTests",

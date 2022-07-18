@@ -12,30 +12,14 @@
 
 import UIKit
 
-protocol ProfileRegisterBusinessLogic
-{
-  func doSomething(request: ProfileRegister.Something.Request)
+protocol ProfileRegisterBusinessLogic {
 }
 
-protocol ProfileRegisterDataStore
-{
-  //var name: String { get set }
+protocol ProfileRegisterDataStore {
 }
 
 class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore
 {
   var presenter: ProfileRegisterPresentationLogic?
   var worker: ProfileRegisterWorker?
-  //var name: String = ""
-  
-  // MARK: Do something
-  
-  func doSomething(request: ProfileRegister.Something.Request)
-  {
-    worker = ProfileRegisterWorker()
-    worker?.doSomeWork()
-    
-    let response = ProfileRegister.Something.Response()
-    presenter?.presentSomething(response: response)
-  }
 }
