@@ -62,7 +62,7 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         }
         self.dialogIconImageView.snp.makeConstraints { make in
             make.trailing.equalTo(self.loveMentView).inset(32)
-            make.bottom.equalTo(self.loveMentView.top).offset(10)
+            make.bottom.equalTo(self.loveMentView.snp.top).offset(10)
         }
         self.loveMentView.snp.makeConstraints { make in
             make.top.equalTo(myGuestCardView.snp.bottom)

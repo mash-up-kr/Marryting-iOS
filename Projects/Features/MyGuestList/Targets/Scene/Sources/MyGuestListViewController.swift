@@ -13,7 +13,6 @@
 import DesignSystem
 import MyGuestListRouter
 import MyGuestListRoutingProtocol
-
 import UIKit
 
 import SnapKit
@@ -70,7 +69,30 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         $0.delegate = self
         return $0
     }(MyGuestMenuView())
-   
+
+    private lazy var collectionView: UICollectionView = {
+        $0.delegate = self
+        $0.dataSource = self
+        return $0
+    }(UICollectionView())
+
+    // MARK: Store Properties
+
+    enum DisplayType {
+        case myLike
+        case matching
+    }
+
+    private var displayType: DisplayType = .myLike {
+        didSet {
+
+        }
+    }
+
+    private var myLikeGuestViewModels: [MyLikeGuestCellViewModel] = []
+
+    private var matchingViewModels: [MatchingGuestCellViewModel] = []
+
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -108,9 +130,61 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
 }
 
 extension MyGuestListViewController: MyGuestMenuViewDelegate {
-    func myLikeButtonDidTap() {}
 
-    func matchingButtonDidTap() {}
+    func myLikeButtonDidTap() {
+        displayType = .myLike
+    }
 
+    func matchingButtonDidTap() {
+        displayType = .matching
+    }
+}
+
+// MARK: UICollectionViewDataSource
+
+extension MyGuestListViewController: UICollectionViewDataSource {
+    
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        switch displayType {
+        case .myLike:
+            return myLikeGuestViewModels.count
+        case .matching:
+            return matchingViewModels.count
+        }
+    }
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        switch displayType {
+        case .myLike:
+            return myLikeGuestCollectionViewCell(indexPath)
+        case .matching:
+            return matchingGuestCollectionViewCell(indexPath)
+        }
+    }
+
+    private func myLikeGuestCollectionViewCell(
+        _ indexPath: IndexPath
+    ) -> MyLikeGuestCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(MyLikeGuestCollectionViewCell.self, for: indexPath)
+        return cell
+    }
+
+    private func matchingGuestCollectionViewCell(
+        _ indexPath: IndexPath
+    ) -> MatchingGuestCollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(MatchingGuestCollectionViewCell.self, for: indexPath)
+        return cell
+    }
+}
+
+// MARK: UICollectionViewDelegate
+
+extension MyGuestListViewController: UICollectionViewDelegate {
 
 }
