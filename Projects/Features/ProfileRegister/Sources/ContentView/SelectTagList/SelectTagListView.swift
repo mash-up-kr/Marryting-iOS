@@ -56,6 +56,7 @@ final class SelectTagListView: UIView {
     }
 }
 
+// TOOD: 2줄 3줄이 고정인지 물어보고 이 부분 추가 작업
 // MARK: - Extension
 extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -72,7 +73,7 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TagCell else{
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TagCell else {
             fatalError()
         }
         
@@ -86,13 +87,13 @@ extension SelectTagListView: UICollectionViewDelegateFlowLayout {
                         sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17)
+        label.font = .body1()
         label.text = tagList[indexPath.row]
         label.sizeToFit()
         
         let size = label.frame.size
         
-        return CGSize(width: size.width + 32, height: size.height + 14)
+        return CGSize(width: size.width + 32, height: 40)
     }
 }
 

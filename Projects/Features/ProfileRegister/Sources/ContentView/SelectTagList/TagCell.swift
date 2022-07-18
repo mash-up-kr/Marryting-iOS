@@ -7,14 +7,32 @@
 //
 
 import UIKit
+import DesignSystem
+import SnapKit
 
 // MARK: - Cell 설정
 final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
-    var titleLabel = UILabel()
+    lazy var baseView: UIView = {
+        let view = UIView()
+        view.layer.borderColor = Pallete.Dark.grey500.color?.cgColor
+        view.layer.borderWidth = 1
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .body1()
+        label.textColor = Pallete.Dark.grey200.color
+        return label
+    }()
     
     var isClicked: Bool = false {
         didSet {
-            backgroundColor = isClicked ? .red : .green
+            baseView.backgroundColor = isClicked ? Pallete.Dark.main300.color?.withAlphaComponent(0.16) : .clear
+            baseView.layer.borderColor = isClicked ? Pallete.Dark.main300.color?.cgColor : Pallete.Dark.grey500.color?.cgColor
+            titleLabel.font = isClicked ? .h5() : .body1()
+            titleLabel.textColor = isClicked ? .white : Pallete.Dark.grey200.color
         }
     }
     
@@ -39,14 +57,21 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     private func configureUI() {
         isClicked = false
         
-        addSubview(titleLabel)
+        addSubview(baseView)
+        baseView.addSubview(titleLabel)
         
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            titleLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            titleLabel.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -7),
-            titleLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 7)
-        ])
+        baseView.snp.makeConstraints { make in
+            make.height.equalTo(40)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+        }
     }
 }
