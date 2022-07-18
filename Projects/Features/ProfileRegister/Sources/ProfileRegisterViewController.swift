@@ -59,7 +59,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let pageSize = 4
     private let sideSpace = 32
     
-    private var pageNum = 1
+    private var pageNum = 1 {
+        didSet {
+            changePage()
+        }
+    }
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
@@ -70,12 +74,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .h3()
-        let titleText = titleStringList[pageNum - 1]
-        let titlehighlightText = titlehighlightStringList[pageNum - 1]
-        let attributedStr = NSMutableAttributedString(string: titleText)
-        attributedStr.addAttribute(.foregroundColor, value: UIColor.white, range: (titleText as NSString).range(of: titleText))
-        attributedStr.addAttribute(.foregroundColor, value: Pallete.Dark.subGreen.color ?? UIColor.white, range: (titleText as NSString).range(of: titlehighlightText))
-        label.attributedText = attributedStr
         return label
     }()
     
@@ -83,7 +81,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .body1()
-        label.text = subTitleStringList[pageNum - 1]
         label.textColor = .systemGray3
         return label
     }()
@@ -113,11 +110,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var leftButton: TextImageMTButton = {
         let button = TextImageMTButton(customButtonType: .mainSmallDark)
-        if pageNum == 1 {
-            button.isHidden = true
-        } else {
-            button.isHidden = false
-        }
         button.title = "PRE"
         button.isEnabled = true
         button.addTarget(self, action: #selector(pressPrevButton(_:)), for: .touchUpInside)
@@ -126,11 +118,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var rightButton: TextImageMTButton = {
         let button = TextImageMTButton(customButtonType: .mainDark)
-        if pageNum == pageSize {
-            button.title = "DONE"
-        } else {
-            button.title = "NEXT"
-        }
         button.addTarget(self, action: #selector(pressNextButton(_:)), for: .touchUpInside)
         return button
     }()
@@ -152,6 +139,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private func configureUI() {
         configureUIObjectsLayout()
+        changePage()
         
         contentView.addSubview(selectTagListView)
         
@@ -216,6 +204,31 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+    }
+    
+    private func changePage() {
+        changeTopUI()
+    }
+    
+    private func changeTopUI() {
+        let titleText = titleStringList[pageNum - 1]
+        let titlehighlightText = titlehighlightStringList[pageNum - 1]
+        let attributedStr = NSMutableAttributedString(string: titleText)
+        attributedStr.addAttribute(.foregroundColor, value: UIColor.white, range: (titleText as NSString).range(of: titleText))
+        attributedStr.addAttribute(.foregroundColor, value: Pallete.Dark.subGreen.color ?? UIColor.white, range: (titleText as NSString).range(of: titlehighlightText))
+        titleLabel.attributedText = attributedStr
+        subTitleLabel.text = subTitleStringList[pageNum - 1]
+        if pageNum == 1 {
+            leftButton.isHidden = true
+        } else {
+            leftButton.isHidden = false
+        }
+        if pageNum == pageSize {
+            rightButton.title = "DONE"
+        } else {
+            rightButton.title = "NEXT"
+        }
+        pageControl.currentPage = pageNum - 1
     }
     
     func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
