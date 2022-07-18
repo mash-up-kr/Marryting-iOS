@@ -20,4 +20,7 @@ final class EnterUserInfoView: UIView {
         super.init(coder: coder)
         configureUI()
     }
+    
+    func configureUI() {
+    }
 }
