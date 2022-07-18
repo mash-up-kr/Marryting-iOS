@@ -39,6 +39,7 @@ public enum Assets: String {
     case img_bubble
     case img_bubble_back
     case logo
+    case btn_apple_login
 
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")
