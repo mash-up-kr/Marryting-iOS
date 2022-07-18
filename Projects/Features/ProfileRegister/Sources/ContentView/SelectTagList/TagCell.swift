@@ -37,7 +37,7 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
             baseView.backgroundColor = isClicked ? Pallete.Dark.main300.color?.withAlphaComponent(0.16) : .clear
             baseView.layer.borderColor = isClicked ? Pallete.Dark.main300.color?.cgColor : Pallete.Dark.grey500.color?.cgColor
             titleLabel.font = isClicked ? .h5() : .body1()
-            titleLabel.textColor = isClicked ? .white : Pallete.Dark.grey200.color
+            titleLabel.textColor = isClicked ? Pallete.Dark.white.color : Pallete.Dark.grey200.color
         }
     }
     

@@ -3,6 +3,7 @@ import GuestListScene
 import LikeRequestScene
 import LoginScene
 import UIKit
+import ProfileRegister
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        navigationController.pushViewController(GuestListViewController(), animated: true)
+        navigationController.pushViewController(ProfileRegisterViewController(), animated: true)
 
         return true
     }

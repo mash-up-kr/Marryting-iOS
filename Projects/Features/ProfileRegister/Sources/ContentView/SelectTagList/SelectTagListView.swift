@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DesignSystem
 
 final class SelectTagListView: UIView {
     // MARK: - Properties
@@ -38,7 +39,7 @@ final class SelectTagListView: UIView {
     }
     
     func configureUI() {
-        backgroundColor = .clear
+        backgroundColor = Pallete.Dark.background.color
         
         collectionView.delegate = self
         collectionView.dataSource = self

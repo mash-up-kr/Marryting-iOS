@@ -34,6 +34,10 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         setup()
     }
     
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
+        self.view.endEditing(true)
+    }
+    
     // MARK: Setup
     
     private func setup() {
@@ -122,6 +126,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         return view
     }()
     
+    lazy var enterUserInfoView: EnterUserInfoView = {
+        let view = EnterUserInfoView()
+        return view
+    }()
+    
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -138,6 +147,15 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         contentView.addSubview(selectTagListView)
         
         selectTagListView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        contentView.addSubview(enterUserInfoView)
+        
+        enterUserInfoView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.trailing.equalToSuperview().offset(-16)
             make.top.equalToSuperview()
