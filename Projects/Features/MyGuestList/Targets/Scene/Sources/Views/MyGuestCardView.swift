@@ -106,6 +106,7 @@ final class MyGuestCardView: UIView {
             if let urlString = viewModel?.imageUrl,
                let url = URL(string: urlString) {
                 self.profileImageView.kf.setImage(with: url)
+                self.setProfileImageViewBackgroundGradient()
             }
         }
     }
@@ -151,8 +152,6 @@ final class MyGuestCardView: UIView {
             make.leading.equalTo(addressStackView)
             make.bottom.equalToSuperview().inset(32)
         }
-
-        self.setProfileImageViewBackgroundGradient()
     }
 
     private func setProfileImageViewBackgroundGradient() {

@@ -75,7 +75,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 30
+        layout.minimumInteritemSpacing = 30
         layout.scrollDirection = .vertical
         layout.estimatedItemSize = .init(width: 345, height: 0)
         let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
@@ -134,7 +134,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
-
+        self.collectionView.backgroundColor = Pallete.Light.background.color
         self.view.addSubviews(self.navigationView, self.myGuestMenuView, self.collectionView)
         self.navigationView.addSubview(self.backButton)
 
@@ -153,7 +153,8 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         }
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.myGuestMenuView.snp.bottom).offset(2)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
         }
     }
     
@@ -230,6 +231,20 @@ extension MyGuestListViewController: UICollectionViewDataSource {
 
 // MARK: UICollectionViewDelegate
 
-extension MyGuestListViewController: UICollectionViewDelegate {
+extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumLineSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return 30
+    }
 
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        minimumInteritemSpacingForSectionAt section: Int
+    ) -> CGFloat {
+        return 30
+    }
 }
