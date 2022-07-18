@@ -18,13 +18,14 @@ struct MyGuestCardViewModel {
     var name: String
     var age: Int
     var address: String
-    var job: String
+    var career: String
     var isLiked: Bool
 }
 
 final class MyGuestCardView: UIView {
 
     private let profileImageView: UIImageView = {
+        $0.backgroundColor = Pallete.Light.background.color
         $0.contentMode = .scaleAspectFill
         return $0
     }(UIImageView())
@@ -68,7 +69,7 @@ final class MyGuestCardView: UIView {
         return $0
     }(UILabel())
 
-    private let jobStackView: UIStackView = {
+    private let careerStackView: UIStackView = {
         $0.axis = .horizontal
         $0.distribution = .fill
         $0.alignment = .center
@@ -76,18 +77,18 @@ final class MyGuestCardView: UIView {
         return $0
     }(UIStackView())
 
-    private let jobIconImageView: UIImageView = {
+    private let careerIconImageView: UIImageView = {
         $0.image = .create(.ic_clover)
         return $0
     }(UIImageView())
 
-    private let jobLabel: UILabel = {
+    private let careerLabel: UILabel = {
         $0.font = .h5()
         $0.textColor = Pallete.Light.background.color
         return $0
     }(UILabel())
 
-    private let jobDescriptionLabel: UILabel = {
+    private let careerDescriptionLabel: UILabel = {
         $0.font = .subtitle2()
         $0.textColor = Pallete.Light.grey200.color
         $0.text = "로 일해요"
@@ -97,7 +98,11 @@ final class MyGuestCardView: UIView {
     var viewModel: MyGuestCardViewModel? {
         didSet {
             self.nameLabel.text = viewModel?.name ?? ""
-            self.ageLabel.text = "\(String(describing: viewModel?.age))"
+            self.addressLabel.text = viewModel?.address ?? ""
+            self.careerLabel.text = viewModel?.career ?? ""
+            if let age = viewModel?.age {
+                self.ageLabel.text = "\(age)"
+            }
             if let urlString = viewModel?.imageUrl,
                let url = URL(string: urlString) {
                 self.profileImageView.kf.setImage(with: url)
@@ -116,21 +121,23 @@ final class MyGuestCardView: UIView {
     }
 
     private func setUI() {
-        self.addSubviews(profileImageView, nameLabel, ageLabel)
-        self.addSubviews(addressStackView, jobStackView)
+        self.addSubviews(self.profileImageView, self.nameLabel, self.ageLabel)
+        self.addSubviews(self.addressStackView, self.careerStackView)
 
-        self.addressStackView.addArrangedSubviews(addressIconImageView, addressLabel, addressDescriptionLabel)
-        self.jobStackView.addArrangedSubviews(jobIconImageView, jobLabel, jobDescriptionLabel)
+        self.addressStackView.addArrangedSubviews(self.addressIconImageView, self.addressLabel, self.addressDescriptionLabel)
+        self.careerStackView.addArrangedSubviews(self.careerIconImageView, self.careerLabel, self.careerDescriptionLabel)
 
         self.profileImageView.snp.makeConstraints { make in
             make.leading.trailing.top.bottom.equalToSuperview()
+            make.width.equalTo(UIScreen.main.bounds.width)
+            make.height.equalTo(self.profileImageView.snp.width).multipliedBy(1.33)
         }
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(32)
         }
         self.ageLabel.snp.makeConstraints { make in
-            make.leading.equalTo(nameLabel.snp.trailing)
-            make.bottom.equalTo(nameLabel.snp.firstBaseline)
+            make.leading.equalTo(nameLabel.snp.trailing).offset(4)
+            make.bottom.equalTo(nameLabel)
         }
         self.addressStackView.snp.makeConstraints { make in
             make.top.equalTo(nameLabel.snp.bottom).offset(10)
@@ -139,7 +146,7 @@ final class MyGuestCardView: UIView {
         self.addressIconImageView.snp.makeConstraints { make in
             make.width.height.equalTo(26)
         }
-        self.jobStackView.snp.makeConstraints { make in
+        self.careerStackView.snp.makeConstraints { make in
             make.top.equalTo(addressStackView.snp.bottom).offset(4)
             make.leading.equalTo(addressStackView)
             make.bottom.equalToSuperview().inset(32)

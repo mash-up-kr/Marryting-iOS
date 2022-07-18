@@ -11,7 +11,7 @@ import UIKit
 
 struct MatchingGuestCellViewModel {
     var myGuestCardViewModel: MyGuestCardViewModel
-    var loveyMent: String
+    var loveMent: String
 }
 
 final class MatchingGuestCollectionViewCell: UICollectionViewCell {
@@ -37,9 +37,10 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         return $0
     }(UILabel())
 
-    var viewModel: MyLikeGuestCellViewModel? {
+    var viewModel: MatchingGuestCellViewModel? {
         didSet {
             self.myGuestCardView.viewModel = viewModel?.myGuestCardViewModel
+            self.loveMentLabel.text = viewModel?.loveMent
         }
     }
 
@@ -56,13 +57,13 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
     private func setUI() {
         self.contentView.addSubviews(myGuestCardView, loveMentView, dialogIconImageView)
 
-        self.loveMentView.addSubview(loveMentView)
+        self.loveMentView.addSubview(loveMentLabel)
         self.myGuestCardView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
         }
         self.dialogIconImageView.snp.makeConstraints { make in
             make.trailing.equalTo(self.loveMentView).inset(32)
-            make.bottom.equalTo(self.loveMentView.snp.top).offset(10)
+            make.bottom.equalTo(self.loveMentView.snp.top)
         }
         self.loveMentView.snp.makeConstraints { make in
             make.top.equalTo(myGuestCardView.snp.bottom)

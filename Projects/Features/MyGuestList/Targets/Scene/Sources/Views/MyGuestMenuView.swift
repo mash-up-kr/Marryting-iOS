@@ -77,9 +77,7 @@ final class MyGuestMenuView: UIView {
     }
 
     private func setUI() {
-        addSubview(myLikeButton)
-        addSubview(matchingButton)
-        addSubview(selectedLineView)
+        self.addSubviews(self.myLikeButton, self.matchingButton, self.selectedLineView)
 
         self.myLikeButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
@@ -87,7 +85,7 @@ final class MyGuestMenuView: UIView {
         }
         self.matchingButton.snp.makeConstraints { make in
             make.leading.equalTo(self.myLikeButton.snp.trailing).offset(20)
-            make.trailing.greaterThanOrEqualTo(self).inset(32).priority(.low)
+            make.top.equalTo(self.myLikeButton)
         }
         self.selectedLineView.snp.makeConstraints { make in
             make.top.equalTo(self.myLikeButton.snp.bottom)

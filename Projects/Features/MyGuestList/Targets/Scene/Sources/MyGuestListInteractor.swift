@@ -13,17 +13,56 @@
 import MyGuestListRoutingProtocol
 import Models
 
-protocol MyGuestListBusinessLogic {}
+protocol MyGuestListBusinessLogic {
+    func fetchMyLikeGuests()
+    func fetchMatchingGuests()
+}
 
 final class MyGuestListInteractor: MyGuestListBusinessLogic, MyGuestListDataStore {
     var presenter: MyGuestListPresentationLogic?
     var worker: MyGuestListWorkerProtocol?
-    
+
+    // MARK: Data Store
+
+    var myLikeGuests: [Guest] = []
+
+    var matchingGuests: [Guest] = []
+
     init(worker: MyGuestListWorkerProtocol = MyGuestListWorker()) {
         self.worker = worker
     }
     
     // MARK: Business Logic
-    
+
+    func fetchMyLikeGuests() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let guests = try await worker.fetchMyLikeGuests()
+                self.myLikeGuests = guests
+                presenter?.presentMyLikeGuests(response: .init(guests: guests))
+            } catch {
+                // TODO: 에러처리
+            }
+        }
+    }
+
+    func fetchMatchingGuests() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let guests = try await worker.fetchMatchingGuests()
+                self.matchingGuests = guests
+                presenter?.presentMatchingGuests(response: .init(guests: guests))
+            } catch {
+                // TODO: 에러처리
+            }
+        }
+    }
+
     
 }

@@ -13,5 +13,6 @@
 import Models
 
 public protocol MyGuestListDataStore {
-//    var storeGuest: Guest? { get set }
+    var myLikeGuests: [Guest] { get set }
+    var matchingGuests: [Guest] { get set }
 }

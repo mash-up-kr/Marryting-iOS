@@ -17,11 +17,31 @@ enum MyGuestList {
     
     // MARK: Use cases
     
-    enum Somthing {
-        struct Reuqest {}
-        
-        struct Response {}
-        
-        struct ViewModel {}
+    enum FetchMyLikeGuests {
+        struct Response {
+            var guests: [Guest]
+        }
+        struct ViewModel {
+            var myLikeGuestCellViewModels: [MyLikeGuestCellViewModel]
+        }
+    }
+
+    enum FetchMatchingGuests {
+        struct Response {
+            var guests: [Guest]
+        }
+        struct ViewModel {
+            var matchingGuestCellViewModels: [MatchingGuestCellViewModel]
+        }
+    }
+    
+    enum DidTapLike {
+        struct Request {
+            var targetId: Int
+        }
+
+        struct Response {
+            var target: Guest
+        }
     }
 }

@@ -17,7 +17,10 @@ import UIKit
 
 import SnapKit
 
-protocol MyGuestListDisplayLogic: AnyObject {}
+protocol MyGuestListDisplayLogic: AnyObject {
+    func displayMyLikeGuests(viewModel: MyGuestList.FetchMyLikeGuests.ViewModel)
+    func displayMatchingGuests(viewModel: MyGuestList.FetchMatchingGuests.ViewModel)
+}
 
 public final class MyGuestListViewController: UIViewController, MyGuestListDisplayLogic {
     var interactor: MyGuestListBusinessLogic?
@@ -71,10 +74,17 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     }(MyGuestMenuView())
 
     private lazy var collectionView: UICollectionView = {
-        $0.delegate = self
-        $0.dataSource = self
-        return $0
-    }(UICollectionView())
+        let layout = UICollectionViewFlowLayout()
+        layout.minimumLineSpacing = 30
+        layout.scrollDirection = .vertical
+        layout.estimatedItemSize = .init(width: 345, height: 0)
+        let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        v.register(MyLikeGuestCollectionViewCell.self)
+        v.register(MatchingGuestCollectionViewCell.self)
+        v.delegate = self
+        v.dataSource = self
+        return v
+    }()
 
     // MARK: Store Properties
 
@@ -83,15 +93,32 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         case matching
     }
 
-    private var displayType: DisplayType = .myLike {
+    private lazy var displayType: DisplayType = .myLike {
         didSet {
-
+            switch displayType {
+            case .myLike:
+                interactor?.fetchMyLikeGuests()
+            case .matching:
+                interactor?.fetchMatchingGuests()
+            }
         }
     }
 
-    private var myLikeGuestViewModels: [MyLikeGuestCellViewModel] = []
+    private lazy var myLikeGuestViewModels: [MyLikeGuestCellViewModel] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
 
-    private var matchingViewModels: [MatchingGuestCellViewModel] = []
+    private lazy var matchingViewModels: [MatchingGuestCellViewModel] = [] {
+        didSet {
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
+    }
 
     // MARK: View lifecycle
     
@@ -100,11 +127,15 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         setUI()
     }
 
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.interactor?.fetchMyLikeGuests()
+    }
+    
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
 
-        self.view.addSubview(self.navigationView)
-        self.view.addSubview(self.myGuestMenuView)
+        self.view.addSubviews(self.navigationView, self.myGuestMenuView, self.collectionView)
         self.navigationView.addSubview(self.backButton)
 
         self.navigationView.snp.makeConstraints { make in
@@ -120,9 +151,21 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
             make.top.equalTo(self.navigationView.snp.bottom).offset(10)
             make.leading.trailing.equalToSuperview()
         }
+        self.collectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.myGuestMenuView.snp.bottom).offset(2)
+            make.leading.trailing.bottom.equalToSuperview()
+        }
     }
     
     // MARK: Display Logic
+
+    func displayMyLikeGuests(viewModel: MyGuestList.FetchMyLikeGuests.ViewModel) {
+        self.myLikeGuestViewModels = viewModel.myLikeGuestCellViewModels
+    }
+
+    func displayMatchingGuests(viewModel: MyGuestList.FetchMatchingGuests.ViewModel) {
+        self.matchingViewModels = viewModel.matchingGuestCellViewModels
+    }
 
     @objc func didTapBackButton() {
         router?.removeFromParent()
@@ -172,6 +215,7 @@ extension MyGuestListViewController: UICollectionViewDataSource {
         _ indexPath: IndexPath
     ) -> MyLikeGuestCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MyLikeGuestCollectionViewCell.self, for: indexPath)
+        cell.viewModel = myLikeGuestViewModels[indexPath.item]
         return cell
     }
 
@@ -179,6 +223,7 @@ extension MyGuestListViewController: UICollectionViewDataSource {
         _ indexPath: IndexPath
     ) -> MatchingGuestCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MatchingGuestCollectionViewCell.self, for: indexPath)
+        cell.viewModel = matchingViewModels[indexPath.item]
         return cell
     }
 }
