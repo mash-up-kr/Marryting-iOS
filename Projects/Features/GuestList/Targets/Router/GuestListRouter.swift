@@ -34,9 +34,15 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
     }
 
     public func routeToMyGuestListScene() {
+        guard let dataStore = dataStore else {
+            return
+        }
+        let _ = dataStore.guests.filter { $0.isLiked == true }
         let destinationVC = MyGuestListViewController()
+//        destinationVC.router?.dataStore?.myLikeGuests = myLikeGuests
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
+
     //func routeToSomewhere(segue: UIStoryboardSegue?)
     //{
     //  if let segue = segue {

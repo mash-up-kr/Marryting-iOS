@@ -24,6 +24,7 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         $0.image = .create(.ic_trianlge)
         return $0
     }(UIImageView())
+
     private let loveMentView: UIView = {
         $0.backgroundColor = Pallete.Light.background.color
         return $0
@@ -41,6 +42,7 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         didSet {
             self.myGuestCardView.viewModel = viewModel?.myGuestCardViewModel
             self.loveMentLabel.text = viewModel?.loveMent
+            self.contentView.layoutIfNeeded()
         }
     }
 
@@ -52,6 +54,11 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setUI()
+    }
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        viewModel = nil
     }
 
     private func setUI() {
