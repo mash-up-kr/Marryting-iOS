@@ -12,11 +12,58 @@
 
 import UIKit
 
-protocol MyGuestListPresentationLogic {}
+protocol MyGuestListPresentationLogic {
+    func presentMyLikeGuests(response: MyGuestList.FetchMyLikeGuests.Response)
+    func presentMatchingGuests(response: MyGuestList.FetchMatchingGuests.Response)
+}
 
 final class MyGuestListPresenter: MyGuestListPresentationLogic {
     weak var viewController: MyGuestListDisplayLogic?
     
-    // MARK: Do something
-    
+    // MARK: Presentation Logic
+
+    func presentMyLikeGuests(response: MyGuestList.FetchMyLikeGuests.Response) {
+        self.viewController?.displayMyLikeGuests(
+            viewModel: .init(
+                myLikeGuestCellViewModels: response.guests
+                    .map {
+                        .init(myGuestCardViewModel:
+                                .init(
+                                    id: $0.user.id,
+                                    imageUrl: $0.user.pictures[0],
+                                    name: $0.user.name,
+                                    age: $0.user.age,
+                                    address: $0.user.address,
+                                    career: $0.user.career,
+                                    isLiked: $0.isLiked
+                                )
+                        )
+                    }
+            )
+        )
+    }
+
+    func presentMatchingGuests(response: MyGuestList.FetchMatchingGuests.Response) {
+        self.viewController?.displayMatchingGuests(
+            viewModel:
+                    .init(
+                        matchingGuestCellViewModels: response.guests
+                            .map {
+                                .init(myGuestCardViewModel:
+                                        .init(
+                                            id: $0.user.id,
+                                            imageUrl: $0.user.pictures[0],
+                                            name: $0.user.name,
+                                            age: $0.user.age,
+                                            address: $0.user.address,
+                                            career: $0.user.career,
+                                            isLiked: $0.isLiked
+                                        ),
+                                      loveMent: "그대가 찾는 사람, 바로 저입니다."
+                                )
+                            }
+                    )
+        )
+    }
+
 }
