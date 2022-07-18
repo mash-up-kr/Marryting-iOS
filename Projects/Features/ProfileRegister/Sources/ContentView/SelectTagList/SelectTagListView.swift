@@ -2,11 +2,11 @@
 //  SelectTagListView.swift
 //  ProfileRegister
 //
-//  Created by Yoojin Park on 2022/07/09.
+//  Created by Yoojin Park on 2022/07/18.
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 final class SelectTagListView: UIView {
     // MARK: - Properties
@@ -20,7 +20,8 @@ final class SelectTagListView: UIView {
         layout.minimumInteritemSpacing = 8
         layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        let collectionView = UICollectionView(frame: .zero,
+                                              collectionViewLayout: layout)
         collectionView.backgroundColor = .clear
         return collectionView
     }()
@@ -46,13 +47,12 @@ final class SelectTagListView: UIView {
         
         addSubview(collectionView)
         
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            collectionView.topAnchor.constraint(equalTo: self.topAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-        ])
+        collectionView.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+        }
     }
 }
 

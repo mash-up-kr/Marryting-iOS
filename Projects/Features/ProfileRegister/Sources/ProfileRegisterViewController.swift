@@ -14,34 +14,29 @@ import UIKit
 import SnapKit
 import DesignSystem
 
-protocol ProfileRegisterDisplayLogic: AnyObject
-{
+protocol ProfileRegisterDisplayLogic: AnyObject {
     func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
 }
 
-public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic
-{
+public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
     var interactor: ProfileRegisterBusinessLogic?
     var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
     
     // MARK: Object lifecycle
     
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
-    {
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
     
-    required init?(coder aDecoder: NSCoder)
-    {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
     
     // MARK: Setup
     
-    private func setup()
-    {
+    private func setup() {
         let viewController = self
         let interactor = ProfileRegisterInteractor()
         let presenter = ProfileRegisterPresenter()
@@ -129,8 +124,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     // MARK: View lifecycle
     
-    public override func viewDidLoad()
-    {
+    public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
     }
@@ -214,8 +208,12 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let titleText = titleStringList[pageNum - 1]
         let titlehighlightText = titlehighlightStringList[pageNum - 1]
         let attributedStr = NSMutableAttributedString(string: titleText)
-        attributedStr.addAttribute(.foregroundColor, value: UIColor.white, range: (titleText as NSString).range(of: titleText))
-        attributedStr.addAttribute(.foregroundColor, value: Pallete.Dark.subGreen.color ?? UIColor.white, range: (titleText as NSString).range(of: titlehighlightText))
+        attributedStr.addAttribute(.foregroundColor,
+                                   value: UIColor.white,
+                                   range: (titleText as NSString).range(of: titleText))
+        attributedStr.addAttribute(.foregroundColor,
+                                   value: Pallete.Dark.subGreen.color ?? UIColor.white,
+                                   range: (titleText as NSString).range(of: titlehighlightText))
         titleLabel.attributedText = attributedStr
         subTitleLabel.text = subTitleStringList[pageNum - 1]
         if pageNum == 1 {

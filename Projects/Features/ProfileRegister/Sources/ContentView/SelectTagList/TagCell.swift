@@ -2,7 +2,7 @@
 //  TagCell.swift
 //  ProfileRegister
 //
-//  Created by Yoojin Park on 2022/07/09.
+//  Created by Yoojin Park on 2022/07/18.
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
@@ -12,6 +12,9 @@ import SnapKit
 
 // MARK: - Cell 설정
 final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
+    
+    // MARK: Configure UI
+    
     lazy var baseView: UIView = {
         let view = UIView()
         view.layer.borderColor = Pallete.Dark.grey500.color?.cgColor
@@ -27,6 +30,8 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         return label
     }()
     
+    // MARK: Properties
+    
     var isClicked: Bool = false {
         didSet {
             baseView.backgroundColor = isClicked ? Pallete.Dark.main300.color?.withAlphaComponent(0.16) : .clear
@@ -35,6 +40,8 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
             titleLabel.textColor = isClicked ? .white : Pallete.Dark.grey200.color
         }
     }
+    
+    // MARK: Object lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -49,10 +56,14 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
         super.prepareForReuse()
     }
     
+    // MARK: Function
+    
     func setData(_ tag: String) {
         titleLabel.text = tag
         titleLabel.sizeToFit()
     }
+    
+    // MARK: Configure UI
     
     private func configureUI() {
         isClicked = false
