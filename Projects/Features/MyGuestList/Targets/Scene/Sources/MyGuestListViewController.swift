@@ -75,9 +75,8 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
 
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 30
         layout.scrollDirection = .vertical
-        layout.estimatedItemSize = .init(width: 345, height: 0)
+        layout.estimatedItemSize = .init(width: UIScreen.main.bounds.width, height: 400)
         let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
         v.register(MyLikeGuestCollectionViewCell.self)
         v.register(MatchingGuestCollectionViewCell.self)
@@ -107,6 +106,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     private lazy var myLikeGuestViewModels: [MyLikeGuestCellViewModel] = [] {
         didSet {
             DispatchQueue.main.async {
+                self.collectionView.setContentOffset(.zero, animated: false)
                 self.collectionView.reloadData()
             }
         }
@@ -115,6 +115,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
     private lazy var matchingViewModels: [MatchingGuestCellViewModel] = [] {
         didSet {
             DispatchQueue.main.async {
+                self.collectionView.setContentOffset(.zero, animated: false)
                 self.collectionView.reloadData()
             }
         }
@@ -154,7 +155,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(self.myGuestMenuView.snp.bottom).offset(2)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide.snp.bottom)
+            make.bottom.equalTo(self.view.snp.bottom)
         }
     }
     
@@ -206,14 +207,14 @@ extension MyGuestListViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         switch displayType {
         case .myLike:
-            return myLikeGuestCollectionViewCell(indexPath)
+            return myLikeGuestCollectionViewCell(for: indexPath)
         case .matching:
-            return matchingGuestCollectionViewCell(indexPath)
+            return matchingGuestCollectionViewCell(for: indexPath)
         }
     }
 
     private func myLikeGuestCollectionViewCell(
-        _ indexPath: IndexPath
+        for indexPath: IndexPath
     ) -> MyLikeGuestCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MyLikeGuestCollectionViewCell.self, for: indexPath)
         cell.viewModel = myLikeGuestViewModels[indexPath.item]
@@ -221,7 +222,7 @@ extension MyGuestListViewController: UICollectionViewDataSource {
     }
 
     private func matchingGuestCollectionViewCell(
-        _ indexPath: IndexPath
+        for indexPath: IndexPath
     ) -> MatchingGuestCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MatchingGuestCollectionViewCell.self, for: indexPath)
         cell.viewModel = matchingViewModels[indexPath.item]
@@ -237,7 +238,13 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 30
+        switch displayType {
+        case .myLike:
+            return 30
+        case .matching:
+            return 60
+        }
+
     }
 
     public func collectionView(
@@ -245,6 +252,39 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         layout collectionViewLayout: UICollectionViewLayout,
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
-        return 30
+        return 0
+    }
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout,
+        sizeForItemAt indexPath: IndexPath
+    ) -> CGSize {
+        switch displayType {
+        case .myLike:
+            return myLikeCellSize()
+        case .matching:
+            return matchingCellSize(for: indexPath)
+        }
+    }
+
+    private func myLikeCellSize() -> CGSize {
+        let width: CGFloat = UIScreen.main.bounds.width
+        let height: CGFloat = width * 4 / 3
+        return .init(width: width, height: height)
+    }
+
+    private func matchingCellSize(for indexPath: IndexPath) -> CGSize {
+        let width: CGFloat = UIScreen.main.bounds.width
+        var height: CGFloat = 0
+        switch displayType {
+        case .myLike:
+            height = width * 4 / 3
+        case .matching:
+            // TODO: dialogView 높이 계산 부분 개선
+            height = width * 4 / 3 + 62 // dialogView.bounds.height
+        }
+
+        return .init(width: width, height: height)
     }
 }

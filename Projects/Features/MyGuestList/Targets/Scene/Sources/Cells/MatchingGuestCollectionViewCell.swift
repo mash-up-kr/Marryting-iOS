@@ -11,7 +11,7 @@ import UIKit
 
 struct MatchingGuestCellViewModel {
     var myGuestCardViewModel: MyGuestCardViewModel
-    var loveMent: String
+    var dialog: DialogViewModel
 }
 
 final class MatchingGuestCollectionViewCell: UICollectionViewCell {
@@ -25,24 +25,14 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         return $0
     }(UIImageView())
 
-    private let loveMentView: UIView = {
-        $0.backgroundColor = Pallete.Light.background.color
+    private let dialogView: DialogView = {
         return $0
-    }(UIView())
-
-    private let loveMentLabel: UILabel = {
-        // TODO: 영어 멘트일경우 체크
-        $0.font = .h4()
-        $0.textColor = Pallete.Light.grey700.color
-        $0.numberOfLines = 0
-        return $0
-    }(UILabel())
+    }(DialogView())
 
     var viewModel: MatchingGuestCellViewModel? {
         didSet {
             self.myGuestCardView.viewModel = viewModel?.myGuestCardViewModel
-            self.loveMentLabel.text = viewModel?.loveMent
-            self.contentView.layoutIfNeeded()
+            self.dialogView.viewModel = viewModel?.dialog
         }
     }
 
@@ -56,31 +46,19 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         setUI()
     }
 
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        viewModel = nil
-    }
-
     private func setUI() {
-        self.contentView.addSubviews(myGuestCardView, loveMentView, dialogIconImageView)
+        self.contentView.addSubviews(self.myGuestCardView, self.dialogIconImageView, self.dialogView)
 
-        self.loveMentView.addSubview(loveMentLabel)
         self.myGuestCardView.snp.makeConstraints { make in
             make.leading.trailing.top.equalToSuperview()
         }
         self.dialogIconImageView.snp.makeConstraints { make in
-            make.trailing.equalTo(self.loveMentView).inset(32)
-            make.bottom.equalTo(self.loveMentView.snp.top)
+            make.trailing.equalTo(self.dialogView).inset(32)
+            make.bottom.equalTo(self.dialogView.snp.top).offset(3)
         }
-        self.loveMentView.snp.makeConstraints { make in
+        self.dialogView.snp.makeConstraints { make in
             make.top.equalTo(myGuestCardView.snp.bottom)
             make.leading.trailing.bottom.equalToSuperview()
-        }
-        self.loveMentLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(32)
-            make.leading.equalToSuperview().offset(33)
-            make.trailing.equalToSuperview().inset(31)
-            make.bottom.equalToSuperview()
         }
     }
 }

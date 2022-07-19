@@ -22,7 +22,6 @@ final class MyLikeGuestCollectionViewCell: UICollectionViewCell {
     var viewModel: MyLikeGuestCellViewModel? {
         didSet {
             self.myGuestCardView.viewModel = viewModel?.myGuestCardViewModel
-            self.contentView.layoutIfNeeded()
         }
     }
 

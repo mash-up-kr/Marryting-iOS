@@ -59,7 +59,8 @@ final class MyGuestListPresenter: MyGuestListPresentationLogic {
                                             career: $0.user.career,
                                             isLiked: $0.isLiked
                                         ),
-                                      loveMent: "그대가 찾는 사람, 바로 저입니다."
+                                      dialog:
+                                        .init(loveMent: "그대가 찾는 사람, 바로 저입니다.")
                                 )
                             }
                     )
