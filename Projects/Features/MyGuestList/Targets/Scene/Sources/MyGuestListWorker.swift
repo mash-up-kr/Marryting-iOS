@@ -10,6 +10,7 @@
 //  see http://clean-swift.com
 //
 
+import DataSource
 import Models
 
 protocol MyGuestListWorkerProtocol {
@@ -18,13 +19,31 @@ protocol MyGuestListWorkerProtocol {
 }
 
 final class MyGuestListWorker: MyGuestListWorkerProtocol {
-    
+    private let myGuestListDataSource: MyGuestListDataSourceProtocol
+
+    init(myGuestListDataSource: MyGuestListDataSourceProtocol = MyGuestListDataSource()) {
+        self.myGuestListDataSource = myGuestListDataSource
+    }
+
     func fetchMyLikeGuests() async throws -> [Guest] {
-        return dummyLikeGuests
+        do {
+            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init())
+
+            return dummyLikeGuests
+        } catch {
+            return dummyLikeGuests
+        }
     }
 
     func fetchMatchingGuests() async throws -> [Guest] {
-        return dummyMatchingGuests
+        do {
+            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init())
+
+            return dummyMatchingGuests
+        } catch {
+            return dummyMatchingGuests
+        }
+
     }
 }
 
