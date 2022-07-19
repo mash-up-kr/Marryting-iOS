@@ -27,6 +27,7 @@ final class MyGuestCardView: UIView {
     private let profileImageView: UIImageView = {
         $0.backgroundColor = Pallete.Light.background.color
         $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
         return $0
     }(UIImageView())
 
@@ -129,9 +130,11 @@ final class MyGuestCardView: UIView {
         self.careerStackView.addArrangedSubviews(self.careerIconImageView, self.careerLabel, self.careerDescriptionLabel)
 
         self.profileImageView.snp.makeConstraints { make in
-            make.leading.trailing.top.bottom.equalToSuperview()
-            make.width.equalTo(UIScreen.main.bounds.width)
-            make.height.equalTo(self.profileImageView.snp.width).multipliedBy(1.33)
+            make.leading.trailing.top.equalToSuperview()
+            let width: CGFloat = UIScreen.main.bounds.width
+            let height: CGFloat = width * 1.33
+            make.width.equalTo(width)
+            make.height.equalTo(height)
         }
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(32)
@@ -155,6 +158,7 @@ final class MyGuestCardView: UIView {
     }
 
     private func setProfileImageViewBackgroundGradient() {
+        self.profileImageView.layer.sublayers = nil
         self.layoutIfNeeded()
         let gradient: CAGradientLayer = CAGradientLayer()
         gradient.locations = [0.0 , 1.0]
