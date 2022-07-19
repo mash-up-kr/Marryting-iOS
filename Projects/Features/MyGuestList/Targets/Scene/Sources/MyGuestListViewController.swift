@@ -281,10 +281,24 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         case .myLike:
             height = width * 4 / 3
         case .matching:
-            // TODO: dialogView 높이 계산 부분 개선
-            height = width * 4 / 3 + 62 // dialogView.bounds.height
+            height = width * 4 / 3 + dialogViewHeight(for: indexPath)
         }
-
         return .init(width: width, height: height)
+    }
+
+    // TODO: 코드 개선 필요
+    private func dialogViewHeight(for indexPath: IndexPath) -> CGFloat {
+        let loveMentLabel: UILabel = {
+            // TODO: 영어 멘트일경우 체크
+            $0.font = .h4()
+            $0.textColor = Pallete.Light.grey700.color
+            $0.numberOfLines = 0
+            $0.text = matchingViewModels[indexPath.item].dialog.loveMent
+            return $0
+        }(UILabel())
+
+        loveMentLabel.sizeToFit()
+
+        return loveMentLabel.bounds.height + 32
     }
 }
