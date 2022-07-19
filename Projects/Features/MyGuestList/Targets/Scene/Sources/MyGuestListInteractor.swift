@@ -26,7 +26,7 @@ final class MyGuestListInteractor: MyGuestListBusinessLogic, MyGuestListDataStor
 
     var myLikeGuests: [Guest] = []
 
-    var matchingGuests: [Guest] = []
+    var matchingGuests: [MatchedGuest] = []
 
     init(worker: MyGuestListWorkerProtocol = MyGuestListWorker()) {
         self.worker = worker

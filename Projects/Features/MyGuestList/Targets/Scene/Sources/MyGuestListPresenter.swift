@@ -51,16 +51,16 @@ final class MyGuestListPresenter: MyGuestListPresentationLogic {
                             .map {
                                 .init(myGuestCardViewModel:
                                         .init(
-                                            id: $0.user.id,
-                                            imageUrl: $0.user.pictures[0],
-                                            name: $0.user.name,
-                                            age: $0.user.age,
-                                            address: $0.user.address,
-                                            career: $0.user.career,
-                                            isLiked: $0.isLiked
+                                            id: $0.guest.user.id,
+                                            imageUrl: $0.guest.user.pictures[0],
+                                            name: $0.guest.user.name,
+                                            age: $0.guest.user.age,
+                                            address: $0.guest.user.address,
+                                            career: $0.guest.user.career,
+                                            isLiked: $0.guest.isLiked
                                         ),
                                       dialog:
-                                        .init(loveMent: "그대가 찾는 사람, 바로 저입니다.")
+                                        .init(loveMent: $0.loveMent)
                                 )
                             }
                     )

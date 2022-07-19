@@ -28,7 +28,7 @@ enum MyGuestList {
 
     enum FetchMatchingGuests {
         struct Response {
-            var guests: [Guest]
+            var guests: [MatchedGuest]
         }
         struct ViewModel {
             var matchingGuestCellViewModels: [MatchingGuestCellViewModel]
