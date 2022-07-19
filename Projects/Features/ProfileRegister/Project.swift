@@ -15,7 +15,9 @@ let project = Project.make(
       infoPlist: .default,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
-      dependencies: []
+      dependencies: [
+        .project(target: "Models", path: "../../Core/CoreKit")
+      ]
     ),
     Target(
       name: "ProfileRegisterTests",
