@@ -8,9 +8,9 @@ import Foundation
 private class BundleFinder {}
 
 extension Foundation.Bundle {
-    /// Since Login is a static library, the bundle containing the resources is copied into the final product.
+    /// Since GuestDetailScene is a static library, the bundle containing the resources is copied into the final product.
     static var module: Bundle = {
-        let bundleName = "Login_Login"
+        let bundleName = "GuestDetail_GuestDetailScene"
 
         let candidates = [
             Bundle.main.resourceURL,
@@ -24,14 +24,14 @@ extension Foundation.Bundle {
                 return bundle
             }
         }
-        fatalError("unable to find bundle named Login_Login")
+        fatalError("unable to find bundle named GuestDetail_GuestDetailScene")
     }()
 }
 
 // MARK: - Objective-C Bundle Accessor
 
 @objc
-public class LoginResources: NSObject {
+public class GuestDetailSceneResources: NSObject {
    @objc public class var bundle: Bundle {
          return .module
    }
