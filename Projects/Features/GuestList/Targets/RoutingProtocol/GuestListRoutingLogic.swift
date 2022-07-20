@@ -10,4 +10,6 @@ import Foundation
 
 public protocol GuestListRoutingLogic {
     func routeToLikeRequestScene(targetId id: Int)
+
+    func routeToMyGuestListScene()
 }

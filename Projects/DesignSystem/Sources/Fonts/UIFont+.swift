@@ -117,7 +117,7 @@ extension UIFont {
     /// - Parameters:
     ///  - weight: 등록할 폰트 weight
     ///  - ofSize: 등록할 폰트 크기
-    private static func notosanskr(weight: Font.Weight, size: Font.Size) -> UIFont {
+    public static func notosanskr(weight: Font.Weight, size: Font.Size) -> UIFont {
         let font = Font.MTFont(name: .notosanskr, weight: weight, extension_: .otf)
         return ._font(name: font.name, size: size.rawValue)
     }

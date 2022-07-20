@@ -15,7 +15,9 @@ let project = Project.make(
       infoPlist: .default,
       sources: ["Targets/RoutingProtocol/**"],
       resources: [],
-      dependencies: []
+      dependencies: [
+        .project(target: "Models", path: "../../Core/CoreKit")
+      ]
     ),
     Target(
       name: "LoginRouter",
