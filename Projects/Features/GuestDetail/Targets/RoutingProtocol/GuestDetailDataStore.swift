@@ -13,5 +13,5 @@
 import Models
 
 public protocol GuestDetailDataStore {
-    var selectedGuest: Guest? { get set }
+    var guest: Guest? { get set }
 }

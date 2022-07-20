@@ -194,7 +194,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        interactor?.loadGuest()
+        interactor?.fetchGuest()
     }
 
     private func setUI() {

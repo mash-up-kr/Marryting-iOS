@@ -14,14 +14,14 @@ import GuestDetailRoutingProtocol
 import Models
 
 protocol GuestDetailBusinessLogic {
-    func loadGuest()
+    func fetchGuest()
 }
 
 final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStore {
     var presenter: GuestDetailPresentationLogic?
     var worker: GuestDetailWorkerProtocol?
 
-    var selectedGuest: Guest?
+    var guest: Guest?
 
     init(worker: GuestDetailWorkerProtocol = GuestDetailWorker()) {
         self.worker = worker
@@ -29,8 +29,8 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
     
     // MARK: Business Logic
 
-    func loadGuest() {
-        guard let selectedGuest = selectedGuest else {
+    func fetchGuest() {
+        guard let selectedGuest = guest else {
             // TODO: 에러처리
             presenter?.presentGuest(response: .init(guest: dummyGuest))
             return
