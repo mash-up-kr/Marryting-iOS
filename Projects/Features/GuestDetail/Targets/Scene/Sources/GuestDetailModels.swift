@@ -17,11 +17,13 @@ enum GuestDetail {
     
     // MARK: Use cases
     
-    enum Somthing {
-        struct Reuqest {}
+    enum GetGuest {
+        struct Response {
+            var guest: Guest
+        }
         
-        struct Response {}
-        
-        struct ViewModel {}
+        struct ViewModel {
+            var guest: GuestDetailViewModel
+        }
     }
 }
