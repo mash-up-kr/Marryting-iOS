@@ -51,7 +51,12 @@ private extension GuestDetailInteractor {
                 birth: .init(),
                 age: 21,
                 address: "서울시 금천구",
-                pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
+                pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                           "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
                 answers: [
                     .init(questionId: "1",
                           answer: "생각을 정리하고 이야기"),
