@@ -27,7 +27,7 @@ struct GuestDetailViewModel {
     var age: Int
     var address: String
     var career: String
-    var images: [String]
+    var images: [UserProfileImagewCellViewModel]
     var keywords: [String]
     var answers: [String]
 }
@@ -72,15 +72,19 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     private lazy var backButton: UIImageView = {
         $0.image = .create(.ic_arrow_back)
         $0.isUserInteractionEnabled = true
-        $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
+        $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backButtonDidTap)))
         return $0
     }(UIImageView())
 
     private let scrollView: UIScrollView = {
-
         return $0
     }(UIScrollView())
 
+    private let contentView: UIView = {
+        let v = UIView()
+        v.backgroundColor = Pallete.Light.background.color
+        return v
+    }()
     private let stackView: UIStackView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.alignment = .center
@@ -150,10 +154,22 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     }(UILabel())
 
     private lazy var collectionView: UICollectionView = {
-        let layout = CarouselLayout()
-        layout.scrollDirection = .horizontal
+        let layout = HorizontalCarouselLayout()
+        layout.delegate = self
         let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        v.backgroundColor = Pallete.Light.background.color
+        v.register(UserProfileImageCollectionViewCell.self, forCellWithReuseIdentifier: "UserProfileImageCollectionViewCell")
         v.dataSource = self
+        v.delegate = self
+        v.layer.masksToBounds = false
+        v.contentInset = .init(top: 0, left: collectionViewInset, bottom: 0, right: collectionViewInset)
+        v.showsHorizontalScrollIndicator = false
+        v.decelerationRate = .fast
+        return v
+    }()
+
+    private lazy var pageControl: UIPageControl = {
+        let v = UIPageControl()
         return v
     }()
 
@@ -163,9 +179,12 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             self.addressLabel.text = viewModel?.address ?? ""
             self.ageLabel.text = "\(viewModel?.age ?? 0)"
             self.careerLabel.text = viewModel?.career ?? ""
+
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
         }
     }
-
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -181,13 +200,16 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
 
+        self.view.addSubview(self.scrollView)
         self.view.addSubview(self.navigationView)
-        self.view.addSubview(self.nameLabel)
-        self.view.addSubview(self.ageLabel)
-        self.view.addSubview(self.likeButton)
-        self.view.addSubview(self.addressStackView)
-        self.view.addSubview(self.careerStackView)
-        self.view.addSubview(self.collectionView)
+        self.contentView.addSubview(self.nameLabel)
+        self.contentView.addSubview(self.ageLabel)
+        self.contentView.addSubview(self.likeButton)
+        self.contentView.addSubview(self.addressStackView)
+        self.contentView.addSubview(self.careerStackView)
+        self.contentView.addSubview(self.collectionView)
+        self.contentView.addSubview(self.pageControl)
+        self.scrollView.addSubview(self.contentView)
         self.navigationView.addSubview(self.backButton)
         self.addressStackView.addArrangedSubview(self.addressLabel)
         self.addressStackView.addArrangedSubview(self.addressDescriptionLabel)
@@ -203,18 +225,26 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
         }
+        self.scrollView.snp.makeConstraints { make in
+            make.leading.trailing.bottom.equalToSuperview()
+            make.top.equalTo(self.navigationView.snp.bottom)
+        }
+        self.contentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.width.equalTo(self.scrollView)
+            make.height.equalTo(self.scrollView).priority(.low)
+        }
         self.nameLabel.snp.makeConstraints { make in
-            make.top.equalTo(navigationView.snp.bottom).offset(16)
+            make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview().offset(32)
         }
         self.ageLabel.snp.makeConstraints { make in
-            make.bottom.equalTo(self.nameLabel.snp.firstBaseline)
             make.leading.equalTo(self.nameLabel.snp.trailing).offset(4)
-            make.trailing.greaterThanOrEqualTo(self.likeButton.snp.leading)
+            make.firstBaseline.equalTo(self.nameLabel.snp.firstBaseline)
         }
         self.likeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(32)
-            make.center.equalTo(self.nameLabel)
+            make.centerY.equalTo(self.nameLabel)
             make.width.height.equalTo(48)
         }
         self.addressStackView.snp.makeConstraints { make in
@@ -225,6 +255,13 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             make.top.equalTo(addressStackView.snp.bottom).offset(4)
             make.leading.equalTo(addressStackView)
         }
+        self.collectionView.snp.makeConstraints { make in
+            make.top.equalTo(careerStackView.snp.bottom).offset(50)
+            make.leading.trailing.equalToSuperview()
+            let width: CGFloat = UIScreen.main.bounds.width - collectionViewInset * 2
+            let height: CGFloat = width * 1.33
+            make.height.equalTo(height)
+        }
     }
     
     // MARK: Display Logic
@@ -233,18 +270,79 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.viewModel = viewModel.guest
     }
 
-    @objc func didTapBackButton() {
+    @objc func backButtonDidTap() {
         router?.removeFromParent()
     }
 
 }
 
 extension GuestDetailViewController: UICollectionViewDataSource {
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        numberOfItemsInSection section: Int
+    ) -> Int {
+        return viewModel?.images.count ?? 0
     }
 
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return UICollectionViewCell()
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserProfileImageCollectionViewCell", for: indexPath) as? UserProfileImageCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        cell.viewModel = viewModel?.images[indexPath.item]
+        return cell
     }
+}
+
+extension GuestDetailViewController: UICollectionViewDelegateFlowLayout {
+    fileprivate var collectionViewInset: CGFloat {
+        return 40
+    }
+
+    fileprivate var itemSpacing: CGFloat {
+        return -30
+    }
+
+    public func scrollViewWillEndDragging(
+        _ scrollView: UIScrollView,
+        withVelocity velocity: CGPoint,
+        targetContentOffset: UnsafeMutablePointer<CGPoint>
+    ) {
+        let itemWidth: CGFloat = collectionView.bounds.width - collectionViewInset * 2
+        let cellWidthIncludingSpacing = itemWidth + itemSpacing
+
+        var offset = targetContentOffset.pointee
+        let index = (offset.x + scrollView.contentInset.left) / cellWidthIncludingSpacing
+        var roundedIndex = round(index)
+
+        if scrollView.contentOffset.x > targetContentOffset.pointee.x {
+            roundedIndex = floor(index)
+        } else {
+            roundedIndex = ceil(index)
+        }
+
+        offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left, y: -scrollView.contentInset.top)
+        targetContentOffset.pointee = offset
+    }
+}
+
+extension GuestDetailViewController: HorizontalCarouselLayoutDelegate {
+    public func collectionView(
+        _ collectionView: UICollectionView
+    ) -> CGSize {
+        let width: CGFloat = collectionView.bounds.width - collectionViewInset * 2
+        let height: CGFloat = width * 1.33
+        return .init(width: width, height: height)
+    }
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
+        layout collectionViewLayout: UICollectionViewLayout
+    ) -> CGFloat {
+        return itemSpacing
+    }
+
+
 }

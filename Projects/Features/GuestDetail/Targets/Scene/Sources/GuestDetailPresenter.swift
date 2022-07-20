@@ -28,11 +28,14 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
                              age: response.guest.user.age,
                              address: response.guest.user.address,
                              career: response.guest.user.career,
-                             images: response.guest.user.pictures,
+                             images: response.guest.user.pictures.map {
+                                 UserProfileImagewCellViewModel(userProfileImageViewModel: .init(imageUrl: $0))
+                             },
                              keywords: response.guest.user.keyword,
                              answers: response.guest.user.answers.map { $0.answer }
                             )
             )
         )
+        
     }
 }
