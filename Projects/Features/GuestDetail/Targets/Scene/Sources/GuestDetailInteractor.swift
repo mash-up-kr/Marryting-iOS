@@ -13,17 +13,58 @@
 import GuestDetailRoutingProtocol
 import Models
 
-protocol GuestDetailBusinessLogic {}
+protocol GuestDetailBusinessLogic {
+    func loadGuest()
+}
 
 final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStore {
     var presenter: GuestDetailPresentationLogic?
     var worker: GuestDetailWorkerProtocol?
-    
+
+    var selectedGuest: Guest?
+
     init(worker: GuestDetailWorkerProtocol = GuestDetailWorker()) {
         self.worker = worker
     }
     
     // MARK: Business Logic
-    
-    
+
+    func loadGuest() {
+        guard let selectedGuest = selectedGuest else {
+            // TODO: 에러처리
+            presenter?.presentGuest(response: .init(guest: dummyGuest))
+            return
+        }
+
+        presenter?.presentGuest(response: .init(guest: selectedGuest))
+    }
+}
+
+private extension GuestDetailInteractor {
+    var dummyGuest: Guest {
+        .init(
+            user: .init(
+                id: 1,
+                name: "박건우",
+                gender: .male,
+                career: "IT회사 개발자",
+                birth: .init(),
+                age: 21,
+                address: "서울시 금천구",
+                pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
+                answers: [
+                    .init(questionId: "1",
+                          answer: "생각을 정리하고 이야기"),
+                    .init(questionId: "1",
+                          answer: "자주 할수록 좋아요"),
+                    .init(questionId: "1",
+                          answer: "계획적인 데이트")
+                ],
+                keyword: [
+                    "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                ]
+            ),
+            isLiked: false
+        )
+    }
 }

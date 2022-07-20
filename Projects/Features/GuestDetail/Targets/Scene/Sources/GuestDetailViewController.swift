@@ -10,13 +10,27 @@
 //  see http://clean-swift.com
 //
 
-import UIKit
+import CarouselLayout
 import DesignSystem
-import SnapKit
-import GuestDetailRoutingProtocol
 import GuestDetailRouter
+import GuestDetailRoutingProtocol
+import UIKit
 
-protocol GuestDetailDisplayLogic: AnyObject {}
+import SnapKit
+
+protocol GuestDetailDisplayLogic: AnyObject {
+    func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel)
+}
+
+struct GuestDetailViewModel {
+    var name: String
+    var age: Int
+    var address: String
+    var career: String
+    var images: [String]
+    var keywords: [String]
+    var answers: [String]
+}
 
 public final class GuestDetailViewController: UIViewController, GuestDetailDisplayLogic {
     var interactor: GuestDetailBusinessLogic?
@@ -50,18 +64,187 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     }
     
     // MARK: UI
-    
+
+    private let navigationView: UIView = {
+        return $0
+    }(UIView())
+
+    private lazy var backButton: UIImageView = {
+        $0.image = .create(.ic_arrow_back)
+        $0.isUserInteractionEnabled = true
+        $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
+        return $0
+    }(UIImageView())
+
+    private let scrollView: UIScrollView = {
+
+        return $0
+    }(UIScrollView())
+
+    private let stackView: UIStackView = {
+        $0.translatesAutoresizingMaskIntoConstraints = false
+        $0.alignment = .center
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.spacing = 0
+        return $0
+    }(UIStackView())
+
+    private let nameLabel: UILabel = {
+        // MARK: 영어이름일경우
+        $0.font = .h1()
+        $0.textColor = Pallete.Light.grey800.color
+        return $0
+    }(UILabel())
+
+    private let ageLabel: UILabel = {
+        $0.font = .h2(name: .montserrat)
+        $0.textColor = Pallete.Light.grey200.color
+        return $0
+    }(UILabel())
+
+    private let likeButton: ImageMTButton = {
+        return $0
+    }(ImageMTButton(customButtonType: .iconMainLight))
+
+    private let addressStackView: UIStackView = {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.alignment = .center
+        $0.spacing = 2
+        return $0
+    }(UIStackView())
+
+    private let addressLabel: UILabel = {
+        $0.font = .h5()
+        $0.textColor = Pallete.Light.grey600.color
+        return $0
+    }(UILabel())
+
+    private let addressDescriptionLabel: UILabel = {
+        $0.font = .subtitle2()
+        $0.textColor = Pallete.Light.grey400.color
+        $0.text = "에 살아요"
+        return $0
+    }(UILabel())
+
+    private let careerStackView: UIStackView = {
+        $0.axis = .horizontal
+        $0.distribution = .fill
+        $0.alignment = .center
+        $0.spacing = 2
+        return $0
+    }(UIStackView())
+
+    private let careerLabel: UILabel = {
+        $0.font = .h5()
+        $0.textColor = Pallete.Light.grey600.color
+        return $0
+    }(UILabel())
+
+    private let careerDescriptionLabel: UILabel = {
+        $0.font = .subtitle2()
+        $0.textColor = Pallete.Light.grey400.color
+        $0.text = "로 일해요"
+        return $0
+    }(UILabel())
+
+    private lazy var collectionView: UICollectionView = {
+        let layout = CarouselLayout()
+        layout.scrollDirection = .horizontal
+        let v = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        v.dataSource = self
+        return v
+    }()
+
+    var viewModel: GuestDetailViewModel? {
+        didSet {
+            self.nameLabel.text = viewModel?.name ?? ""
+            self.addressLabel.text = viewModel?.address ?? ""
+            self.ageLabel.text = "\(viewModel?.age ?? 0)"
+            self.careerLabel.text = viewModel?.career ?? ""
+        }
+    }
+
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
     }
-    
+
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        interactor?.loadGuest()
+    }
+
     private func setUI() {
-        
+        self.view.backgroundColor = Pallete.Light.background.color
+
+        self.view.addSubview(self.navigationView)
+        self.view.addSubview(self.nameLabel)
+        self.view.addSubview(self.ageLabel)
+        self.view.addSubview(self.likeButton)
+        self.view.addSubview(self.addressStackView)
+        self.view.addSubview(self.careerStackView)
+        self.view.addSubview(self.collectionView)
+        self.navigationView.addSubview(self.backButton)
+        self.addressStackView.addArrangedSubview(self.addressLabel)
+        self.addressStackView.addArrangedSubview(self.addressDescriptionLabel)
+        self.careerStackView.addArrangedSubview(self.careerLabel)
+        self.careerStackView.addArrangedSubview(self.careerDescriptionLabel)
+
+        self.navigationView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.trailing.equalToSuperview()
+            make.height.equalTo(56)
+        }
+        self.backButton.snp.makeConstraints { make in
+            make.centerY.equalToSuperview()
+            make.leading.equalToSuperview().inset(20)
+        }
+        self.nameLabel.snp.makeConstraints { make in
+            make.top.equalTo(navigationView.snp.bottom).offset(16)
+            make.leading.equalToSuperview().offset(32)
+        }
+        self.ageLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(self.nameLabel.snp.firstBaseline)
+            make.leading.equalTo(self.nameLabel.snp.trailing).offset(4)
+            make.trailing.greaterThanOrEqualTo(self.likeButton.snp.leading)
+        }
+        self.likeButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(32)
+            make.center.equalTo(self.nameLabel)
+            make.width.height.equalTo(48)
+        }
+        self.addressStackView.snp.makeConstraints { make in
+            make.top.equalTo(nameLabel.snp.bottom).offset(10)
+            make.leading.equalTo(nameLabel)
+        }
+        self.careerStackView.snp.makeConstraints { make in
+            make.top.equalTo(addressStackView.snp.bottom).offset(4)
+            make.leading.equalTo(addressStackView)
+        }
     }
     
     // MARK: Display Logic
-    
+
+    func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel) {
+        self.viewModel = viewModel.guest
+    }
+
+    @objc func didTapBackButton() {
+        router?.removeFromParent()
+    }
+
+}
+
+extension GuestDetailViewController: UICollectionViewDataSource {
+    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 10
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        return UICollectionViewCell()
+    }
 }

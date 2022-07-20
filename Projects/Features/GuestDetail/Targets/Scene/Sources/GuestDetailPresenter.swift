@@ -12,11 +12,27 @@
 
 import UIKit
 
-protocol GuestDetailPresentationLogic {}
+protocol GuestDetailPresentationLogic {
+    func presentGuest(response: GuestDetail.GetGuest.Response)
+}
 
 final class GuestDetailPresenter: GuestDetailPresentationLogic {
     weak var viewController: GuestDetailDisplayLogic?
     
-    // MARK: Do something
-    
+    // MARK: Presentation Logic
+
+    func presentGuest(response: GuestDetail.GetGuest.Response) {
+        self.viewController?.displayGuest(
+            viewModel: .init(
+                guest: .init(name: response.guest.user.name,
+                             age: response.guest.user.age,
+                             address: response.guest.user.address,
+                             career: response.guest.user.career,
+                             images: response.guest.user.pictures,
+                             keywords: response.guest.user.keyword,
+                             answers: response.guest.user.answers.map { $0.answer }
+                            )
+            )
+        )
+    }
 }
