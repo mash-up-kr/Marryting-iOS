@@ -10,8 +10,8 @@
 import UIKit
 
 public protocol HorizontalCarouselLayoutDelegate: AnyObject {
-    func collectionView(_ collectionView: UICollectionView) -> CGSize
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGFloat
+    func itemSize(_ collectionView: UICollectionView) -> CGSize
+    func minimumLineSpacing(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout) -> CGFloat
 }
 
 public class HorizontalCarouselLayout: UICollectionViewFlowLayout {
@@ -26,8 +26,8 @@ public class HorizontalCarouselLayout: UICollectionViewFlowLayout {
         guard let collectionView = self.collectionView else { return }
 
         self.scrollDirection = .horizontal
-        self.itemSize = delegate?.collectionView(collectionView) ?? .zero
-        self.minimumLineSpacing = delegate?.collectionView(collectionView, layout: self) ?? 0
+        self.itemSize = delegate?.itemSize(collectionView) ?? .zero
+        self.minimumLineSpacing = delegate?.minimumLineSpacing(collectionView, layout: self) ?? 0
 
         self.isInit = true
     }

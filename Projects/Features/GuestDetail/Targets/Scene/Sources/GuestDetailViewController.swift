@@ -329,7 +329,7 @@ extension GuestDetailViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension GuestDetailViewController: HorizontalCarouselLayoutDelegate {
-    public func collectionView(
+    public func itemSize(
         _ collectionView: UICollectionView
     ) -> CGSize {
         let width: CGFloat = collectionView.bounds.width - collectionViewInset * 2
@@ -337,7 +337,7 @@ extension GuestDetailViewController: HorizontalCarouselLayoutDelegate {
         return .init(width: width, height: height)
     }
 
-    public func collectionView(
+    public func minimumLineSpacing(
         _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout
     ) -> CGFloat {
