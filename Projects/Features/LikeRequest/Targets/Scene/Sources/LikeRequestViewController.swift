@@ -64,7 +64,7 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         let v = UIImageView()
         v.image = .create(.ic_arrow_back)
         v.isUserInteractionEnabled = true
-        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backButtonDidTap)))
         return v
     }()
     
@@ -270,7 +270,7 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         }
     }
     
-    @objc func didTapBackButton() {
+    @objc func backButtonDidTap() {
         self.messageTextView.resignFirstResponder()
         router?.removeFromParent()
     }
