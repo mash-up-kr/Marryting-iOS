@@ -43,6 +43,7 @@ let project = Project.make(
       resources: ["Targets/Scene/Resources/**"],
       dependencies: [
         .target(name: "LikeRequestRouter"),
+        .project(target: "LikeRequestCompleteScene", path: "../LikeRequestComplete"),
         .project(target: "DesignSystem", path: "../../DesignSystem"),
         .project(target: "Models", path: "../../Core/CoreKit"),
         .project(target: "DataSource", path: "../../DataSource"),

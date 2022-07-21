@@ -19,7 +19,8 @@ let project = Project.make(
         .project(target: "ProfileRegister", path: "../ProfileRegister"),
         .project(target: "GuestListScene", path: "../GuestList"),
         .project(target: "LikeRequestScene", path: "../LikeRequest"),
-        .project(target: "LoginScene", path: "../Login")
+        .project(target: "LoginScene", path: "../Login"),
+        .project(target: "LikeRequestCompleteScene", path: "../LikeRequestComplete"),
       ]
     ),
     Target(
