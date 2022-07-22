@@ -140,20 +140,23 @@ final class MyGuestCardView: UIView {
             make.leading.equalToSuperview().offset(32)
         }
         self.ageLabel.snp.makeConstraints { make in
-            make.leading.equalTo(nameLabel.snp.trailing).offset(4)
-            make.bottom.equalTo(nameLabel)
+            make.leading.equalTo(self.nameLabel.snp.trailing).offset(4)
+            make.bottom.equalTo(self.nameLabel)
         }
         self.addressStackView.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(10)
-            make.leading.equalTo(nameLabel)
+            make.top.equalTo(self.nameLabel.snp.bottom).offset(10)
+            make.leading.equalTo(self.nameLabel)
         }
         self.addressIconImageView.snp.makeConstraints { make in
             make.width.height.equalTo(26)
         }
         self.careerStackView.snp.makeConstraints { make in
-            make.top.equalTo(addressStackView.snp.bottom).offset(4)
-            make.leading.equalTo(addressStackView)
-            make.bottom.equalToSuperview().inset(32)
+            make.top.equalTo(self.addressStackView.snp.bottom).offset(4)
+            make.leading.equalTo(self.addressStackView)
+            make.bottom.equalTo(self.profileImageView).inset(32)
+        }
+        self.careerIconImageView.snp.makeConstraints { make in
+            make.width.height.equalTo(26)
         }
     }
 

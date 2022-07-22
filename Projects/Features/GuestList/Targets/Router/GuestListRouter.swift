@@ -37,9 +37,7 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
         guard let dataStore = dataStore else {
             return
         }
-        let _ = dataStore.guests.filter { $0.isLiked == true }
         let destinationVC = MyGuestListViewController()
-//        destinationVC.router?.dataStore?.myLikeGuests = myLikeGuests
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 

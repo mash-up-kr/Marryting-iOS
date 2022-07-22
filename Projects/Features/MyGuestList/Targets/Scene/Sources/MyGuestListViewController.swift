@@ -153,7 +153,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
             make.leading.trailing.equalToSuperview()
         }
         self.collectionView.snp.makeConstraints { make in
-            make.top.equalTo(self.myGuestMenuView.snp.bottom).offset(2)
+            make.top.equalTo(self.myGuestMenuView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.view.snp.bottom)
         }
@@ -240,9 +240,9 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
     ) -> CGFloat {
         switch displayType {
         case .myLike:
-            return 30
+            return 10
         case .matching:
-            return 60
+            return 0
         }
 
     }
@@ -281,7 +281,7 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         case .myLike:
             height = width * 4 / 3
         case .matching:
-            height = width * 4 / 3 + dialogViewHeight(for: indexPath)
+            height = width * 4 / 3 + 100 //dialogViewHeight(for: indexPath)
         }
         return .init(width: width, height: height)
     }

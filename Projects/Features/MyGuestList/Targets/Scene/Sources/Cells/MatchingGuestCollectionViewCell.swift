@@ -11,7 +11,7 @@ import UIKit
 
 struct MatchingGuestCellViewModel {
     var myGuestCardViewModel: MyGuestCardViewModel
-    var dialog: DialogViewModel
+    var dialog: LoveMentDialogViewModel
 }
 
 final class MatchingGuestCollectionViewCell: UICollectionViewCell {
@@ -25,9 +25,9 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         return $0
     }(UIImageView())
 
-    private let dialogView: DialogView = {
+    private let dialogView: LoveMentDialogView = {
         return $0
-    }(DialogView())
+    }(LoveMentDialogView())
 
     var viewModel: MatchingGuestCellViewModel? {
         didSet {
