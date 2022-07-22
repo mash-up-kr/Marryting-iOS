@@ -50,7 +50,7 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 21,
                     address: "서울시 금천구",
-                    pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
                     answers: [],
                     keyword: []
                 ),
@@ -65,7 +65,7 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 25,
                     address: "포항항",
-                    pictures: ["https://i.pinimg.com/originals/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg"],
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png"],
                     answers: [],
                     keyword: []
                 ),
@@ -80,7 +80,7 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 25,
                     address: "비공개",
-                    pictures: ["https://img.theqoo.net/img/fzxPW.jpg"],
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png"],
                     answers: [],
                     keyword: []
                 ),
@@ -95,7 +95,7 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 30,
                     address: "비공개",
-                    pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954903-b631811a-ac0c-48f2-9b1f-727e88e7cb3f.png"],
                     answers: [],
                     keyword: []
                 ),
