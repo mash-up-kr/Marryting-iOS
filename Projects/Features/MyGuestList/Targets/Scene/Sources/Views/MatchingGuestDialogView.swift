@@ -12,11 +12,11 @@ import UIKit
 import Kingfisher
 import SnapKit
 
-struct LoveMentDialogViewModel {
+struct MatchingGuestDialogViewModel {
     var loveMent: String
 }
 
-final class LoveMentDialogView: UIView {
+final class MatchingGuestDialogView: UIView {
 
     lazy var loveMentLabel: UILabel = {
         // TODO: 영어 멘트일경우 체크
@@ -26,7 +26,7 @@ final class LoveMentDialogView: UIView {
         return $0
     }(UILabel())
 
-    var viewModel: LoveMentDialogViewModel? {
+    var viewModel: MatchingGuestDialogViewModel? {
         didSet {
             self.loveMentLabel.text = viewModel?.loveMent
         }
