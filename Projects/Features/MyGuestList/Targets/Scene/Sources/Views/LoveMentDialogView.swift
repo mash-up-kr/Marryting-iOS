@@ -12,11 +12,11 @@ import UIKit
 import Kingfisher
 import SnapKit
 
-struct DialogViewModel {
+struct LoveMentDialogViewModel {
     var loveMent: String
 }
 
-final class DialogView: UIView {
+final class LoveMentDialogView: UIView {
 
     lazy var loveMentLabel: UILabel = {
         // TODO: 영어 멘트일경우 체크
@@ -26,7 +26,7 @@ final class DialogView: UIView {
         return $0
     }(UILabel())
 
-    var viewModel: DialogViewModel? {
+    var viewModel: LoveMentDialogViewModel? {
         didSet {
             self.loveMentLabel.text = viewModel?.loveMent
         }
@@ -47,10 +47,10 @@ final class DialogView: UIView {
         self.addSubview(self.loveMentLabel)
 
         self.loveMentLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(32)
+            make.top.equalToSuperview().offset(24)
             make.leading.equalToSuperview().offset(33)
             make.trailing.equalToSuperview().inset(31)
-            make.bottom.equalToSuperview()
+            make.bottom.equalToSuperview().inset(46)
         }
     }
 }
