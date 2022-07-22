@@ -39,6 +39,5 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
                             )
             )
         )
-        
     }
 }

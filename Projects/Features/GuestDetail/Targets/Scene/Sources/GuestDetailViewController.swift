@@ -118,12 +118,16 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     }(ImageMTButton(customButtonType: .iconMainLight))
 
     @objc func likeButtonDidTap() {
+        guard let guest = router?.dataStore?.targetGuest else {
+            return
+        }
         UIView.animate(
             withDuration: 0.05,
             animations: {
                 self.likeButton.transform = CGAffineTransform.identity
             }
         )
+        router?.routeToLikeRequestScene(targetId: guest.user.id)
     }
 
     @objc func likeButtonDidTouchDown() {

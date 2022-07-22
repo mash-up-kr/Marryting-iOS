@@ -120,9 +120,10 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         v.backgroundColor = self.getGuestCardViewColor(for: self.guestCardIndex)
         v.delegate = self
         self.guestCardIndex += 1
+        v.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(guestCardViewDidTap)))
         return v
     }
-    
+
     private func getGuestCardViewColor(for index: Int) -> UIColor? {
         switch index % 4 {
         case 0:
@@ -140,6 +141,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
 
     @objc private func didTapLikeListButton() {
         router?.routeToMyGuestListScene()
+    }
+
+    @objc private func guestCardViewDidTap() {
+        guard self.guestCardIndex >= 0 else { return }
+        router?.routeToGuestDetailScene(targetId: self.guestCardIndex)
     }
 
     // MARK: View lifecycle

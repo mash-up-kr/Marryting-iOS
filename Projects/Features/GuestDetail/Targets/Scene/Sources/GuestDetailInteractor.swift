@@ -21,7 +21,7 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
     var presenter: GuestDetailPresentationLogic?
     var worker: GuestDetailWorkerProtocol?
 
-    var guest: Guest?
+    var targetGuest: Guest?
 
     init(worker: GuestDetailWorkerProtocol = GuestDetailWorker()) {
         self.worker = worker
@@ -30,7 +30,7 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
     // MARK: Business Logic
 
     func fetchGuest() {
-        guard let selectedGuest = guest else {
+        guard let selectedGuest = targetGuest else {
             // TODO: 에러처리
             presenter?.presentGuest(response: .init(guest: dummyGuest))
             return

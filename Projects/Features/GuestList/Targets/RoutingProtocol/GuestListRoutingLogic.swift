@@ -12,4 +12,6 @@ public protocol GuestListRoutingLogic {
     func routeToLikeRequestScene(targetId id: Int)
 
     func routeToMyGuestListScene()
+
+    func routeToGuestDetailScene(targetId id: Int)
 }
