@@ -26,15 +26,15 @@ public final class TextMTButton: BaseButton {
         self.setBackgroundColor(customButtonType.highlightedBackgroundColor!, for: .highlighted)
 
         self.titleLabel?.font = .subtitle1(name: .montserrat)
-        self.layer.cornerRadius = Constant.buttonHeight / 2
+        self.layer.cornerRadius = ButtonConstant.buttonHeight / 2
         self.layer.masksToBounds = true
     }
 
     override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: Constant.buttonHeight),
-            self.widthAnchor.constraint(equalToConstant: Constant.longButtonWidth)
+            self.heightAnchor.constraint(equalToConstant: ButtonConstant.buttonHeight),
+            self.widthAnchor.constraint(equalToConstant: ButtonConstant.longButtonWidth)
         ])
     }
 }
