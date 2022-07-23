@@ -15,7 +15,9 @@ let project = Project.make(
             infoPlist: .default,
             sources: ["Targets/RoutingProtocol/**"],
             resources: [],
-            dependencies: []
+            dependencies: [
+                .project(target: "Models", path: "../../Core/CoreKit"),
+            ]
         ),
         Target(
             name: "LikeRequestCompleteRouter",
@@ -42,7 +44,6 @@ let project = Project.make(
             resources: ["Targets/Scene/Resources/**"],
             dependencies: [
                 .target(name: "LikeRequestCompleteRouter"),
-                .external(name: "Lottie"),
                 .project(target: "DesignSystem", path: "../../DesignSystem"),
                 .project(target: "Models", path: "../../Core/CoreKit"),
                 .project(target: "DataSource", path: "../../DataSource"),

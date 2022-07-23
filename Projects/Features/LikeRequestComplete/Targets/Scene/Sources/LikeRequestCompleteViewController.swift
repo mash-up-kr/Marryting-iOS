@@ -15,7 +15,6 @@ import DesignSystem
 import SnapKit
 import LikeRequestCompleteRoutingProtocol
 import LikeRequestCompleteRouter
-import ResoucrePackage
 import Lottie
 
 protocol LikeRequestCompleteDisplayLogic: AnyObject {
