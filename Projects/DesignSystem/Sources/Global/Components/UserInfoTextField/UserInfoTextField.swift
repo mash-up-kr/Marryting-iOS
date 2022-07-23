@@ -25,6 +25,8 @@ public final class UserInfoTextField: UITextField {
             setPlaceHolder(type.placeholder)
             if type == .gender {
                 setSelectGenderMode()
+            } else if type == .birth {
+                setSelectBirthMode()
             }
         }
     }
@@ -40,6 +42,19 @@ public final class UserInfoTextField: UITextField {
         let pickerView = UIPickerView()
         pickerView.dataSource = self
         pickerView.delegate = self
+        return pickerView
+    }()
+    
+    lazy var datePickerview: UIDatePicker = {
+        let pickerView = UIDatePicker()
+        pickerView.datePickerMode = .date
+        pickerView.timeZone = TimeZone.current
+        pickerView.addTarget(self,
+                             action: #selector(handleDatePicker(sender:)),
+                             for: .valueChanged)
+        if #available(iOS 14, *) {
+            pickerView.preferredDatePickerStyle = .wheels
+        }
         return pickerView
     }()
     
@@ -65,6 +80,10 @@ public final class UserInfoTextField: UITextField {
     
     func setSelectGenderMode() {
         self.inputView = pickerview
+    }
+    
+    func setSelectBirthMode() {
+        self.inputView = datePickerview
     }
     
     // MARK: Configure UI
@@ -110,7 +129,7 @@ public final class UserInfoTextField: UITextField {
     public override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: textPadding)
     }
-
+    
     public override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: textPadding)
     }
@@ -130,9 +149,16 @@ public final class UserInfoTextField: UITextField {
         layer.borderColor = Pallete.Dark.subGreen.color?.cgColor
         titleLabel.textColor = Pallete.Dark.subGreen.color
     }
+    
     @objc func deactiveTextFieldColor(){
         layer.borderColor = Pallete.Dark.grey600.color?.cgColor
         titleLabel.textColor = Pallete.Dark.grey400.color
+    }
+    
+    @objc func handleDatePicker(sender: UIDatePicker) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 MM월 dd일"
+        self.text = dateFormatter.string(from: sender.date)
     }
 }
 
