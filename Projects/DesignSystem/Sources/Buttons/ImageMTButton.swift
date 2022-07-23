@@ -38,8 +38,8 @@ public final class ImageMTButton: UIButton, CodeBased {
     func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: Constant.circleButtonHeight),
-            self.widthAnchor.constraint(equalToConstant: Constant.circleButtonHeight)
+            self.heightAnchor.constraint(equalToConstant: ButtonConstant.circleButtonHeight),
+            self.widthAnchor.constraint(equalToConstant: ButtonConstant.circleButtonHeight)
         ])
     }
     
