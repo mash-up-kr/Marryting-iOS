@@ -67,6 +67,8 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
     
+    lazy var contentViewArr: [UIView] = [enterUserInfoView, UIView(), selectTagListView, selectValuesView]
+    
     // MARK: UI Properties
     
     lazy var titleLabel: UILabel = {
@@ -131,6 +133,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         return view
     }()
     
+    lazy var selectValuesView: SelectValuesView = {
+        let view = SelectValuesView()
+        return view
+    }()
+    
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -143,24 +150,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private func configureUI() {
         configureUIObjectsLayout()
         changePage()
-        
-        contentView.addSubview(selectTagListView)
-        
-        selectTagListView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        contentView.addSubview(enterUserInfoView)
-        
-        enterUserInfoView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
     }
     
     private func configureUIObjectsLayout() {
@@ -220,6 +209,19 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private func changePage() {
         changeTopUI()
+        
+        loadViewIfNeeded()
+        
+        contentView.subviews.forEach({ $0.removeFromSuperview() })
+        
+        contentView.addSubview(contentViewArr[pageNum - 1])
+
+        contentViewArr[pageNum - 1].snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
     
     private func changeTopUI() {

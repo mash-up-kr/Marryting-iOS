@@ -21,8 +21,6 @@ let project = Project.make(
         .project(target: "DataSource", path: "../../DataSource"),
         .external(name: "SnapKit"),
         .external(name: "Kingfisher"),
-        .external(name: "RxSwift"),
-        .external(name: "RxCocoa")
       ]
     ),
     Target(
