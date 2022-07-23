@@ -10,8 +10,13 @@ import UIKit
 import DesignSystem
 import SnapKit
 
+protocol RegisterProfileImageCellDelegate: AnyObject {
+    func tapRegisterimageButton(_ sender: UIButton)
+}
 final class RegisterProfileImageCell: UICollectionViewCell {
     static let id = "RegisterProfileImageCell"
+    
+    weak var delegate: RegisterProfileImageCellDelegate?
     
     // MARK: UI
     
@@ -42,5 +47,11 @@ final class RegisterProfileImageCell: UICollectionViewCell {
         registerimageButton.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
+        
+        registerimageButton.addTarget(self, action: #selector(tapRegisterimageButton), for: .touchUpInside)
+    }
+    
+    @objc func tapRegisterimageButton(_ sender: AddImageButton) {
+        delegate?.tapRegisterimageButton(sender)
     }
 }

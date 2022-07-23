@@ -13,6 +13,8 @@
 import UIKit
 import SnapKit
 import DesignSystem
+import BSImagePicker
+import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
     func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
@@ -140,6 +142,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var registerProfileImageView: RegisterProfileImageView = {
         let view = RegisterProfileImageView()
+        view.delegate = self
         return view
     }()
     
@@ -271,5 +274,31 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         if pageNum < pageSize {
             pageNum += 1
         }
+    }
+}
+
+extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
+    func tapRegisterimageButton(_ sender: UIButton) {
+        let allAssets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
+        var evenAssets = [PHAsset]()
+
+        allAssets.enumerateObjects({ (asset, idx, stop) -> Void in
+            if idx % 2 == 0 {
+                evenAssets.append(asset)
+            }
+        })
+
+        let imagePicker = ImagePickerController(selectedAssets: evenAssets)
+        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
+
+        self.presentImagePicker(imagePicker, select: { (asset) in
+            print("Selected: \(asset)")
+        }, deselect: { (asset) in
+            print("Deselected: \(asset)")
+        }, cancel: { (assets) in
+            print("Canceled with selections: \(assets)")
+        }, finish: { (assets) in
+            print("Finished with selections: \(assets)")
+        })
     }
 }

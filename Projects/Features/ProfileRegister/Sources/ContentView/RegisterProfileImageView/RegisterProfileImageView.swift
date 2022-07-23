@@ -9,9 +9,13 @@
 import UIKit
 import DesignSystem
 import SnapKit
-import PhotosUI
 
+protocol RegisterProfileImageViewDelegate: AnyObject {
+    func tapRegisterimageButton(_ sender: UIButton)
+}
 final class RegisterProfileImageView: UIView {
+    weak var delegate: RegisterProfileImageViewDelegate?
+    
     let maximumNumberOfImages = 5
     
     let itemSize: CGSize = {
@@ -29,8 +33,6 @@ final class RegisterProfileImageView: UIView {
     }
     
     // MARK: UI Properties
-    
-    let imagePicker = UIImagePickerController()
     
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -86,6 +88,7 @@ extension RegisterProfileImageView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RegisterProfileImageCell.id, for: indexPath) as? RegisterProfileImageCell else { return UICollectionViewCell()
         }
+        cell.delegate = self
         return cell
     }
 }
@@ -100,5 +103,11 @@ extension RegisterProfileImageView: UICollectionViewDelegateFlowLayout {
         let cellWidth = itemSize.width + itemSpacing
         let index = round(scrolledOffsetX / cellWidth)
         targetContentOffset.pointee = CGPoint(x: index * cellWidth - scrollView.contentInset.left, y: scrollView.contentInset.top)
+    }
+}
+
+extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
+    func tapRegisterimageButton(_ sender: UIButton) {
+        delegate?.tapRegisterimageButton(sender)
     }
 }
