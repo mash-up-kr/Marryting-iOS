@@ -31,6 +31,7 @@ let project = Project.make(
       dependencies: [
         .target(name: "GuestListRoutingProtocol"),
         .project(target: "LikeRequestScene", path: "../LikeRequest"),
+        .project(target: "MyGuestListScene", path: "../MyGuestList"),
       ]
     ),
     Target(

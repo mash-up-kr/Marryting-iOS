@@ -9,7 +9,7 @@
 public struct Guest {
     public var user: User
     public var isLiked: Bool
-    
+
     public init(
         user: User,
         isLiked: Bool

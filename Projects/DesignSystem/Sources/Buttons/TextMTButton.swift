@@ -33,8 +33,8 @@ public final class TextMTButton: BaseButton {
     override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: Constant.buttonHeight),
-            self.widthAnchor.constraint(equalToConstant: Constant.longButtonWidth)
+            self.heightAnchor.constraint(equalToConstant: ButtonConstant.buttonHeight),
+            self.widthAnchor.constraint(equalToConstant: ButtonConstant.longButtonWidth)
         ])
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct Constant {
+struct ButtonConstant {
     static let circleButtonHeight: CGFloat = 48
     static let buttonHeight: CGFloat = 56
     static let longButtonWidth: CGFloat = 240

@@ -3,6 +3,7 @@ import GuestListScene
 import LikeRequestScene
 import LoginScene
 import UIKit
+import ProfileRegister
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
