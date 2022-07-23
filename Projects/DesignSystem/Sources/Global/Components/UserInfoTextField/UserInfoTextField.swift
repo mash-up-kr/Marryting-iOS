@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import DesignSystem
 
-final class EnterUserInfoTextField: UITextField {
+public final class UserInfoTextField: UITextField {
     
     // MARK: Properties
     var textPadding = UIEdgeInsets(
@@ -20,13 +19,31 @@ final class EnterUserInfoTextField: UITextField {
     )
     
     // MARK: UI Properties
+    public var type: UserInfo = .name {
+        didSet {
+            titleLabel.text = type.korean
+            setPlaceHolder(type.placeholder)
+            if type == .gender {
+                setSelectGenderMode()
+            }
+        }
+    }
+    
     let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .body3()
-        label.text = "이름"
         label.textColor = Pallete.Dark.grey400.color
         return label
     }()
+    
+    lazy var pickerview: UIPickerView = {
+        let pickerView = UIPickerView()
+        pickerView.dataSource = self
+        pickerView.delegate = self
+        return pickerView
+    }()
+    
+    lazy var genderData = ["남성", "여성"]
     
     // MARK: CustomView Init
     override init(frame: CGRect) {
@@ -41,9 +58,13 @@ final class EnterUserInfoTextField: UITextField {
     
     // MARK: Function
     
-    func setPlaceHolder(text: String) {
+    func setPlaceHolder(_ text: String) {
         attributedPlaceholder = NSAttributedString(string: text,
                                                    attributes: [NSAttributedString.Key.foregroundColor: Pallete.Dark.grey400.color ?? .gray])
+    }
+    
+    func setSelectGenderMode() {
+        self.inputView = pickerview
     }
     
     // MARK: Configure UI
@@ -76,7 +97,7 @@ final class EnterUserInfoTextField: UITextField {
     
     // MARK: override
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         if let clearButton = self.value(forKey: "clearButton") as? UIButton {
             let templateImage = clearButton.imageView?.image?.withRenderingMode(.alwaysTemplate)
@@ -86,19 +107,19 @@ final class EnterUserInfoTextField: UITextField {
         }
     }
     
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
+    public override func textRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: textPadding)
     }
 
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+    public override func editingRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: textPadding)
     }
     
-    override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
+    public override func placeholderRect(forBounds bounds: CGRect) -> CGRect {
         return bounds.inset(by: textPadding)
     }
     
-    override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
+    public override func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         var clearButtonRect = super.clearButtonRect(forBounds: bounds)
         clearButtonRect.origin.x -= 16
         clearButtonRect.origin.y += 6
@@ -112,5 +133,24 @@ final class EnterUserInfoTextField: UITextField {
     @objc func deactiveTextFieldColor(){
         layer.borderColor = Pallete.Dark.grey600.color?.cgColor
         titleLabel.textColor = Pallete.Dark.grey400.color
+    }
+}
+
+extension UserInfoTextField: UIPickerViewDelegate, UIPickerViewDataSource {
+    public func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return  genderData.count
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return genderData[row]
+    }
+    
+    public func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.text = genderData[row]
+        // TODO: self.endEditing(true)하고 delegate 로 다음꺼 자동 선택
     }
 }

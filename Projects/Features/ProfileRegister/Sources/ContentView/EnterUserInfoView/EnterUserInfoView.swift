@@ -26,35 +26,35 @@ final class EnterUserInfoView: UIView {
         return stackView
     }()
     
-    let nameTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "이름을 입력해주세요")
+    let nameTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .name
         return textField
     }()
     
     // 성별 선택 textField 커스텀 필요
-    let genderTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "성별을 선택해주세요")
+    let genderTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .gender
         return textField
     }()
     
     // 생년월일 textField 커스텀 필요
-    let birthTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "생년월일을 선택해주세요")
+    let birthTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .birth
         return textField
     }()
     
-    let addressTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "ex) 서울시 광진구")
+    let addressTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .address
         return textField
     }()
     
-    let jobTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "ex) IT 기획자")
+    let jobTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .job
         return textField
     }()
     
@@ -81,6 +81,8 @@ final class EnterUserInfoView: UIView {
         contentView.addArrangedSubview(birthTextField)
         contentView.addArrangedSubview(addressTextField)
         contentView.addArrangedSubview(jobTextField)
+        
+        nameTextField.becomeFirstResponder()
         
         scrollView.snp.makeConstraints { make in
             make.top.equalToSuperview()

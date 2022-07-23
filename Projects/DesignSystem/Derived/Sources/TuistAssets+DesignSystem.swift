@@ -21,6 +21,8 @@ public enum DesignSystemAsset {
     public static let btnAppleLogin = DesignSystemImages(name: "btn_apple_login")
     public static let icArrowBack = DesignSystemImages(name: "ic_arrow_back")
     public static let icCheckBlack = DesignSystemImages(name: "ic_check_black")
+    public static let icCheckGreen = DesignSystemImages(name: "ic_check_green")
+    public static let icCheckGrey = DesignSystemImages(name: "ic_check_grey")
     public static let icClose = DesignSystemImages(name: "ic_close")
     public static let icClover = DesignSystemImages(name: "ic_clover")
     public static let icDropdown = DesignSystemImages(name: "ic_dropdown")
