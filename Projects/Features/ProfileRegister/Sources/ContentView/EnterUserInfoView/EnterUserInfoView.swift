@@ -10,7 +10,6 @@ import UIKit
 import DesignSystem
 
 final class EnterUserInfoView: UIView {
-    
     // MARK: UI Properties
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -99,6 +98,8 @@ final class EnterUserInfoView: UIView {
             make.width.equalToSuperview()
         }
         setKeyboardObserver()
+        
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapScrollView)))
     }
     
     func setKeyboardObserver() {
@@ -120,7 +121,11 @@ final class EnterUserInfoView: UIView {
             let frameOriginY = 80 * tag + 14 * (tag - 1)
             let offset = CGPoint(x: 0, y: frameOriginY)
             self?.scrollView.setContentOffset(offset, animated: false) // true로 하면 움직이지 않음
-            self?.scrollView.contentInset.bottom = CGFloat(frameOriginY)
+        }
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                          let keyboardRectangle = keyboardFrame.cgRectValue
+                          let keyboardHeight = keyboardRectangle.height
+            self.scrollView.contentInset.bottom = keyboardHeight + 56
         }
     }
     
@@ -128,5 +133,9 @@ final class EnterUserInfoView: UIView {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.scrollView.setContentOffset(.zero, animated: false) // true로 하면 움직이지 않음
         }
+    }
+    
+    @objc func tapScrollView() {
+        self.endEditing(true)
     }
 }

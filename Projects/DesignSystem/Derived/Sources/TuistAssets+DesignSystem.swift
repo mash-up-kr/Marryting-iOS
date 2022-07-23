@@ -26,6 +26,7 @@ public enum DesignSystemAsset {
     public static let icClose = DesignSystemImages(name: "ic_close")
     public static let icClover = DesignSystemImages(name: "ic_clover")
     public static let icDropdown = DesignSystemImages(name: "ic_dropdown")
+    public static let icDropdownGray = DesignSystemImages(name: "ic_dropdown_gray")
     public static let icEdit = DesignSystemImages(name: "ic_edit")
     public static let icEditEnable = DesignSystemImages(name: "ic_edit_enable")
     public static let icEditHighlight = DesignSystemImages(name: "ic_edit_highlight")

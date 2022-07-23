@@ -31,7 +31,7 @@ public final class UserInfoTextField: UITextField {
         }
     }
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.font = .body3()
         label.textColor = Pallete.Dark.grey400.color
@@ -58,6 +58,12 @@ public final class UserInfoTextField: UITextField {
         return pickerView
     }()
     
+    lazy var selectTextFieldIcon: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = .create(.ic_dropdown_gray)
+        return imageView
+    }()
+    
     lazy var genderData = ["남성", "여성"]
     
     // MARK: CustomView Init
@@ -78,12 +84,24 @@ public final class UserInfoTextField: UITextField {
                                                    attributes: [NSAttributedString.Key.foregroundColor: Pallete.Dark.grey400.color ?? .gray])
     }
     
-    func setSelectGenderMode() {
+    private func setSelectGenderMode() {
         self.inputView = pickerview
+        setSelectMode()
     }
     
-    func setSelectBirthMode() {
+    private func setSelectBirthMode() {
         self.inputView = datePickerview
+        setSelectMode()
+    }
+    
+    private func setSelectMode() {
+        addSubview(selectTextFieldIcon)
+        
+        selectTextFieldIcon.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(37)
+            make.bottom.equalToSuperview().offset(-18)
+            make.trailing.equalToSuperview().offset(-20)
+        }
     }
     
     // MARK: Configure UI
