@@ -67,7 +67,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
     
-    lazy var contentViewArr: [UIView] = [enterUserInfoView, UIView(), selectTagListView, selectValuesView]
+    lazy var contentViewArr: [UIView] = [enterUserInfoView, registerProfileImageView, selectTagListView, selectValuesView]
     
     // MARK: UI Properties
     
@@ -135,6 +135,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var selectValuesView: SelectValuesView = {
         let view = SelectValuesView()
+        return view
+    }()
+    
+    lazy var registerProfileImageView: RegisterProfileImageView = {
+        let view = RegisterProfileImageView()
         return view
     }()
     
@@ -217,8 +222,8 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         contentView.addSubview(contentViewArr[pageNum - 1])
 
         contentViewArr[pageNum - 1].snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }

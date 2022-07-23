@@ -8,6 +8,7 @@
 
 import UIKit
 import DesignSystem
+import SnapKit
 
 final class EnterUserInfoView: UIView {
     // MARK: UI Properties
@@ -81,13 +82,11 @@ final class EnterUserInfoView: UIView {
         contentView.addArrangedSubview(addressTextField)
         contentView.addArrangedSubview(jobTextField)
         
-        nameTextField.becomeFirstResponder()
-        
         scrollView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
+            make.leading.equalToSuperview().offset(16)
+            make.trailing.equalToSuperview().offset(-16)
         }
         
         contentView.snp.makeConstraints { make in
