@@ -104,7 +104,7 @@ extension TextImageMTButton {
             case .mainLight:
                 return Pallete.Dark.grey300.color
             case .mainSmallDark:
-                return nil
+                return Pallete.Dark.grey300.color
             }
         }
 

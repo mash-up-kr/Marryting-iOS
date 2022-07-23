@@ -12,9 +12,9 @@
 
 import UIKit
 
-class ProfileRegisterWorker
-{
-  func doSomeWork()
-  {
-  }
+protocol ProfileRegisterWorkerProtocol {
+    
+}
+
+class ProfileRegisterWorker {
 }

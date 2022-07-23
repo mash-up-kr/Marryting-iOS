@@ -16,7 +16,13 @@ let project = Project.make(
       sources: ["Sources/**"],
       resources: ["Resources/**"],
       dependencies: [
-        .project(target: "Models", path: "../../Core/CoreKit")
+        .project(target: "DesignSystem", path: "../../DesignSystem"),
+        .project(target: "Models", path: "../../Core/CoreKit"),
+        .project(target: "DataSource", path: "../../DataSource"),
+        .external(name: "SnapKit"),
+        .external(name: "Kingfisher"),
+        .external(name: "RxSwift"),
+        .external(name: "RxCocoa")
       ]
     ),
     Target(
