@@ -77,6 +77,8 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     lazy var likeListButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_heart)
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapLikeListButton)))
         return v
     }()
     
@@ -123,19 +125,23 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     private func getGuestCardViewColor(for index: Int) -> UIColor? {
         switch index % 4 {
-            case 0:
-                return .white
-            case 1:
-                return Pallete.Light.main300.color
-            case 2:
-                return Pallete.Light.subPurple.color
-            case 3:
-                return Pallete.Light.subGreen.color
-            default:
-                return .white
+        case 0:
+            return .white
+        case 1:
+            return Pallete.Light.main300.color
+        case 2:
+            return Pallete.Light.subPurple.color
+        case 3:
+            return Pallete.Light.subGreen.color
+        default:
+            return .white
         }
     }
-    
+
+    @objc private func didTapLikeListButton() {
+        router?.routeToMyGuestListScene()
+    }
+
     // MARK: View lifecycle
     
     public override func viewDidLoad() {

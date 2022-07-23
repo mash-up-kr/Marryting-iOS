@@ -17,7 +17,8 @@ let project = Project.make(
       resources: [],
       dependencies: [
         .project(target: "NetworkProtocol", path: "../Core/CoreKit"),
-        .project(target: "Network", path: "../Core/CoreKit")
+        .project(target: "Network", path: "../Core/CoreKit"),
+        .project(target: "Models", path: "../Core/CoreKit")
       ]
     ),
     Target(
