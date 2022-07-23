@@ -44,4 +44,19 @@ public enum UserInfo {
             return "ex) IT 기획자"
         }
     }
+    
+    public var tag: Int {
+        switch self {
+        case .name:
+            return 1
+        case .gender:
+            return 2
+        case .birth:
+            return 3
+        case .address:
+            return 4
+        case .job:
+            return 5
+        }
+    }
 }

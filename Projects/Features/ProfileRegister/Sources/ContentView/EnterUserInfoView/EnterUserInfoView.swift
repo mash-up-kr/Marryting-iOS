@@ -98,5 +98,35 @@ final class EnterUserInfoView: UIView {
             make.trailing.equalToSuperview()
             make.width.equalToSuperview()
         }
+        setKeyboardObserver()
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object:nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let textFieldArr = contentView.arrangedSubviews.compactMap { $0 as? UserInfoTextField }
+        guard let currentTextField: UserInfoTextField = textFieldArr.first(where: { $0.isEditing}) else { return }
+        let tag = currentTextField.type.tag
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            let frameOriginY = 80 * tag + 14 * (tag - 1)
+            let offset = CGPoint(x: 0, y: frameOriginY)
+            self?.scrollView.setContentOffset(offset, animated: false) // true로 하면 움직이지 않음
+            self?.scrollView.contentInset.bottom = CGFloat(frameOriginY)
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.scrollView.setContentOffset(.zero, animated: false) // true로 하면 움직이지 않음
+        }
     }
 }
