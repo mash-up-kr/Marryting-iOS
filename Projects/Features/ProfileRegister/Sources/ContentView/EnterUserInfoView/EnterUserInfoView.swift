@@ -10,7 +10,6 @@ import UIKit
 import DesignSystem
 
 final class EnterUserInfoView: UIView {
-    
     // MARK: UI Properties
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -26,35 +25,35 @@ final class EnterUserInfoView: UIView {
         return stackView
     }()
     
-    let nameTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "이름을 입력해주세요")
+    let nameTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .name
         return textField
     }()
     
     // 성별 선택 textField 커스텀 필요
-    let genderTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "성별을 선택해주세요")
+    let genderTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .gender
         return textField
     }()
     
     // 생년월일 textField 커스텀 필요
-    let birthTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "생년월일을 선택해주세요")
+    let birthTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .birth
         return textField
     }()
     
-    let addressTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "ex) 서울시 광진구")
+    let addressTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .address
         return textField
     }()
     
-    let jobTextField: EnterUserInfoTextField = {
-        let textField = EnterUserInfoTextField()
-        textField.setPlaceHolder(text: "ex) IT 기획자")
+    let jobTextField: UserInfoTextField = {
+        let textField = UserInfoTextField()
+        textField.type = .job
         return textField
     }()
     
@@ -82,6 +81,8 @@ final class EnterUserInfoView: UIView {
         contentView.addArrangedSubview(addressTextField)
         contentView.addArrangedSubview(jobTextField)
         
+        nameTextField.becomeFirstResponder()
+        
         scrollView.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
@@ -96,5 +97,45 @@ final class EnterUserInfoView: UIView {
             make.trailing.equalToSuperview()
             make.width.equalToSuperview()
         }
+        setKeyboardObserver()
+        
+        scrollView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tapScrollView)))
+    }
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillShow),
+                                               name: UIResponder.keyboardWillShowNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(keyboardWillHide),
+                                               name: UIResponder.keyboardWillHideNotification,
+                                               object:nil)
+    }
+    
+    @objc func keyboardWillShow(notification: NSNotification) {
+        let textFieldArr = contentView.arrangedSubviews.compactMap { $0 as? UserInfoTextField }
+        guard let currentTextField: UserInfoTextField = textFieldArr.first(where: { $0.isEditing}) else { return }
+        let tag = currentTextField.type.tag
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            let frameOriginY = 80 * tag + 14 * (tag - 1)
+            let offset = CGPoint(x: 0, y: frameOriginY)
+            self?.scrollView.setContentOffset(offset, animated: false) // true로 하면 움직이지 않음
+        }
+        if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
+                          let keyboardRectangle = keyboardFrame.cgRectValue
+                          let keyboardHeight = keyboardRectangle.height
+            self.scrollView.contentInset.bottom = keyboardHeight + 56
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.scrollView.setContentOffset(.zero, animated: false) // true로 하면 움직이지 않음
+        }
+    }
+    
+    @objc func tapScrollView() {
+        self.endEditing(true)
     }
 }

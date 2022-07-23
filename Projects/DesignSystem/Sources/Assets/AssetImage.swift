@@ -13,6 +13,7 @@ public enum Assets: String {
     case ic_close
     case ic_clover
     case ic_dropdown
+    case ic_dropdown_gray
     case ic_arrow_back
     case ic_enlarge
     case ic_edit_enable
