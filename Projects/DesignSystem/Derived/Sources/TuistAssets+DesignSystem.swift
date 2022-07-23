@@ -46,6 +46,7 @@ public enum DesignSystemAsset {
     public static let icTrashDisable = DesignSystemImages(name: "ic_trash_disable")
     public static let icTrashEnable = DesignSystemImages(name: "ic_trash_enable")
     public static let icTrashHighlight = DesignSystemImages(name: "ic_trash_highlight")
+    public static let icTrianlge = DesignSystemImages(name: "ic_trianlge")
     public static let imgBubble = DesignSystemImages(name: "img_bubble")
     public static let imgBubbleBack = DesignSystemImages(name: "img_bubble_back")
     public static let logo = DesignSystemImages(name: "logo")
