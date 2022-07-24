@@ -44,14 +44,14 @@ public final class TextImageMTButton: BaseButton {
         self.setTitleColor(customButtonType.disabledTextColor, for: .disabled)
         self.setImage(customButtonType.disableImage, for: .disabled)
         self.titleLabel?.font = .subtitle1(name: .montserrat)
-        self.layer.cornerRadius = Constant.buttonHeight / 2
+        self.layer.cornerRadius = ButtonConstant.buttonHeight / 2
         self.layer.masksToBounds = true
     }
 
     override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            self.heightAnchor.constraint(equalToConstant: Constant.buttonHeight)
+            self.heightAnchor.constraint(equalToConstant: ButtonConstant.buttonHeight)
         ])
         self.semanticContentAttribute = customButtonType.contentAttribute
         self.titleEdgeInsets   = .init(top: 0,
@@ -104,7 +104,7 @@ extension TextImageMTButton {
             case .mainLight:
                 return Pallete.Dark.grey300.color
             case .mainSmallDark:
-                return nil
+                return Pallete.Dark.grey300.color
             }
         }
 

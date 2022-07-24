@@ -82,6 +82,6 @@ let project = Project.make(
           sources: ["Targets/LeftAlignmentLayout/**"],
           resources: [],
           dependencies: []
-        ),
+        )
     ]
 )

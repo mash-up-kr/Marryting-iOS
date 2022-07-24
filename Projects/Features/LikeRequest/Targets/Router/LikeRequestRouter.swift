@@ -12,6 +12,7 @@
 
 import UIKit
 import LikeRequestRoutingProtocol
+import LikeRequestCompleteScene
 
 public class LikeRequestRouter: NSObject, LikeRequestRoutingLogic, LikeRequestDataPassing {
     public weak var viewController: UIViewController?
@@ -21,5 +22,10 @@ public class LikeRequestRouter: NSObject, LikeRequestRoutingLogic, LikeRequestDa
     
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    public func routeToLikeRequestCompleteScene() {
+        let vc = LikeRequestCompleteViewController()
+        viewController?.navigationController?.pushViewController(vc, animated: true)
     }
 }
