@@ -13,5 +13,5 @@
 import Models
 
 public protocol GuestDetailDataStore {
-    var guest: Guest? { get set }
+    var targetGuest: Guest? { get set }
 }

@@ -50,9 +50,19 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 21,
                     address: "서울시 금천구",
-                    pictures: ["https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                    answers: [],
-                    keyword: []
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                               "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
+                    answers: [ "생각을 정리하고 이야기",
+                               "자주 할수록 좋아요",
+                               "계획적인 데이트"
+                             ],
+                    keyword: [
+                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    ]
                 ),
                 isLiked: false
             ),
@@ -65,9 +75,16 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 25,
                     address: "포항항",
-                    pictures: ["https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png"],
-                    answers: [],
-                    keyword: []
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
+                               "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
+                               "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png"],
+                    answers: [ "생각을 정리하고 이야기",
+                               "자주 할수록 좋아요",
+                               "계획적인 데이트"
+                             ],
+                    keyword: [
+                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    ]
                 ),
                 isLiked: false
             ),
@@ -80,9 +97,15 @@ private extension GuestListWorker {
                     birth: .init(),
                     age: 25,
                     address: "비공개",
-                    pictures: ["https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png"],
-                    answers: [],
-                    keyword: []
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png",
+                               "https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png"],
+                    answers: [ "생각을 정리하고 이야기",
+                               "자주 할수록 좋아요",
+                               "계획적인 데이트"
+                             ],
+                    keyword: [
+                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    ]
                 ),
                 isLiked: true
             ),
@@ -96,8 +119,14 @@ private extension GuestListWorker {
                     age: 30,
                     address: "비공개",
                     pictures: ["https://user-images.githubusercontent.com/56102421/179954903-b631811a-ac0c-48f2-9b1f-727e88e7cb3f.png"],
-                    answers: [],
-                    keyword: []
+                    answers: [ "생각을 정리하고 이야기",
+                               "자주 할수록 좋아요",
+                               "계획적인 데이트"
+                             ],
+                    keyword: [
+                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    ]
+                    
                 ),
                 isLiked: false
             )

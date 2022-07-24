@@ -22,20 +22,22 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
     // MARK: Presentation Logic
 
     func presentGuest(response: GuestDetail.GetGuest.Response) {
+        let user = response.guest.user
         self.viewController?.displayGuest(
             viewModel: .init(
-                guest: .init(name: response.guest.user.name,
-                             age: response.guest.user.age,
-                             address: response.guest.user.address,
-                             career: response.guest.user.career,
-                             images: response.guest.user.pictures.map {
+                guest: .init(name: user.name,
+                             age: user.age,
+                             address: user.address,
+                             career: user.career,
+                             images: user.pictures.map {
                                  UserProfileImagewCellViewModel(userProfileImageViewModel: .init(imageUrl: $0))
                              },
-                             keywords: response.guest.user.keyword,
-                             answers: response.guest.user.answers.map { $0.answer }
+                             keywords: .init(keywords: user.keyword.map { .init(keyword: $0) }),
+                             answers: .init(fightAnswer: user.answers[0],
+                                            communicationAnswer: user.answers[1],
+                                            dateAnswer: user.answers[2])
                             )
             )
         )
-        
     }
 }

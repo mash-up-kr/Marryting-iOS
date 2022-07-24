@@ -43,6 +43,7 @@ let project = Project.make(
             dependencies: [
                 .target(name: "GuestDetailRouter"),
                 .target(name: "CarouselLayout"),
+                .target(name: "LeftAlignmentLayout"),
                 .project(target: "DesignSystem", path: "../../DesignSystem"),
                 .project(target: "Models", path: "../../Core/CoreKit"),
                 .project(target: "DataSource", path: "../../DataSource"),
@@ -71,5 +72,16 @@ let project = Project.make(
           resources: [],
           dependencies: []
         ),
+        Target(
+          name: "LeftAlignmentLayout",
+          platform: .iOS,
+          product: .staticLibrary,
+          bundleId: "kr.mash-up.GuestList",
+          deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
+          infoPlist: .default,
+          sources: ["Targets/LeftAlignmentLayout/**"],
+          resources: [],
+          dependencies: []
+        )
     ]
 )

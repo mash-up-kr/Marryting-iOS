@@ -21,7 +21,7 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
     var presenter: GuestDetailPresentationLogic?
     var worker: GuestDetailWorkerProtocol?
 
-    var guest: Guest?
+    var targetGuest: Guest?
 
     init(worker: GuestDetailWorkerProtocol = GuestDetailWorker()) {
         self.worker = worker
@@ -30,7 +30,7 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
     // MARK: Business Logic
 
     func fetchGuest() {
-        guard let selectedGuest = guest else {
+        guard let selectedGuest = targetGuest else {
             // TODO: 에러처리
             presenter?.presentGuest(response: .init(guest: dummyGuest))
             return
@@ -57,14 +57,10 @@ private extension GuestDetailInteractor {
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                answers: [
-                    .init(questionId: "1",
-                          answer: "생각을 정리하고 이야기"),
-                    .init(questionId: "1",
-                          answer: "자주 할수록 좋아요"),
-                    .init(questionId: "1",
-                          answer: "계획적인 데이트")
-                ],
+                answers: [ "생각을 정리하고 이야기",
+                           "자주 할수록 좋아요",
+                           "계획적인 데이트"
+                         ],
                 keyword: [
                     "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
                 ]

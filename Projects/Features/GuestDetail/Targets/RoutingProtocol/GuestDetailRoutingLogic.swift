@@ -12,4 +12,6 @@
 
 public protocol GuestDetailRoutingLogic {
     func removeFromParent()
+
+    func routeToLikeRequestScene(targetId id: Int)
 }

@@ -12,6 +12,7 @@
 
 import UIKit
 import GuestDetailRoutingProtocol
+import LikeRequestScene
 
 public final class GuestDetailRouter: GuestDetailRoutingLogic, GuestDetailDataPassing {
     public weak var viewController: UIViewController?
@@ -24,4 +25,16 @@ public final class GuestDetailRouter: GuestDetailRoutingLogic, GuestDetailDataPa
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
     }
+
+    public func routeToLikeRequestScene(targetId id: Int) {
+        guard let dataStore = dataStore,
+              let guest = dataStore.targetGuest else {
+            return
+        }
+
+        let destinationVC = LikeRequestViewController()
+        destinationVC.router?.dataStore?.targetGuest = guest
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+
 }
