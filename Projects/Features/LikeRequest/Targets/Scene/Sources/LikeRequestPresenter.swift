@@ -12,9 +12,10 @@
 
 import UIKit
 
-protocol LikeRequestPresentationLogic
-{
+protocol LikeRequestPresentationLogic {
     func presentIntroduceContents(response: LikeRequest.FetchIntroduceContents.Response)
+    func presentLikeRequestSuccess()
+    func presentLikeRequestError(response: LikeRequest.RequestLike.Response.Error)
 }
 
 class LikeRequestPresenter: LikeRequestPresentationLogic
@@ -27,5 +28,13 @@ class LikeRequestPresenter: LikeRequestPresentationLogic
         self.viewController?.displayIntroduceContents(viewModel: .init(
             introduceContents: "\(response.userName)님의 마음을\n한 줄로 전달해보세요!"
         ))
+    }
+    
+    func presentLikeRequestSuccess() {
+        self.viewController?.displayLikeRequestSuccess()
+    }
+    
+    func presentLikeRequestError(response: LikeRequest.RequestLike.Response.Error) {
+        self.viewController?.displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error())
     }
 }

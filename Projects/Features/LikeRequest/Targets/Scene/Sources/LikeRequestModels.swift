@@ -23,4 +23,18 @@ enum LikeRequest
             var introduceContents: String
         }
     }
+    
+    enum RequestLike {
+        struct Response {
+            struct Error {
+                
+            }
+        }
+        
+        struct ViewModel {
+            struct Error {
+                
+            }
+        }
+    }
 }
