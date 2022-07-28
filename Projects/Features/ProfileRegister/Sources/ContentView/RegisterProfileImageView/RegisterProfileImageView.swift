@@ -88,7 +88,7 @@ final class RegisterProfileImageView: UIView {
 
 extension RegisterProfileImageView: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 5
+        return images.count + 1
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RegisterProfileImageCell.id, for: indexPath) as? RegisterProfileImageCell else { return UICollectionViewCell()
