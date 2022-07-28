@@ -16,6 +16,7 @@ import UIKit
 
 protocol LikeRequestBusinessLogic {
     func fetchIntroduceContents()
+    func requestLike()
 }
 
 class LikeRequestInteractor: LikeRequestBusinessLogic, LikeRequestDataStore {
@@ -35,5 +36,13 @@ class LikeRequestInteractor: LikeRequestBusinessLogic, LikeRequestDataStore {
             return
         }
         presenter?.presentIntroduceContents(response: .init(userName: worker.getMyName()))
+    }
+    
+    func requestLike() {
+        guard let worker = worker else {
+            return
+        }
+        // TODO: 좋아요 요청 통신
+        presenter?.presentLikeRequestSuccess()
     }
 }

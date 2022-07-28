@@ -28,8 +28,8 @@ struct GuestDetailViewModel {
     var address: String
     var career: String
     var images: [UserProfileImagewCellViewModel]
-    var keywords: [String]
-    var answers: [String]
+    var keywords: KeywordsViewModel
+    var answers: WhoIAmViewModel
 }
 
 public final class GuestDetailViewController: UIViewController, GuestDetailDisplayLogic {
@@ -107,9 +107,37 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         return $0
     }(UILabel())
 
-    private let likeButton: ImageMTButton = {
+    private lazy var likeButton: ImageMTButton = {
+        $0.setBackgroundImage(
+            $0.customButtonType.enableImage,
+            for: .highlighted
+        )
+        $0.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return $0
     }(ImageMTButton(customButtonType: .iconMainLight))
+
+    @objc func likeButtonDidTap() {
+        guard let guest = router?.dataStore?.targetGuest else {
+            return
+        }
+        UIView.animate(
+            withDuration: 0.05,
+            animations: {
+                self.likeButton.transform = CGAffineTransform.identity
+            }
+        )
+        router?.routeToLikeRequestScene(targetId: guest.user.id)
+    }
+
+    @objc func likeButtonDidTouchDown() {
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                self.likeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }
+        )
+    }
 
     private let addressStackView: UIStackView = {
         $0.axis = .horizontal
@@ -170,6 +198,21 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
 
     private lazy var pageControl: UIPageControl = {
         let v = UIPageControl()
+        v.isUserInteractionEnabled = false
+        v.currentPageIndicatorTintColor = Pallete.Light.grey800.color
+        v.pageIndicatorTintColor = Pallete.Light.grey300.color
+        return v
+    }()
+
+    private lazy var keywordContainerView: IntroductionContainerView = {
+        let v = IntroductionContainerView(containView: KeywordsView())
+        v.title = "KEYWORD"
+        return v
+    }()
+
+    private lazy var whoIAmContainerView: IntroductionContainerView = {
+        let v = IntroductionContainerView(containView: WhoIAmView())
+        v.title = "WHO I AM"
         return v
     }()
 
@@ -179,9 +222,15 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             self.addressLabel.text = viewModel?.address ?? ""
             self.ageLabel.text = "\(viewModel?.age ?? 0)"
             self.careerLabel.text = viewModel?.career ?? ""
-
+            self.keywordContainerView.viewModel = viewModel?.keywords
+            self.whoIAmContainerView.viewModel = viewModel?.answers
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
+                self?.pageControl.numberOfPages = self?.viewModel?.images.count ?? 1
+                self?.pageControl.currentPage = 0
+                self?.pageControl.subviews.forEach {
+                    $0.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+                }
             }
         }
     }
@@ -200,15 +249,11 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
 
-        self.view.addSubview(self.scrollView)
-        self.view.addSubview(self.navigationView)
-        self.contentView.addSubview(self.nameLabel)
-        self.contentView.addSubview(self.ageLabel)
-        self.contentView.addSubview(self.likeButton)
-        self.contentView.addSubview(self.addressStackView)
-        self.contentView.addSubview(self.careerStackView)
-        self.contentView.addSubview(self.collectionView)
-        self.contentView.addSubview(self.pageControl)
+        self.view.addSubviews(self.scrollView, self.navigationView)
+        self.contentView.addSubviews(self.nameLabel, self.ageLabel, self.likeButton)
+        self.contentView.addSubviews(self.addressStackView, self.careerStackView)
+        self.contentView.addSubviews(self.collectionView, self.pageControl)
+        self.contentView.addSubviews(self.keywordContainerView, self.whoIAmContainerView)
         self.scrollView.addSubview(self.contentView)
         self.navigationView.addSubview(self.backButton)
         self.addressStackView.addArrangedSubview(self.addressLabel)
@@ -248,12 +293,32 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             make.width.height.equalTo(48)
         }
         self.addressStackView.snp.makeConstraints { make in
-            make.top.equalTo(nameLabel.snp.bottom).offset(10)
-            make.leading.equalTo(nameLabel)
+            make.top.equalTo(self.nameLabel.snp.bottom).offset(10)
+            make.leading.equalTo(self.nameLabel)
         }
         self.careerStackView.snp.makeConstraints { make in
-            make.top.equalTo(addressStackView.snp.bottom).offset(4)
-            make.leading.equalTo(addressStackView)
+            make.top.equalTo(self.addressStackView.snp.bottom).offset(4)
+            make.leading.equalTo(self.addressStackView)
+        }
+        self.collectionView.snp.makeConstraints { make in
+            make.top.equalTo(self.careerStackView.snp.bottom).offset(50)
+            make.leading.trailing.equalToSuperview()
+            let width: CGFloat = UIScreen.main.bounds.width - collectionViewInset * 2
+            let height: CGFloat = width * 1.33
+            make.height.equalTo(height)
+        }
+        self.pageControl.snp.makeConstraints { make in
+            make.top.equalTo(self.collectionView.snp.bottom).offset(20)
+            make.centerX.equalToSuperview()
+        }
+        self.keywordContainerView.snp.makeConstraints { make in
+            make.top.equalTo(self.collectionView.snp.bottom).offset(98)
+            make.leading.trailing.equalToSuperview()
+        }
+        self.whoIAmContainerView.snp.makeConstraints { make in
+            make.top.equalTo(self.keywordContainerView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview().inset(20)
         }
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(careerStackView.snp.bottom).offset(50)
@@ -325,6 +390,16 @@ extension GuestDetailViewController: UICollectionViewDelegateFlowLayout {
 
         offset = CGPoint(x: roundedIndex * cellWidthIncludingSpacing - scrollView.contentInset.left, y: -scrollView.contentInset.top)
         targetContentOffset.pointee = offset
+    }
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        let width: CGFloat = scrollView.contentOffset.x + collectionViewInset * 2
+        let cellWidth: CGFloat = collectionView.bounds.width - collectionViewInset * 2 + itemSpacing
+        let newPage = Int(width / cellWidth)
+        if pageControl.currentPage != newPage {
+            pageControl.currentPage = newPage
+        }
     }
 }
 

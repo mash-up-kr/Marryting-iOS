@@ -8,4 +8,5 @@
 
 public protocol LikeRequestRoutingLogic {
     func removeFromParent()
+    func routeToLikeRequestCompleteScene()
 }

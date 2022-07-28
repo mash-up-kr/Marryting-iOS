@@ -54,12 +54,12 @@ final class GuestCardView: UIView {
             v.customButtonType.enableImage,
             for: .highlighted
         )
-        v.addTarget(self, action: #selector(didTapLikeButton), for: .touchUpInside)
-        v.addTarget(self, action: #selector(didTouchDownLikeButton), for: .touchDown)
+        v.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
+        v.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return v
     }()
     
-    @objc func didTapLikeButton() {
+    @objc func likeButtonDidTap() {
         guard let viewModel = viewModel else {
             return
         }
@@ -72,7 +72,7 @@ final class GuestCardView: UIView {
         delegate?.didTapLikeButton(id: viewModel.id)
     }
     
-    @objc func didTouchDownLikeButton() {
+    @objc func likeButtonDidTouchDown() {
         UIView.animate(
             withDuration: 0.25,
             animations: {

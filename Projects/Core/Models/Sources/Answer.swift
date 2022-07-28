@@ -6,17 +6,4 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public struct Answer {
-    
-    public var questionId: String
-    
-    public var answer: String
-    
-    public init(
-        questionId: String,
-        answer: String
-    ) {
-        self.questionId = questionId
-        self.answer = answer
-    }
-}
+public typealias Answer = String

@@ -4,13 +4,13 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-    name: "GuestDetail",
+    name: "LikeRequestComplete",
     targets: [
         Target(
-            name: "GuestDetailRoutingProtocol",
+            name: "LikeRequestCompleteRoutingProtocol",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.GuestDetailRoutingProtocol",
+            bundleId: "kr.mash-up.LikeRequestCompleteRoutingProtocol",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/RoutingProtocol/**"],
@@ -20,70 +20,46 @@ let project = Project.make(
             ]
         ),
         Target(
-            name: "GuestDetailRouter",
+            name: "LikeRequestCompleteRouter",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.GuestDetailRouter",
+            bundleId: "kr.mash-up.LikeRequestCompleteRouter",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Router/**"],
             resources: [],
             dependencies: [
-                .target(name: "GuestDetailRoutingProtocol"),
+                .target(name: "LikeRequestCompleteRoutingProtocol"),
 //                .project(target: "TargetScene", path: "../Target"),
             ]
         ),
         Target(
-            name: "GuestDetailScene",
+            name: "LikeRequestCompleteScene",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.GuestDetailScene",
+            bundleId: "kr.mash-up.LikeRequestCompleteScene",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Scene/Sources/**"],
             resources: ["Targets/Scene/Resources/**"],
             dependencies: [
-                .target(name: "GuestDetailRouter"),
-                .target(name: "CarouselLayout"),
-                .target(name: "LeftAlignmentLayout"),
+                .target(name: "LikeRequestCompleteRouter"),
                 .project(target: "DesignSystem", path: "../../DesignSystem"),
                 .project(target: "Models", path: "../../Core/CoreKit"),
                 .project(target: "DataSource", path: "../../DataSource"),
                 .external(name: "SnapKit"),
-                .external(name: "Kingfisher")
+                .external(name: "Lottie")
             ]
         ),
         Target(
-            name: "GuestDetailSceneTests",
+            name: "LikeRequestCompleteSceneTests",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.GuestDetailSceneTests",
+            bundleId: "kr.mash-up.LikeRequestCompleteSceneTests",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Scene/Tests/**"],
-            dependencies: [.target(name: "GuestDetailScene")]
+            dependencies: [.target(name: "LikeRequestCompleteScene")]
         ),
-        Target(
-          name: "CarouselLayout",
-          platform: .iOS,
-          product: .staticLibrary,
-          bundleId: "kr.mash-up.GuestList",
-          deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
-          infoPlist: .default,
-          sources: ["Targets/CarouselLayout/**"],
-          resources: [],
-          dependencies: []
-        ),
-        Target(
-          name: "LeftAlignmentLayout",
-          platform: .iOS,
-          product: .staticLibrary,
-          bundleId: "kr.mash-up.GuestList",
-          deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
-          infoPlist: .default,
-          sources: ["Targets/LeftAlignmentLayout/**"],
-          resources: [],
-          dependencies: []
-        )
     ]
 )

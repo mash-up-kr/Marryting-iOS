@@ -29,7 +29,8 @@ let project = Project.make(
       sources: ["Targets/Router/**"],
       resources: [],
       dependencies: [
-        .target(name: "LikeRequestRoutingProtocol")
+        .target(name: "LikeRequestRoutingProtocol"),
+        .project(target: "LikeRequestCompleteScene", path: "../LikeRequestComplete")
       ]
     ),
     Target(

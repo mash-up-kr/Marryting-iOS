@@ -25,8 +25,8 @@ public final class TextMTButton: BaseButton {
 
         self.setBackgroundColor(customButtonType.highlightedBackgroundColor!, for: .highlighted)
 
-        self.titleLabel?.font = .subtitle1(name: .montserrat)
-        self.layer.cornerRadius = ButtonConstant.buttonHeight / 2
+        self.titleLabel?.font = .h5()
+        self.layer.cornerRadius = Constant.buttonHeight / 2
         self.layer.masksToBounds = true
     }
 

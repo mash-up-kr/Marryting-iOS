@@ -18,6 +18,8 @@ import LikeRequestRouter
 
 protocol LikeRequestDisplayLogic: AnyObject {
     func displayIntroduceContents(viewModel: LikeRequest.FetchIntroduceContents.ViewModel)
+    func displayLikeRequestSuccess()
+    func displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error)
 }
 
 public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogic {
@@ -157,6 +159,7 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         let v = TextImageMTButton(customButtonType: .mainLight)
         v.title = "DONE"
         v.isEnabled = false
+        v.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)
         return v
     }()
     
@@ -270,9 +273,21 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         }
     }
     
-    @objc func backButtonDidTap() {
+    func displayLikeRequestSuccess() {
+        router?.routeToLikeRequestCompleteScene()
+    }
+    
+    func displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error) {
+        // TODO: Error 처리
+    }
+    
+    @objc func didTapBackButton() {
         self.messageTextView.resignFirstResponder()
         router?.removeFromParent()
+    }
+    
+    @objc func didTapDoneButton() {
+        interactor?.requestLike()
     }
     
     /// 배경 터치시 messageTextView 포커싱 해제

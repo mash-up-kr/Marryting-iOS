@@ -20,6 +20,7 @@ let project = Project.make(
         .project(target: "GuestListScene", path: "../GuestList"),
         .project(target: "LikeRequestScene", path: "../LikeRequest"),
         .project(target: "LoginScene", path: "../Login"),
+        .project(target: "LikeRequestCompleteScene", path: "../LikeRequestComplete"),
         .project(target: "GuestDetailScene", path: "../GuestDetail"),
         .project(target: "MyGuestListScene", path: "../MyGuestList")
       ]
