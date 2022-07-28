@@ -15,7 +15,9 @@ let project = Project.make(
       infoPlist: .default,
       sources: ["Sources/**"],
       resources: ["Resources/**"],
-      dependencies: []
+      dependencies: [
+        .external(name: "SnapKit"),
+      ]
     ),
     Target(
       name: "DesignSystemTests",

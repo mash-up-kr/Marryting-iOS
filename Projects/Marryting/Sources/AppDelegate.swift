@@ -4,6 +4,7 @@ import LikeRequestScene
 import LoginScene
 import UIKit
 import ProfileRegister
+import GuestDetailScene
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
