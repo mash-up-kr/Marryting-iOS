@@ -328,6 +328,10 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
             self.view.layoutIfNeeded()
         }
     }
+
+    @objc func backButtonDidTap() {
+        router?.removeFromParent()
+    }
 }
 
 extension LikeRequestViewController: UITextViewDelegate {
