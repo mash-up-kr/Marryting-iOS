@@ -7,7 +7,10 @@ let infoPlist: [String: InfoPlist.Value] = [
   "CFBundleShortVersionString": "1.0",
   "CFBundleVersion": "1",
   "UIMainStoryboardFile": "",
-  "UILaunchStoryboardName": "LaunchScreen"
+  "UILaunchStoryboardName": "LaunchScreen",
+  "NSCameraUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
+  "NSPhotoLibraryUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
+  "NSPhotoLibraryAddUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다"
 ]
 
 let project = Project.make(

@@ -11,12 +11,17 @@ import DesignSystem
 import SnapKit
 
 protocol RegisterProfileImageViewDelegate: AnyObject {
-    func tapRegisterimageButton(_ sender: UIButton)
+    func tapRegisterimageButton(_ sender: UIButton, completion: @escaping ([UIImage]) -> Void)
 }
 final class RegisterProfileImageView: UIView {
     weak var delegate: RegisterProfileImageViewDelegate?
     
     let maximumNumberOfImages = 5
+    var images: [UIImage] = [] {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     
     let itemSize: CGSize = {
         let width = UIScreen.main.bounds.width - 80
@@ -89,6 +94,11 @@ extension RegisterProfileImageView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RegisterProfileImageCell.id, for: indexPath) as? RegisterProfileImageCell else { return UICollectionViewCell()
         }
         cell.delegate = self
+        if images.count > indexPath.row {
+            cell.setImage(image: images[indexPath.row])
+        } else {
+            cell.setImage(image: nil)
+        }
         return cell
     }
 }
@@ -108,6 +118,8 @@ extension RegisterProfileImageView: UICollectionViewDelegateFlowLayout {
 
 extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
-        delegate?.tapRegisterimageButton(sender)
+        delegate?.tapRegisterimageButton(sender, completion: { images in
+            self.images = images
+        })
     }
 }
