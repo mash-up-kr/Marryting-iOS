@@ -37,13 +37,9 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
             let userName = appleIDCredential.fullName
             let userEmail = appleIDCredential.email
             let userToken = appleIDCredential.authorizationCode
-            print(userIdentifier, userName, userEmail, userToken)
             guard let userIdentifier = userIdentifier else {
                 return
             }
-
-            print(String(data: userIdentifier, encoding: .utf8))
-
             let appleUser = dummyAppleUser
             delegate?.appleLoginSuccess(appleUser)
         }

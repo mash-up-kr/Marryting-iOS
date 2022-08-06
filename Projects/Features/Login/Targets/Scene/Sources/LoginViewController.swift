@@ -70,7 +70,10 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
 
     func displayLoginSucees() {
         // TODO: Login 성공
-        print("displayLoginSucees")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
+            self?.router?.routeToGuestListViewController()
+        }
+
     }
 
     func displayLoginFail() {
