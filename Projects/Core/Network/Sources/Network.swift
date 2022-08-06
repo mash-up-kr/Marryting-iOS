@@ -57,7 +57,7 @@ private final class RequestFactory<T: Request> {
     
     init(request: T) {
         self.request = request
-        if let url = URL(string: request.endpoint) {
+        if let url = URL(string: request.baseURL + request.endpoint) {
             self.urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true)
         }
     }

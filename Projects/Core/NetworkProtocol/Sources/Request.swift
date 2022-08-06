@@ -75,3 +75,8 @@ public extension Request {
         return nil
     }
 }
+
+public extension Request {
+    var baseURL: String { "http://marrytingserver-env-2.eba-qvmbsp3m.ap-northeast-2.elasticbeanstalk.com"
+    }
+}
