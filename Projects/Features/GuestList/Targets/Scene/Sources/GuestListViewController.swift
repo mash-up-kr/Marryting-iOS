@@ -85,6 +85,8 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     lazy var myInfoButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_edit)
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapMyInfoButton)))
         return v
     }()
     
@@ -139,13 +141,21 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         }
     }
 
-    @objc private func didTapLikeListButton() {
+    @objc
+    private func didTapLikeListButton() {
         router?.routeToMyGuestListScene()
     }
 
-    @objc private func guestCardViewDidTap() {
+    @objc
+    private func guestCardViewDidTap() {
         guard self.guestCardIndex >= 0 else { return }
         router?.routeToGuestDetailScene(targetId: self.guestCardIndex)
+    }
+
+    @objc
+    func didTapMyInfoButton() {
+        print("didTapMyInfoButton")
+        router?.routeToMyProfile()
     }
 
     // MARK: View lifecycle

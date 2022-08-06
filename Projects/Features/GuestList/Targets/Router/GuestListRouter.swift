@@ -47,10 +47,20 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
               let guest = dataStore.guests.filter({ $0.user.id == id }).first else {
             return
         }
-        let destinationVC = GuestDetailViewController()
+        let destinationVC = GuestDetailViewController(profileDetailType: .guestProfile)
         destinationVC.router?.dataStore?.targetGuest = guest
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
+
+    public func routeToMyProfile() {
+        guard let dataStore = dataStore else {
+            return
+        }
+        let destinationVC = GuestDetailViewController(profileDetailType: .myProfile)
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+
+
     //func routeToSomewhere(segue: UIStoryboardSegue?)
     //{
     //  if let segue = segue {

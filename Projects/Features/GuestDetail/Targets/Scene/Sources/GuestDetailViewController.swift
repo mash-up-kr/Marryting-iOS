@@ -62,7 +62,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         router.viewController = viewController
         router.dataStore = interactor
     }
-    
+
     // MARK: UI
 
     private let navigationView: UIView = {
@@ -85,18 +85,38 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         v.backgroundColor = Pallete.Light.background.color
         return v
     }()
-    private let stackView: UIStackView = {
+
+    private let topHeaderStackView: UIStackView = {
         $0.translatesAutoresizingMaskIntoConstraints = false
-        $0.alignment = .center
-        $0.axis = .horizontal
+        $0.alignment = .leading
+        $0.axis = .vertical
         $0.distribution = .fill
         $0.spacing = 0
         return $0
     }(UIStackView())
 
-    private let nameLabel: UILabel = {
+    private lazy var profileStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .horizontal
+        v.distribution = .fill
+        v.alignment = .firstBaseline
+        v.spacing = 5
+        return v
+    }()
+
+    private lazy var helloLabel: UILabel = {
+        let v = UILabel()
+        v.textAlignment = .left
+        v.text = "Hello!"
+        v.textColor = Pallete.Light.grey500.color
+        v.font = .h3(name: .montserrat)
+        return v
+    }()
+
+    private lazy  var nameLabel: UILabel = {
         // MARK: 영어이름일경우
         $0.font = .h1()
+        $0.textAlignment = .left
         $0.textColor = Pallete.Light.grey800.color
         return $0
     }(UILabel())
@@ -116,28 +136,6 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         $0.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return $0
     }(ImageMTButton(customButtonType: .iconMainLight))
-
-    @objc func likeButtonDidTap() {
-        guard let guest = router?.dataStore?.targetGuest else {
-            return
-        }
-        UIView.animate(
-            withDuration: 0.05,
-            animations: {
-                self.likeButton.transform = CGAffineTransform.identity
-            }
-        )
-        router?.routeToLikeRequestScene(targetId: guest.user.id)
-    }
-
-    @objc func likeButtonDidTouchDown() {
-        UIView.animate(
-            withDuration: 0.25,
-            animations: {
-                self.likeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
-            }
-        )
-    }
 
     private let addressStackView: UIStackView = {
         $0.axis = .horizontal
@@ -234,8 +232,23 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             }
         }
     }
+
+    // MARK: Stored Property
+
+    public enum ProfileDetailType {
+        case myProfile
+        case guestProfile
+    }
+
+    private var profileDetailType: ProfileDetailType?
+
     // MARK: View lifecycle
-    
+
+    public init(profileDetailType: ProfileDetailType = .guestProfile) {
+        self.init()
+        self.profileDetailType = profileDetailType
+    }
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
@@ -250,12 +263,16 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.view.backgroundColor = Pallete.Light.background.color
 
         self.view.addSubviews(self.scrollView, self.navigationView)
-        self.contentView.addSubviews(self.nameLabel, self.ageLabel, self.likeButton)
+        self.contentView.addSubviews(self.likeButton)
+        self.contentView.addSubviews(self.topHeaderStackView)
         self.contentView.addSubviews(self.addressStackView, self.careerStackView)
         self.contentView.addSubviews(self.collectionView, self.pageControl)
         self.contentView.addSubviews(self.keywordContainerView, self.whoIAmContainerView)
         self.scrollView.addSubview(self.contentView)
         self.navigationView.addSubview(self.backButton)
+        self.topHeaderStackView.addArrangedSubview(self.profileStackView)
+        self.profileStackView.addArrangedSubview(self.nameLabel)
+        self.profileStackView.addArrangedSubview(self.ageLabel)
         self.addressStackView.addArrangedSubview(self.addressLabel)
         self.addressStackView.addArrangedSubview(self.addressDescriptionLabel)
         self.careerStackView.addArrangedSubview(self.careerLabel)
@@ -279,13 +296,9 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             make.width.equalTo(self.scrollView)
             make.height.equalTo(self.scrollView).priority(.low)
         }
-        self.nameLabel.snp.makeConstraints { make in
+        self.topHeaderStackView.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(16)
             make.leading.equalToSuperview().offset(32)
-        }
-        self.ageLabel.snp.makeConstraints { make in
-            make.leading.equalTo(self.nameLabel.snp.trailing).offset(4)
-            make.firstBaseline.equalTo(self.nameLabel.snp.firstBaseline)
         }
         self.likeButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(32)
@@ -293,8 +306,8 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             make.width.height.equalTo(48)
         }
         self.addressStackView.snp.makeConstraints { make in
-            make.top.equalTo(self.nameLabel.snp.bottom).offset(10)
-            make.leading.equalTo(self.nameLabel)
+            make.top.equalTo(self.topHeaderStackView.snp.bottom).offset(10)
+            make.leading.equalTo(self.topHeaderStackView)
         }
         self.careerStackView.snp.makeConstraints { make in
             make.top.equalTo(self.addressStackView.snp.bottom).offset(4)
@@ -327,19 +340,57 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             let height: CGFloat = width * 1.33
             make.height.equalTo(height)
         }
+
+        if self.profileDetailType == .myProfile { configure() }
     }
-    
+
+    private func configure() {
+        self.topHeaderStackView.subviews.forEach { $0.removeFromSuperview() }
+        self.topHeaderStackView.addArrangedSubviews(self.helloLabel, self.profileStackView)
+        self.likeButton.isHidden = true
+    }
+
     // MARK: Display Logic
 
     func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel) {
         self.viewModel = viewModel.guest
     }
+}
 
-    @objc func backButtonDidTap() {
+// MARK: Button Tap
+
+extension GuestDetailViewController {
+    @objc
+    func backButtonDidTap() {
         router?.removeFromParent()
     }
 
+    @objc
+    func likeButtonDidTap() {
+        guard let guest = router?.dataStore?.targetGuest else {
+            return
+        }
+        UIView.animate(
+            withDuration: 0.05,
+            animations: {
+                self.likeButton.transform = CGAffineTransform.identity
+            }
+        )
+        router?.routeToLikeRequestScene(targetId: guest.user.id)
+    }
+
+    @objc
+    func likeButtonDidTouchDown() {
+        UIView.animate(
+            withDuration: 0.25,
+            animations: {
+                self.likeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }
+        )
+    }
 }
+
+// MARK: UICollectionViewDataSource
 
 extension GuestDetailViewController: UICollectionViewDataSource {
     public func collectionView(
@@ -360,6 +411,8 @@ extension GuestDetailViewController: UICollectionViewDataSource {
         return cell
     }
 }
+
+// MARK: UICollectionViewDelegateFlowLayout
 
 extension GuestDetailViewController: UICollectionViewDelegateFlowLayout {
     fileprivate var collectionViewInset: CGFloat {
@@ -403,6 +456,8 @@ extension GuestDetailViewController: UICollectionViewDelegateFlowLayout {
     }
 }
 
+// MARK: HorizontalCarouselLayoutDelegate
+
 extension GuestDetailViewController: HorizontalCarouselLayoutDelegate {
     public func itemSize(
         _ collectionView: UICollectionView
@@ -418,6 +473,4 @@ extension GuestDetailViewController: HorizontalCarouselLayoutDelegate {
     ) -> CGFloat {
         return itemSpacing
     }
-
-
 }
