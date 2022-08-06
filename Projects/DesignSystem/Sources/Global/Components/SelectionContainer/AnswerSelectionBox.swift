@@ -7,7 +7,6 @@
 //
 
 import UIKit
-
 import SnapKit
 
 struct AnswerSelectionBoxViewModel {

@@ -12,6 +12,10 @@ let dependencies = Dependencies(
         .remote(
             url: "https://github.com/onevcat/Kingfisher.git",
             requirement: .upToNextMajor(from: "7.0.0")
+        ),
+        .remote(
+            url: "https://github.com/mikaoj/BSImagePicker.git",
+            requirement: .upToNextMajor(from: "3.3.1")
         )
     ],
     platforms: [.iOS]

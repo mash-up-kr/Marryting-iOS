@@ -13,6 +13,8 @@
 import UIKit
 import SnapKit
 import DesignSystem
+import BSImagePicker
+import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
     func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
@@ -66,6 +68,8 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
+    
+    lazy var contentViewArr: [UIView] = [enterUserInfoView, registerProfileImageView, selectTagListView, selectValuesView]
     
     // MARK: UI Properties
     
@@ -131,6 +135,17 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         return view
     }()
     
+    lazy var selectValuesView: SelectValuesView = {
+        let view = SelectValuesView()
+        return view
+    }()
+    
+    lazy var registerProfileImageView: RegisterProfileImageView = {
+        let view = RegisterProfileImageView()
+        view.delegate = self
+        return view
+    }()
+    
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -143,24 +158,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private func configureUI() {
         configureUIObjectsLayout()
         changePage()
-        
-        contentView.addSubview(selectTagListView)
-        
-        selectTagListView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        contentView.addSubview(enterUserInfoView)
-        
-        enterUserInfoView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(16)
-            make.trailing.equalToSuperview().offset(-16)
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
     }
     
     private func configureUIObjectsLayout() {
@@ -220,6 +217,19 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private func changePage() {
         changeTopUI()
+        
+        loadViewIfNeeded()
+        
+        contentView.subviews.forEach({ $0.removeFromSuperview() })
+        
+        contentView.addSubview(contentViewArr[pageNum - 1])
+
+        contentViewArr[pageNum - 1].snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
     }
     
     private func changeTopUI() {
@@ -264,5 +274,31 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         if pageNum < pageSize {
             pageNum += 1
         }
+    }
+}
+
+extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
+    func tapRegisterimageButton(_ sender: UIButton) {
+        let allAssets = PHAsset.fetchAssets(with: PHAssetMediaType.image, options: nil)
+        var evenAssets = [PHAsset]()
+
+        allAssets.enumerateObjects({ (asset, idx, stop) -> Void in
+            if idx % 2 == 0 {
+                evenAssets.append(asset)
+            }
+        })
+
+        let imagePicker = ImagePickerController(selectedAssets: evenAssets)
+        imagePicker.settings.fetch.assets.supportedMediaTypes = [.image]
+
+        self.presentImagePicker(imagePicker, select: { (asset) in
+            print("Selected: \(asset)")
+        }, deselect: { (asset) in
+            print("Deselected: \(asset)")
+        }, cancel: { (assets) in
+            print("Canceled with selections: \(assets)")
+        }, finish: { (assets) in
+            print("Finished with selections: \(assets)")
+        })
     }
 }
