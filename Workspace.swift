@@ -7,6 +7,7 @@ let workspace = Workspace(
         "Projects/Marryting",
         "Projects/DesignSystem",
         "Projects/Features/FeatureKit",
-        "Projects/Core/CoreKit"
+        "Projects/Core/CoreKit",
+        "Projects/DataSource"
     ]
 )
