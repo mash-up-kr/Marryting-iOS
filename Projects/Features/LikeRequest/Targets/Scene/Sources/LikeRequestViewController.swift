@@ -66,7 +66,7 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         let v = UIImageView()
         v.image = .create(.ic_arrow_back)
         v.isUserInteractionEnabled = true
-        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backButtonDidTap)))
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapBackButton)))
         return v
     }()
     

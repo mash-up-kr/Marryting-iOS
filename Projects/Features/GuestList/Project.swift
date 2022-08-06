@@ -16,7 +16,7 @@ let project = Project.make(
       sources: ["Targets/RoutingProtocol/**"],
       resources: [],
       dependencies: [
-        .project(target: "Models", path: "../../Core/CoreKit")
+        .project(target: "Models", path: "../../Core/CoreKit"),
       ]
     ),
     Target(
@@ -32,6 +32,7 @@ let project = Project.make(
         .target(name: "GuestListRoutingProtocol"),
         .project(target: "LikeRequestScene", path: "../LikeRequest"),
         .project(target: "MyGuestListScene", path: "../MyGuestList"),
+        .project(target: "GuestDetailScene", path: "../GuestDetail"),
       ]
     ),
     Target(
