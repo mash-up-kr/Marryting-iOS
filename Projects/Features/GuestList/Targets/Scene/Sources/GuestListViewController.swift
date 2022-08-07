@@ -24,7 +24,7 @@ protocol GuestListDisplayLogic: AnyObject {
 
 public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     var interactor: GuestListBusinessLogic?
-    var router: (GuestListRoutingLogic & GuestListDataPassing)?
+    public var router: (GuestListRoutingLogic & GuestListDataPassing)?
     
     // MARK: Object lifecycle
     

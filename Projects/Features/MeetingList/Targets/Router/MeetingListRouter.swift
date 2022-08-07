@@ -12,6 +12,7 @@
 
 import UIKit
 import MeetingListRoutingProtocol
+import GuestListScene
 
 public final class MeetingListRouter: MeetingListRoutingLogic, MeetingListDataPassing {
     public weak var viewController: UIViewController?
@@ -23,5 +24,14 @@ public final class MeetingListRouter: MeetingListRoutingLogic, MeetingListDataPa
     
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+    
+    public func routeToGuestListScene() {
+        guard let dataStore = dataStore else {
+            return
+        }
+        let destinationVC = GuestListViewController()
+        destinationVC.router?.dataStore?.meetingId = dataStore.selectedMeetingId
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 }

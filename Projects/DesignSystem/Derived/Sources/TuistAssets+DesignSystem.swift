@@ -34,6 +34,7 @@ public enum DesignSystemAsset {
     public static let icEnlarge = DesignSystemImages(name: "ic_enlarge")
     public static let icError = DesignSystemImages(name: "ic_error")
     public static let icHeart = DesignSystemImages(name: "ic_heart")
+    public static let icHeartDark = DesignSystemImages(name: "ic_heart_dark")
     public static let icHeartEnable = DesignSystemImages(name: "ic_heart_enable")
     public static let icHeartHighlight = DesignSystemImages(name: "ic_heart_highlight")
     public static let icMainDarkDisable = DesignSystemImages(name: "ic_main_dark_disable")
