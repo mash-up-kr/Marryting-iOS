@@ -10,7 +10,13 @@ import UIKit
 import DesignSystem
 import SnapKit
 
+protocol MeetingCollectionViewCellDelegate: AnyObject {
+    /// 진입 버튼 클릭 이벤트
+    func didTapMeetingEnterButton(id: String)
+}
+
 struct MeetingCellViewModel {
+    var id: String
     var index: String
     var groomName: String
     var brideName: String
@@ -56,6 +62,7 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
     lazy var enterButton: ImageMTButton = {
         let v = ImageMTButton(customButtonType: .iconSub1Light)
         v.isUserInteractionEnabled = true
+        v.addTarget(self, action: #selector(didTapMeetingEnterButton), for: .touchUpInside)
         return v
     }()
     
@@ -65,8 +72,11 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
         return v
     }()
     
+    private var id: String?
+    
     var viewModel: MeetingCellViewModel? {
         didSet {
+            id = viewModel?.id
             if (viewModel?.index ?? "").count < 2 {
                 indexLabel.text = "0\(viewModel?.index ?? "")"
             }
@@ -78,6 +88,8 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
             dateLabel.text = viewModel?.date ?? ""
         }
     }
+    
+    var delegate: MeetingCollectionViewCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -134,5 +146,12 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
             make.trailing.equalToSuperview().inset(32)
             make.height.width.equalTo(48)
         }
+    }
+    
+    @objc func didTapMeetingEnterButton() {
+        guard let id = id else {
+            return
+        }
+        delegate?.didTapMeetingEnterButton(id: id)
     }
 }

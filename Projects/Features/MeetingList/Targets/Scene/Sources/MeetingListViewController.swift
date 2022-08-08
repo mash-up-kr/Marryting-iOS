@@ -102,10 +102,6 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
     func displayMeetings(viewModel: MeetingList.List.ViewModel) {
         meetingViewModels = viewModel.meetings
     }
-    
-    @objc func didTapMeetingEnterButton() {
-        
-    }
 }
 
 // MARK: UICollectionViewDataSource
@@ -125,7 +121,7 @@ extension MeetingListViewController: UICollectionViewDataSource {
     ) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MeetingCollectionViewCell.self, for: indexPath)
         cell.viewModel = meetingViewModels[indexPath.item]
-        cell.enterButton.addTarget(self, action: #selector(didTapMeetingEnterButton), for: .touchUpInside)
+        cell.delegate = self
         return cell
     }
     
@@ -145,4 +141,14 @@ extension MeetingListViewController: UICollectionViewDataSource {
 extension MeetingListViewController: UICollectionViewDelegate {
     
     
+}
+
+// MARK: MeetingCollectionViewCellDelegate
+
+extension MeetingListViewController: MeetingCollectionViewCellDelegate {
+    
+    func didTapMeetingEnterButton(id: String) {
+        interactor?.selectItem(request: .init(meetingId: id))
+        router?.routeToGuestListScene()
+    }
 }

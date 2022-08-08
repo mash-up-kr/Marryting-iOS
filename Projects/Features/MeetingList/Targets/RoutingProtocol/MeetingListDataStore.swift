@@ -10,8 +10,8 @@
 //  see http://clean-swift.com
 //
 
-//import Models
+import Models
 
 public protocol MeetingListDataStore {
-//    var storeGuest: Guest? { get set }
+    var selectedMeetingId: String? { get set }
 }

@@ -15,11 +15,15 @@ import Models
 
 protocol MeetingListBusinessLogic {
     func fetchMeetings()
+    func selectItem(request: MeetingList.Select.Request)
 }
 
 final class MeetingListInteractor: MeetingListBusinessLogic, MeetingListDataStore {
+    
     var presenter: MeetingListPresentationLogic?
     var worker: MeetingListWorkerProtocol?
+    
+    var selectedMeetingId: String?
     
     init(worker: MeetingListWorkerProtocol = MeetingListWorker()) {
         self.worker = worker
@@ -40,5 +44,9 @@ final class MeetingListInteractor: MeetingListBusinessLogic, MeetingListDataStor
                 
             }
         }
+    }
+    
+    func selectItem(request: MeetingList.Select.Request) {
+        selectedMeetingId = request.meetingId
     }
 }

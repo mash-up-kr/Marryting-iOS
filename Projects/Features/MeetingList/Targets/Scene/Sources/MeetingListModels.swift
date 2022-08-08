@@ -27,4 +27,11 @@ enum MeetingList {
             var meetings: [MeetingCellViewModel]
         }
     }
+    
+    enum Select {
+        
+        struct Request {
+            var meetingId: String
+        }
+    }
 }

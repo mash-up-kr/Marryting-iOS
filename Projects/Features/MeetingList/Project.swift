@@ -28,7 +28,7 @@ let project = Project.make(
             resources: [],
             dependencies: [
                 .target(name: "MeetingListRoutingProtocol"),
-//                .project(target: "TargetScene", path: "../Target"),
+                .project(target: "GuestListScene", path: "../GuestList"),
             ]
         ),
         Target(

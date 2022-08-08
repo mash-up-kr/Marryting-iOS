@@ -30,6 +30,7 @@ final class MeetingListPresenter: MeetingListPresentationLogic {
         
         for (index, meeting) in response.meetings.enumerated() {
             meetings.append(MeetingCellViewModel(
+                id: meeting.id,
                 index: "\(index + 1)",
                 groomName: meeting.groomName,
                 brideName: meeting.brideName,

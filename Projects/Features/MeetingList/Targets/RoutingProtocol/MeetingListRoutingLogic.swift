@@ -12,4 +12,5 @@
 
 public protocol MeetingListRoutingLogic {
     func removeFromParent()
+    func routeToGuestListScene()
 }
