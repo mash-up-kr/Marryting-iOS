@@ -29,6 +29,12 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         return $0
     }(MatchingGuestDialogView())
 
+    var imageType: MatchingGuestDialogView.ImageType? {
+        didSet {
+            self.dialogView.imageType = imageType
+        }
+    }
+
     var viewModel: MatchingGuestCellViewModel? {
         didSet {
             self.myGuestCardView.viewModel = viewModel?.myGuestCardViewModel
@@ -54,7 +60,7 @@ final class MatchingGuestCollectionViewCell: UICollectionViewCell {
         }
         self.dialogIconImageView.snp.makeConstraints { make in
             make.trailing.equalTo(self.dialogView).inset(32)
-            make.bottom.equalTo(self.dialogView.snp.top).offset(3)
+            make.bottom.equalTo(self.myGuestCardView.snp.bottom).offset(3)
         }
         self.dialogView.snp.makeConstraints { make in
             make.top.equalTo(myGuestCardView.snp.bottom)

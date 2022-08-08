@@ -53,7 +53,7 @@ final class MyGuestCardView: UIView {
     }(UIStackView())
 
     private let addressIconImageView: UIImageView = {
-        $0.image = .create(.ic_clover)
+        $0.image = .create(.ic_sharp_place_grey100)
         return $0
     }(UIImageView())
 
@@ -74,12 +74,12 @@ final class MyGuestCardView: UIView {
         $0.axis = .horizontal
         $0.distribution = .fill
         $0.alignment = .center
-        $0.spacing = 0
+        $0.spacing = 2
         return $0
     }(UIStackView())
 
     private let careerIconImageView: UIImageView = {
-        $0.image = .create(.ic_clover)
+        $0.image = .create(.ic_symbols_work_grey100)
         return $0
     }(UIImageView())
 

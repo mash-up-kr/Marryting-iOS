@@ -5,6 +5,7 @@ import LoginScene
 import UIKit
 import ProfileRegister
 import GuestDetailScene
+import MyGuestListScene
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        navigationController.pushViewController(GuestListViewController(), animated: true)
+        navigationController.pushViewController(MyGuestListViewController(), animated: true)
         return true
     }
 
