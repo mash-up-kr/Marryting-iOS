@@ -8,6 +8,9 @@
 
 import Foundation
 
+public typealias Answer = String
+public typealias Keyword = String
+
 public enum Gender: Codable {
     case male
     case female
@@ -22,5 +25,31 @@ public struct UserInformation: Codable {
     public var age: Int
     public var address: String
     public var pictures: [String]
+    public var answers: [Answer]
+    public var keyword: [Keyword]
+
+    public init(
+        id: Int,
+        name: String,
+        gender: Gender,
+        career: String,
+        birth: Date,
+        age: Int,
+        address: String,
+        pictures: [String],
+        answers: [Answer],
+        keyword: [Keyword]
+    ) {
+        self.id = id
+        self.name = name
+        self.gender = gender
+        self.career = career
+        self.birth = birth
+        self.age = age
+        self.address = address
+        self.pictures = pictures
+        self.answers = answers
+        self.keyword = keyword
+    }
 }
 

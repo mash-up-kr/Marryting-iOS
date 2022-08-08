@@ -7,27 +7,28 @@
 //
 
 import Foundation
+import Models
 
 public protocol UserDataSoureceProtocol {
-    var data: UserInformation? { get }
+    var data: User? { get }
 
-    func save(_ user: UserInformation)
+    func save(_ user: User)
 
     func removeAll()
 }
 
 public final class UserDataSourece: UserDataSoureceProtocol {
 
-    private let key: String = "user_info"
+    private let key: String = "userInfo"
 
-    public var data: UserInformation? {
+    public var data: User? {
         return UserDefaults.standard.getCodable(for: key)
     }
 
     public init() {}
 
-    public func save(_ user: UserInformation) {
-        UserDefaults.standard.storeCodable(data, key: key)
+    public func save(_ user: User) {
+        UserDefaults.standard.storeCodable(user, key: key)
     }
 
     public func removeAll() {

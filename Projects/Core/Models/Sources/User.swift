@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct User {
+public struct User: Codable {
     
     public var id: Int
     

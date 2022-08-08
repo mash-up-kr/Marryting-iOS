@@ -18,44 +18,46 @@ import AuthenticationServices
 protocol LoginWorkerProtocol {
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
 
-//    func appleLogin()
+    func appleLogin()
 
-    func appleLogin() async throws -> User
+    func loginWithoutAppleLogin() async
 }
 
 class LoginWorker: LoginWorkerProtocol {
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
     private let testUserDatSource: TestTokenDataSourceProtocol
+    private let userDataSource: UserDataSoureceProtocol
 
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
-         testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource()) {
+         testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource(),
+         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
         self.testUserDatSource = testUserDataSource
+        self.userDataSource = userDataSource
 
         appleLoginManager.delegate = self
     }
 
-    func appleLogin() async throws -> User {
-
-        return dummyUser
+    func loginWithoutAppleLogin() async {
+        userDataSource.save(self.dummyUser)
     }
-//
-//    func appleLogin() {
-//        let appleIDProvider = ASAuthorizationAppleIDProvider()
-//        let request = appleIDProvider.createRequest()
-//        request.requestedScopes = [.fullName, .email]
-//
-//        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-//
-//        authorizationController.delegate = appleLoginManager
-//        authorizationController.presentationContextProvider = appleLoginManager
-//        authorizationController.performRequests()
-//    }
+
+    func appleLogin() {
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
+
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+
+        authorizationController.delegate = appleLoginManager
+        authorizationController.presentationContextProvider = appleLoginManager
+        authorizationController.performRequests()
+    }
 }
 
 extension LoginWorker: AppleLoginManagerDelegate {
@@ -69,6 +71,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
             do {
                 #warning("테스트 리퀘스트입니다.")
                 let user = try await login()
+                userDataSource.save(self.dummyUser)
                 fetchUser?(.success(user))
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))
@@ -80,7 +83,6 @@ extension LoginWorker: AppleLoginManagerDelegate {
         do {
             let dto = try await loginDataSource.login(request: .init())
             // TODO: dto 명세후 매핑 로직 작성
-//            let data = try await testUserDatSource.getTestToken(request: testRequest)
 
             return dummyUser
         } catch {

@@ -28,23 +28,25 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
     }
     
     func appleLogin() {
-//        worker?.fetchUser = { [weak self] result in
-//            switch result {
-//            case .success(_):
-//                // TODO: 비즈니스로직 작성
-//                self?.presenter?.presentLogin()
-//            case .failure:
-//                self?.presenter?.failLogin()
-//            }
-//        }
-        
-        Task {
-            do {
-                let user = try await worker?.appleLogin()
-                self.presenter?.presentLogin()
-            } catch {
-
+        worker?.fetchUser = { [weak self] result in
+            switch result {
+            case .success(_):
+                // TODO: 비즈니스로직 작성
+                self?.presenter?.presentLogin()
+            case .failure:
+                self?.presenter?.failLogin()
             }
+        }
+
+        #warning("배포할 때 주석 바꾸기")
+        // MARK: 배포용 - 애플 로그인 있는 로그인 처리
+        // worker?.appleLogin()
+
+        // MARK: dev용 - 애플 로그인 없는 로그인 처리
+
+        Task {
+            await worker?.loginWithoutAppleLogin()
+            self.presenter?.presentLogin()
         }
 
 
