@@ -24,13 +24,16 @@ protocol LoginWorkerProtocol {
 class LoginWorker: LoginWorkerProtocol {
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
+    private let testUserDatSource: TestTokenDataSourceProtocol
 
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
-         loginDataSource: LoginDataSourceProtocol = LoginDataSource()) {
+         loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
+         testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource()) {
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
+        self.testUserDatSource = testUserDataSource
 
         appleLoginManager.delegate = self
     }
@@ -57,6 +60,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
         Task {
             do {
+                #warning("테스트 리퀘스트입니다.")
                 let user = try await login()
                 fetchUser?(.success(user))
             } catch {
@@ -69,6 +73,9 @@ extension LoginWorker: AppleLoginManagerDelegate {
         do {
             let dto = try await loginDataSource.login(request: .init())
             // TODO: dto 명세후 매핑 로직 작성
+            let testRequest = GetTestTokenRequest(id: 1)
+            let data = try await testUserDatSource.getTestToken(request: testRequest)
+
             return dummyUser
         } catch {
             return dummyUser
