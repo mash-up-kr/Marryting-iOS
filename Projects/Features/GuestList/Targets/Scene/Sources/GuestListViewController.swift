@@ -229,6 +229,16 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel) {
         self.guestCardViewModels = viewModel.guestCardViewModels
+        
+        DispatchQueue.main.async {
+            self.guestSwipeableView.removeFromSuperview()
+            self.view.addSubview(self.guestSwipeableView)
+            self.guestSwipeableView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(32)
+                make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
+                make.bottom.equalToSuperview().inset(84)
+            }
+        }
     }
 }
 
