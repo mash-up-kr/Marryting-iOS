@@ -12,6 +12,8 @@
 
 import UIKit
 import ProfileRegisterCompleteRoutingProtocol
+import MeetingListScene
+import GuestListScene
 
 public final class ProfileRegisterCompleteRouter: ProfileRegisterCompleteRoutingLogic, ProfileRegisterCompleteDataPassing {
     public weak var viewController: UIViewController?
@@ -23,5 +25,21 @@ public final class ProfileRegisterCompleteRouter: ProfileRegisterCompleteRouting
     
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+
+    public func routeToMeetingListScene() {
+        let meetingListViewController = MeetingListViewController()
+        viewController?.navigationController?.setViewControllers(
+            [meetingListViewController],
+            animated: true
+        )
+    }
+
+    public func routeToGuestListScene() {
+        let guestListViewController = GuestListViewController()
+        viewController?.navigationController?.setViewControllers(
+            [guestListViewController],
+            animated: true
+        )
     }
 }

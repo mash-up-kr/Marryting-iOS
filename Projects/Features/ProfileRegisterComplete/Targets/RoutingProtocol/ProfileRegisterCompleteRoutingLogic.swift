@@ -12,4 +12,6 @@
 
 public protocol ProfileRegisterCompleteRoutingLogic {
     func removeFromParent()
+    func routeToMeetingListScene()
+    func routeToGuestListScene()
 }
