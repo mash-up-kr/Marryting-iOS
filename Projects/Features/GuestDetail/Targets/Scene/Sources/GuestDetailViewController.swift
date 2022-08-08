@@ -113,7 +113,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         return v
     }()
 
-    private lazy  var nameLabel: UILabel = {
+    private lazy var nameLabel: UILabel = {
         // MARK: 영어이름일경우
         $0.font = .h1()
         $0.textAlignment = .left
@@ -145,6 +145,11 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         return $0
     }(UIStackView())
 
+    private let addressIconImageView: UIImageView = {
+        let v = UIImageView(asset: .ic_sharp_place)
+        return v
+    }()
+
     private let addressLabel: UILabel = {
         $0.font = .h5()
         $0.textColor = Pallete.Light.grey600.color
@@ -165,6 +170,11 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         $0.spacing = 2
         return $0
     }(UIStackView())
+
+    private let careerIconImageView: UIImageView = {
+        let v = UIImageView(asset: .ic_symbols_work)
+        return v
+    }()
 
     private let careerLabel: UILabel = {
         $0.font = .h5()
@@ -273,8 +283,10 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.topHeaderStackView.addArrangedSubview(self.profileStackView)
         self.profileStackView.addArrangedSubview(self.nameLabel)
         self.profileStackView.addArrangedSubview(self.ageLabel)
+        self.addressStackView.addArrangedSubview(self.addressIconImageView)
         self.addressStackView.addArrangedSubview(self.addressLabel)
         self.addressStackView.addArrangedSubview(self.addressDescriptionLabel)
+        self.careerStackView.addArrangedSubview(self.careerIconImageView)
         self.careerStackView.addArrangedSubview(self.careerLabel)
         self.careerStackView.addArrangedSubview(self.careerDescriptionLabel)
 
