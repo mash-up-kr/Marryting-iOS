@@ -18,7 +18,9 @@ import AuthenticationServices
 protocol LoginWorkerProtocol {
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
 
-    func appleLogin()
+//    func appleLogin()
+
+    func appleLogin() async throws -> User
 }
 
 class LoginWorker: LoginWorkerProtocol {
@@ -38,17 +40,22 @@ class LoginWorker: LoginWorkerProtocol {
         appleLoginManager.delegate = self
     }
 
-    func appleLogin() {
-        let appleIDProvider = ASAuthorizationAppleIDProvider()
-        let request = appleIDProvider.createRequest()
-        request.requestedScopes = [.fullName, .email]
+    func appleLogin() async throws -> User {
 
-        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-
-        authorizationController.delegate = appleLoginManager
-        authorizationController.presentationContextProvider = appleLoginManager
-        authorizationController.performRequests()
+        return dummyUser
     }
+//
+//    func appleLogin() {
+//        let appleIDProvider = ASAuthorizationAppleIDProvider()
+//        let request = appleIDProvider.createRequest()
+//        request.requestedScopes = [.fullName, .email]
+//
+//        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+//
+//        authorizationController.delegate = appleLoginManager
+//        authorizationController.presentationContextProvider = appleLoginManager
+//        authorizationController.performRequests()
+//    }
 }
 
 extension LoginWorker: AppleLoginManagerDelegate {
@@ -73,8 +80,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
         do {
             let dto = try await loginDataSource.login(request: .init())
             // TODO: dto 명세후 매핑 로직 작성
-            let testRequest = GetTestTokenRequest(id: 1)
-            let data = try await testUserDatSource.getTestToken(request: testRequest)
+//            let data = try await testUserDatSource.getTestToken(request: testRequest)
 
             return dummyUser
         } catch {
