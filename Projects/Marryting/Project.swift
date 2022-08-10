@@ -9,7 +9,10 @@ let infoPlist: [String: InfoPlist.Value] = [
   "UIMainStoryboardFile": "",
   "UILaunchStoryboardName": "LaunchScreen",
   "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
-  "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"]
+  "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
+  "NSCameraUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
+  "NSPhotoLibraryUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
+  "NSPhotoLibraryAddUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다"
 ]
 
 let project = Project.make(
