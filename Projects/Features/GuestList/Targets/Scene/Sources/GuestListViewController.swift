@@ -24,7 +24,7 @@ protocol GuestListDisplayLogic: AnyObject {
 
 public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     var interactor: GuestListBusinessLogic?
-    var router: (GuestListRoutingLogic & GuestListDataPassing)?
+    public var router: (GuestListRoutingLogic & GuestListDataPassing)?
     
     // MARK: Object lifecycle
     
@@ -85,6 +85,8 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     lazy var myInfoButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_edit)
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapMyInfoButton)))
         return v
     }()
     
@@ -139,13 +141,21 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         }
     }
 
-    @objc private func didTapLikeListButton() {
+    @objc
+    private func didTapLikeListButton() {
         router?.routeToMyGuestListScene()
     }
 
-    @objc private func guestCardViewDidTap() {
+    @objc
+    private func guestCardViewDidTap() {
         guard self.guestCardIndex >= 0 else { return }
         router?.routeToGuestDetailScene(targetId: self.guestCardIndex)
+    }
+
+    @objc
+    func didTapMyInfoButton() {
+        print("didTapMyInfoButton")
+        router?.routeToMyProfile()
     }
 
     // MARK: View lifecycle
@@ -219,6 +229,16 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel) {
         self.guestCardViewModels = viewModel.guestCardViewModels
+        
+        DispatchQueue.main.async {
+            self.guestSwipeableView.removeFromSuperview()
+            self.view.addSubview(self.guestSwipeableView)
+            self.guestSwipeableView.snp.makeConstraints { make in
+                make.leading.trailing.equalToSuperview().inset(32)
+                make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
+                make.bottom.equalToSuperview().inset(84)
+            }
+        }
     }
 }
 

@@ -22,8 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         
-        navigationController.pushViewController(ProfileRegisterViewController(), animated: true)
-
+        navigationController.pushViewController(GuestListViewController(), animated: true)
         return true
     }
 

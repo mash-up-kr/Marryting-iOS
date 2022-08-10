@@ -16,7 +16,7 @@ let project = Project.make(
             sources: ["Targets/RoutingProtocol/**"],
             resources: [],
             dependencies: [
-                .project(target: "Models", path: "../../Core/CoreKit"),
+                .project(target: "Models", path: "../../Core/CoreKit")
             ]
         ),
         Target(

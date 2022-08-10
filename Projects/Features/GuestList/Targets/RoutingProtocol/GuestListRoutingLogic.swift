@@ -14,4 +14,6 @@ public protocol GuestListRoutingLogic {
     func routeToMyGuestListScene()
 
     func routeToGuestDetailScene(targetId id: Int)
+
+    func routeToMyProfile()
 }

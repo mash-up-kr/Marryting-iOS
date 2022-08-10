@@ -12,6 +12,7 @@
 
 import UIKit
 import LoginRoutingProtocol
+import GuestListScene
 
 public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     public weak var viewController: UIViewController?
@@ -21,5 +22,11 @@ public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+
+    public func routeToGuestListViewController() {
+
+        let destinationVC = GuestListViewController()
+        viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
     }
 }

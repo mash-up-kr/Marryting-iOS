@@ -28,6 +28,8 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
     
     var guests: [Guest] = []
     
+    var meetingId: String?
+    
     // MARK: Business Logic
     
     func fetchGuests() {
