@@ -49,7 +49,11 @@ public enum Assets: String {
     case img_login
     case ic_symbols_work
     case ic_sharp_place
-
+    case img_blue_dongrami
+    case img_yellow_dongrami
+    case ic_sharp_place_grey100
+    case ic_symbols_work_grey100
+    
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")
         return .init(named: self.rawValue, in: bundle, with: nil)

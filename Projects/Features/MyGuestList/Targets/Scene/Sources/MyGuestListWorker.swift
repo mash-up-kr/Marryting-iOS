@@ -120,6 +120,60 @@ private extension MyGuestListWorker {
                     isLiked: false
                 ),
                 loveMent: "그대의 눈동자에 cheers~!"
+            ),
+            .init(
+                guest: .init(
+                    user: .init(
+                        id: 4,
+                        name: "강진호",
+                        gender: .male,
+                        career: "IT회사 개발자",
+                        birth: .init(),
+                        age: 30,
+                        address: "비공개",
+                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
+                        answers: [],
+                        keyword: []
+                    ),
+                    isLiked: false
+                ),
+                loveMent: "그대의 눈동자에 cheers~!"
+            ),
+            .init(
+                guest: .init(
+                    user: .init(
+                        id: 4,
+                        name: "강진호",
+                        gender: .male,
+                        career: "IT회사 개발자",
+                        birth: .init(),
+                        age: 30,
+                        address: "비공개",
+                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
+                        answers: [],
+                        keyword: []
+                    ),
+                    isLiked: false
+                ),
+                loveMent: "그대의 눈동자에 cheers~!"
+            ),
+            .init(
+                guest: .init(
+                    user: .init(
+                        id: 4,
+                        name: "강진호",
+                        gender: .male,
+                        career: "IT회사 개발자",
+                        birth: .init(),
+                        age: 30,
+                        address: "비공개",
+                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
+                        answers: [],
+                        keyword: []
+                    ),
+                    isLiked: false
+                ),
+                loveMent: "그대의 눈동자에 cheers~!"
             )
         ]
     }

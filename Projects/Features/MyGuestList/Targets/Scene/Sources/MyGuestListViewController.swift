@@ -225,6 +225,7 @@ extension MyGuestListViewController: UICollectionViewDataSource {
         for indexPath: IndexPath
     ) -> MatchingGuestCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(MatchingGuestCollectionViewCell.self, for: indexPath)
+        cell.imageType = indexPath.row % 2 == 0 ? .yello : .blue
         cell.viewModel = matchingViewModels[indexPath.item]
         return cell
     }
@@ -244,7 +245,6 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         case .matching:
             return 0
         }
-
     }
 
     public func collectionView(
@@ -281,7 +281,7 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
         case .myLike:
             height = width * 4 / 3
         case .matching:
-            height = width * 4 / 3 + 100 //dialogViewHeight(for: indexPath)
+            height = width * 4 / 3 + dialogViewHeight(for: indexPath)
         }
         return .init(width: width, height: height)
     }
@@ -292,13 +292,13 @@ extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
             // TODO: 영어 멘트일경우 체크
             $0.font = .h4()
             $0.textColor = Pallete.Light.grey700.color
-            $0.numberOfLines = 0
-            $0.text = matchingViewModels[indexPath.item].dialog.loveMent
+            $0.numberOfLines = 2
+            $0.text = "안녕\n안녕"
             return $0
         }(UILabel())
 
         loveMentLabel.sizeToFit()
 
-        return loveMentLabel.bounds.height + 32
+        return loveMentLabel.bounds.height + 48
     }
 }
