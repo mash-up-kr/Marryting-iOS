@@ -25,6 +25,12 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

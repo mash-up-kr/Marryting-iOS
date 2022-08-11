@@ -25,6 +25,13 @@ final class RegisterProfileImageCell: UICollectionViewCell {
         return view
     }()
     
+    lazy var imageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 16
+        return imageView
+    }()
+    
     // MARK: Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -41,14 +48,24 @@ final class RegisterProfileImageCell: UICollectionViewCell {
     }
     
     private func configureUI() {
-        self.layer.cornerRadius = 16
         addSubview(registerimageButton)
+        addSubview(imageView)
         
         registerimageButton.snp.makeConstraints { make in
             make.top.leading.trailing.bottom.equalToSuperview()
         }
         
+        imageView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalToSuperview()
+        }
+        
         registerimageButton.addTarget(self, action: #selector(tapRegisterimageButton), for: .touchUpInside)
+    }
+    
+    func setImage(image: UIImage?) {
+        imageView.image = image
+        imageView.isHidden = image == nil
+        registerimageButton.isHidden = image != nil
     }
     
     @objc func tapRegisterimageButton(_ sender: AddImageButton) {

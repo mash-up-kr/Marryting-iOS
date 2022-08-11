@@ -22,8 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
-        
-        navigationController.pushViewController(MyGuestListViewController(), animated: true)
+        navigationController.pushViewController(LoginViewController(), animated: true)
         return true
     }
 

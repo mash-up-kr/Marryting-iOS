@@ -56,8 +56,56 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
 
     // MARK: UI
 
+    lazy var wholeStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.distribution = .fill
+        v.alignment = .center
+        v.spacing = 12
+        return v
+    }()
+
+    lazy var heartImageView: UIImageView = {
+        let v = UIImageView(asset: .img_login)
+        return v
+    }()
+
+    lazy var bottomStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.distribution = .fill
+        v.alignment = .center
+        v.spacing = 40
+        return v
+    }()
+
+    lazy var vStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.distribution = .fill
+        v.alignment = .center
+        v.spacing = 0
+        return v
+    }()
+
+    lazy var findyourLabel: UILabel = {
+        let v = UILabel()
+        v.text = "Find your"
+        v.font = .montserrat(weight: .medium, size: ._30)
+        v.textColor = Pallete.Light.black.color
+        return v
+    }()
+
+    lazy var marrytingLabel: UILabel = {
+        let v = UILabel()
+        v.text = "MARRY-TING"
+        v.font = .montserrat(weight: .bold, size: ._30)
+        v.textColor = Pallete.Light.black.color
+        return v
+    }()
+
     lazy var appleLoginButton: UIButton = {
-        $0.setBackgroundImage(.create(.btn_apple_login), for: .normal)
+        $0.setBackgroundImage(.create(.btn_apple_button), for: .normal)
         $0.addTarget(self, action: #selector(appleLoginButtonPressed), for: .touchUpInside)
         return $0
     }(UIButton(type: .system))
@@ -88,12 +136,22 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     }
 
     private func setUI() {
-        self.view.addSubview(self.appleLoginButton)
+        self.view.backgroundColor = Pallete.Light.background.color
+        self.view.addSubview(self.wholeStackView)
+        self.wholeStackView.addArrangedSubviews(self.heartImageView, self.bottomStackView)
+        self.bottomStackView.addArrangedSubviews(self.vStackView, self.appleLoginButton)
+        self.vStackView.addArrangedSubviews(self.findyourLabel, self.marrytingLabel)
 
-        self.appleLoginButton.snp.makeConstraints { make in
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(40)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().inset(24)
+        self.wholeStackView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
         }
+        
+        let constraint1 = heartImageView.heightAnchor.constraint(equalTo: heartImageView.widthAnchor, multiplier: 298/360)
+        constraint1.priority = UILayoutPriority(1000)
+        constraint1.isActive = true
+
+        let constraint2 = appleLoginButton.heightAnchor.constraint(equalTo: appleLoginButton.widthAnchor, multiplier: 56/327)
+        constraint2.priority = UILayoutPriority(1000)
+        constraint2.isActive = true
     }
 }

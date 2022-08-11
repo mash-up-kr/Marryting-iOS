@@ -6,7 +6,7 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public enum Gender {
+public enum Gender: Codable {
     case male
     case female
 }
