@@ -37,6 +37,18 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
                 self?.presenter?.failLogin()
             }
         }
-        worker?.appleLogin()
+
+        #warning("배포할 때 주석 바꾸기")
+        // MARK: 배포용 - 애플 로그인 있는 로그인 처리
+        // worker?.appleLogin()
+
+        // MARK: dev용 - 애플 로그인 없는 로그인 처리
+
+        Task {
+            await worker?.loginWithoutAppleLogin()
+            self.presenter?.presentLogin()
+        }
+
+
     }
 }
