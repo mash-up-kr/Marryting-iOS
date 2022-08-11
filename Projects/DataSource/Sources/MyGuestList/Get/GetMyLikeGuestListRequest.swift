@@ -22,7 +22,7 @@ public struct GetMyLikeGuestListRequest: Request {
 
     private let authorizationKey: String = "Authorization"
 
-    public init(_ token: String) {
+    public init(token: String) {
         header[authorizationKey] = "Bearer" + " " + token
     }
 }

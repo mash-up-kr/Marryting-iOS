@@ -15,6 +15,12 @@ public struct KeywordDTO: Codable {
         case keyword
         case keywordID = "keywordId"
     }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        keyword = (try? values.decode(String.self, forKey: .keyword)) ?? ""
+        keywordID = (try? values.decode(String.self, forKey: .keywordID)) ?? ""
+    }
 }
 
 

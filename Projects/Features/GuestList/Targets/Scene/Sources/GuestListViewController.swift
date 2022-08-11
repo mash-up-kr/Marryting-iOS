@@ -154,7 +154,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
 
     @objc
     func didTapMyInfoButton() {
-        print("didTapMyInfoButton")
         router?.routeToMyProfile()
     }
 

@@ -44,7 +44,8 @@ class LoginWorker: LoginWorkerProtocol {
     }
 
     func loginWithoutAppleLogin() async {
-        userDataSource.save(self.dummyUser)
+        let testToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyMDA1NzI5fQ.Qa2V4A98Q1lOly_xg1ME-9Uj9AhMkKL4l_6f6fDIxw8"
+        userDataSource.save(DdipUser(self.dummyUser, testToken))
     }
 
     func appleLogin() {
@@ -71,7 +72,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
             do {
                 #warning("테스트 리퀘스트입니다.")
                 let user = try await login()
-                userDataSource.save(self.dummyUser)
+//                userDataSource.save(self.dummyUser)
                 fetchUser?(.success(user))
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))

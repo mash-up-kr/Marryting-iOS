@@ -15,4 +15,10 @@ public struct AnswerDTO: Codable {
         case answer
         case questionID = "questionId"
     }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        answer = (try? values.decode(String.self, forKey: .answer)) ?? ""
+        questionID = (try? values.decode(String.self, forKey: .questionID)) ?? ""
+    }
 }

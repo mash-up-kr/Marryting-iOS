@@ -31,6 +31,7 @@ public struct GetMatchingGuestListDTO: Codable, Response {
 }
 
 public extension MatchedGuest {
+    
     init(_ dto: GetMatchingGuestListDTO) {
         let user = User(id: dto.profileID,
                         name: dto.name,
@@ -44,6 +45,4 @@ public extension MatchedGuest {
                         keyword: dto.keywords.map { $0.keyword })
         self.init(guest: Guest(user: user, isLiked: true), loveMent: dto.message)
     }
-
-
 }
