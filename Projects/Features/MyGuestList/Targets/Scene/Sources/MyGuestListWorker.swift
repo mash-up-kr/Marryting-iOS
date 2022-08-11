@@ -27,19 +27,22 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
 
     func fetchMyLikeGuests() async throws -> [Guest] {
         do {
-            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init())
-
-            return dummyLikeGuests
+            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init(""))
+            guard let myLikeGuestListDTO = dto.data else { return dummyLikeGuests }
+            let myLikeGuestList = myLikeGuestListDTO.map { Guest($0) }
+            return myLikeGuestList
         } catch {
+            print("HI")
             return dummyLikeGuests
         }
     }
 
     func fetchMatchingGuests() async throws -> [MatchedGuest] {
         do {
-            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init())
-
-            return dummyMatchingGuests
+            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init(""))
+            guard let matchingGuestListDTO = dto.data else { return dummyMatchingGuests }
+            let matchingGuestList = matchingGuestListDTO.map { MatchedGuest($0) }
+            return matchingGuestList
         } catch {
             return dummyMatchingGuests
         }

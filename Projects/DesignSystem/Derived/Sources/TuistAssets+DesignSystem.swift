@@ -48,6 +48,8 @@ public enum DesignSystemAsset {
     public static let icRightEnable = DesignSystemImages(name: "ic_right_enable")
     public static let icRightHighlight = DesignSystemImages(name: "ic_right_highlight")
     public static let icRing = DesignSystemImages(name: "ic_ring")
+    public static let icSharpPlace = DesignSystemImages(name: "ic_sharp_place")
+    public static let icSymbolsWork = DesignSystemImages(name: "ic_symbols_work")
     public static let icTrashDisable = DesignSystemImages(name: "ic_trash_disable")
     public static let icTrashEnable = DesignSystemImages(name: "ic_trash_enable")
     public static let icTrashHighlight = DesignSystemImages(name: "ic_trash_highlight")

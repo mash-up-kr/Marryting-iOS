@@ -14,11 +14,17 @@ public struct GetMatchingGuestListRequest: Request {
 
     public typealias Output = GetMatchingGuestListResponse
 
-    public var endpoint: String = ""
+    public var endpoint: String = "/api/v1/like/matching-profiles"
 
     public var method: HTTPMethod = .get
 
-    public init() {}
+    public var header: HTTPHeader = [:]
+
+    private let authorizationKey: String = "Authorization"
+
+    public init(_ token: String) {
+        header[authorizationKey] = "Bearer" + " " + token
+    }
 }
 
 

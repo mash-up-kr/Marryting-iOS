@@ -14,10 +14,16 @@ public struct GetMyLikeGuestListRequest: Request {
 
     public typealias Output = GetMyLikeGuestListResponse
 
-    public var endpoint: String = ""
+    public var endpoint: String = "/api/v1/like/profiles"
 
     public var method: HTTPMethod = .get
 
-    public init() {}
+    public var header: HTTPHeader = [:]
+
+    private let authorizationKey: String = "Authorization"
+
+    public init(_ token: String) {
+        header[authorizationKey] = "Bearer" + " " + token
+    }
 }
 
