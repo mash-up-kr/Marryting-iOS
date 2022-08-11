@@ -236,6 +236,26 @@ extension MyGuestListViewController: UICollectionViewDataSource {
 extension MyGuestListViewController: UICollectionViewDelegateFlowLayout {
     public func collectionView(
         _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        var id: Int?
+        switch displayType {
+        case .myLike:
+            guard let cell = collectionView.cellForItem(at: indexPath) as? MyLikeGuestCollectionViewCell else { return }
+            id = cell.viewModel?.myGuestCardViewModel.id
+        case .matching:
+            guard let cell = collectionView.cellForItem(at: indexPath) as? MatchingGuestCollectionViewCell else { return }
+            id = cell.viewModel?.myGuestCardViewModel.id
+        }
+
+        guard let id = id else {
+            return
+        }
+        router?.routeToGuestDetailscene(targetId: id)
+    }
+
+    public func collectionView(
+        _ collectionView: UICollectionView,
         layout collectionViewLayout: UICollectionViewLayout,
         minimumLineSpacingForSectionAt section: Int
     ) -> CGFloat {

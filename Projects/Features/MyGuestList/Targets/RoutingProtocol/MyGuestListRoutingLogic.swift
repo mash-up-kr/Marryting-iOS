@@ -10,6 +10,10 @@
 //  see http://clean-swift.com
 //
 
+import Models
+
 public protocol MyGuestListRoutingLogic {
     func removeFromParent()
+
+    func routeToGuestDetailscene(targetId id: Int)
 }

@@ -11,7 +11,61 @@
 //
 
 import UIKit
+import Models
+import DataSource
 
-protocol GuestDetailWorkerProtocol {}
+protocol GuestDetailWorkerProtocol {
+//    func fetchGuest(_ id: Int) async throws -> Guest
+}
 
-final class GuestDetailWorker: GuestDetailWorkerProtocol {}
+final class GuestDetailWorker: GuestDetailWorkerProtocol {
+//    private let guestDetailDataSource: GuestDetailDataSourceProtocol
+//    private let userDataSource: UserDataSoureceProtocol
+//
+//    init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
+//         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+//        self.guestDetailDataSource = guestDetailDataSource
+//        self.userDataSource = userDataSource
+//    }
+//
+//    func fetchGuest(_ id: Int) async throws -> Guest {
+//        do {
+//            let dto = try await guestDetailDataSource.getGuestDetail(request: .init(profileID: id))
+//            guard let data = dto.data else { return dummyGuest }
+//            return data.map(Guest.init)
+//        } catch {
+//
+//        }
+//    }
+
+}
+
+extension GuestDetailWorker {
+    var dummyGuest: Guest {
+        .init(
+            user: .init(
+                id: 1,
+                name: "박건우",
+                gender: .male,
+                career: "IT회사 개발자",
+                birth: .init(),
+                age: 21,
+                address: "서울시 금천구",
+                pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                           "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
+                answers: [ "생각을 정리하고 이야기",
+                           "자주 할수록 좋아요",
+                           "계획적인 데이트"
+                         ],
+                keyword: [
+                    "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                ]
+            ),
+            isLiked: false
+        )
+    }
+}

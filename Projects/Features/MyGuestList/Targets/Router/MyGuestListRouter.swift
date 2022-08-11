@@ -12,6 +12,7 @@
 
 import UIKit
 import MyGuestListRoutingProtocol
+import GuestDetailScene
 
 public final class MyGuestListRouter: MyGuestListRoutingLogic, MyGuestListDataPassing {
     public weak var viewController: UIViewController?
@@ -23,5 +24,15 @@ public final class MyGuestListRouter: MyGuestListRoutingLogic, MyGuestListDataPa
     
     public func removeFromParent() {
         viewController?.navigationController?.popViewController(animated: true)
+    }
+
+    public func routeToGuestDetailscene(targetId id: Int) {
+        guard let dataStore = dataStore,
+              let guest = (dataStore.matchingGuests.map({ $0.guest }) + dataStore.myLikeGuests).filter({ $0.user.id == id }).first else {
+            return
+        }
+        let destinationVC = GuestDetailViewController()
+        destinationVC.router?.dataStore?.targetGuest = guest
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 }

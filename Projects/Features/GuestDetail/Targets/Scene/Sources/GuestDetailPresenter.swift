@@ -29,6 +29,7 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
                              age: user.age,
                              address: user.address,
                              career: user.career,
+                             isLiked: response.guest.isLiked,
                              images: user.pictures.map {
                                  UserProfileImagewCellViewModel(userProfileImageViewModel: .init(imageUrl: $0))
                              },
