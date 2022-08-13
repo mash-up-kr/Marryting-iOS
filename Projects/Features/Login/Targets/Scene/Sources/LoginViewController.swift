@@ -117,9 +117,12 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     // MARK: Routing
 
     func displayLoginSucees() {
-        // TODO: Login 성공
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-            self?.router?.routeToGuestListViewController()
+
+            // TODO: 라우팅 변경
+//            self?.router?.routeToGuestListViewController()
+            self?.router?.routeToMeetingListViewController()
         }
 
     }
