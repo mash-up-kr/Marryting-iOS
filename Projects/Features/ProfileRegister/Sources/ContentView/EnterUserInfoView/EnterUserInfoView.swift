@@ -10,7 +10,14 @@ import UIKit
 import DesignSystem
 import SnapKit
 
-final class EnterUserInfoView: UIView {
+protocol ProfileRegisterContentView {
+    func hideKeyboardAndSendUserInfo()
+}
+protocol EnterUserInfoViewDelegate: AnyObject {
+    func sendUserInfo(_ info: UserInfo, allEntered: Bool)
+}
+final class EnterUserInfoView: UIView, ProfileRegisterContentView {
+    weak var delegate: EnterUserInfoViewDelegate?
     // MARK: UI Properties
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
@@ -129,9 +136,22 @@ final class EnterUserInfoView: UIView {
     }
     
     @objc func keyboardWillHide(notification: NSNotification) {
+        hideKeyboardAndSendUserInfo()
+    }
+    
+    func hideKeyboardAndSendUserInfo() {
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.scrollView.setContentOffset(.zero, animated: false) // true로 하면 움직이지 않음
         }
+        let name = nameTextField.text ?? ""
+        let gender = genderTextField.text ?? ""
+        let birth = birthTextField.text ?? ""
+        let address = addressTextField.text ?? ""
+        let job = jobTextField.text ?? ""
+        
+        let allEntered = [name, gender, birth, address, job]
+        
+        delegate?.sendUserInfo(UserInfo(name: name, gender: gender, birth: birth, address: address, job: job), allEntered: allEntered.filter { $0.count == 0}.isEmpty)
     }
     
     @objc func tapScrollView() {

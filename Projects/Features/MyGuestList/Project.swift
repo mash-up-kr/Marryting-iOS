@@ -30,7 +30,7 @@ let project = Project.make(
             resources: [],
             dependencies: [
                 .target(name: "MyGuestListRoutingProtocol"),
-//                .project(target: "TargetScene", path: "../Target"),
+                .project(target: "GuestDetailScene", path: "../GuestDetail"),
             ]
         ),
         Target(

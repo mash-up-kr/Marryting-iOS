@@ -29,3 +29,19 @@ enum ProfileRegister
     }
   }
 }
+
+struct UserInfo {
+    var name: String
+    var gender: String
+    var birth: String
+    var address: String
+    var job: String
+    
+    init(name: String = "", gender: String = "", birth: String = "", address: String = "", job: String = "") {
+        self.name = name
+        self.gender = gender
+        self.birth = birth
+        self.address = address
+        self.job = job
+    }
+}

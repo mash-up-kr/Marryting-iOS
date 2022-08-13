@@ -30,6 +30,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let scale = UIScreen.main.scale
         return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
     }
+    var firstPageData: UserInfo = UserInfo()
     
     // MARK: Object lifecycle
     
@@ -139,6 +140,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var enterUserInfoView: EnterUserInfoView = {
         let view = EnterUserInfoView()
+        view.delegate = self
         return view
     }()
     
@@ -238,6 +240,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        
+        guard let changedPage = contentViewArr[pageNum - 1] as? ProfileRegisterContentView else {
+            return
+        }
+        changedPage.hideKeyboardAndSendUserInfo()
     }
     
     private func changeTopUI() {
@@ -354,5 +361,12 @@ extension PHAsset {
             }
         )
         return thumbnail
+    }
+}
+
+extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
+    func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
+        firstPageData = info
+        rightButton.isEnabled = allEntered
     }
 }
