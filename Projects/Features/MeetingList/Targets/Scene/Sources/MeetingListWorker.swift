@@ -12,19 +12,46 @@
 
 import UIKit
 import Models
+import DataSource
 
 protocol MeetingListWorkerProtocol {
     func fetchMeetings() async throws -> [Meeting]
 }
 
 final class MeetingListWorker: MeetingListWorkerProtocol {
+
+    private let meetingListDataSource: MeetingListDataSourceProtocol
+    private let userDataSource: UserDataSoureceProtocol
+
+    init(meetingListDataSource: MeetingListDataSourceProtocol = MeetingListDataSource(),
+         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+        self.meetingListDataSource = meetingListDataSource
+        self.userDataSource = userDataSource
+    }
+
     func fetchMeetings() async throws -> [Meeting] {
-        return [
-            .init(id: "1", groomName: "김신랑", brideName: "박신부", date: Date()),
-            .init(id: "2", groomName: "현빈", brideName: "손예진", date: Date()),
-            .init(id: "3", groomName: "신랑", brideName: "신부", date: Date()),
-            .init(id: "4", groomName: "현빈", brideName: "손예진", date: Date()),
-            .init(id: "5", groomName: "현빈", brideName: "손예진", date: Date()),
+        do {
+            let token = userDataSource.data?.token ?? ""
+            let dto = try await meetingListDataSource.getMeetingList(request: .init(token: token))
+            print(dto)
+            guard let meetingListDTO = dto.data else { return dummyMeetings }
+            let meetingList = meetingListDTO.map(Meeting.init)
+            return meetingList
+        }
+        catch {
+            return dummyMeetings
+        }
+    }
+}
+
+fileprivate extension MeetingListWorker {
+    var dummyMeetings: [Meeting] {
+        [
+            .init(id: 1, groomName: "김신랑", brideName: "박신부", date: Date()),
+            .init(id: 2, groomName: "현빈", brideName: "손예진", date: Date()),
+            .init(id: 3, groomName: "신랑", brideName: "신부", date: Date()),
+            .init(id: 4, groomName: "현빈", brideName: "손예진", date: Date()),
+            .init(id: 5, groomName: "현빈", brideName: "손예진", date: Date()),
         ]
     }
 }

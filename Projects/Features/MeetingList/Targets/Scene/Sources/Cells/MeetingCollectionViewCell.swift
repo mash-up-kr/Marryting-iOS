@@ -12,11 +12,11 @@ import SnapKit
 
 protocol MeetingCollectionViewCellDelegate: AnyObject {
     /// 진입 버튼 클릭 이벤트
-    func didTapMeetingEnterButton(id: String)
+    func didTapMeetingEnterButton(id: Int)
 }
 
 struct MeetingCellViewModel {
-    var id: String
+    var id: Int
     var index: String
     var groomName: String
     var brideName: String
@@ -72,7 +72,7 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
         return v
     }()
     
-    private var id: String?
+    private var id: Int?
     
     var viewModel: MeetingCellViewModel? {
         didSet {
