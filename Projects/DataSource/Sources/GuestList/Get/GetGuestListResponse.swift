@@ -31,6 +31,7 @@ public struct GetGuestListDTO: Codable, Response {
 
 public extension Guest {
 
+    #warning("서버 수정 후에 주석으로 대체해야함")
     init(_ dto: GetGuestListDTO) {
         let user = User(id: dto.profileID,
                         name: dto.name,
