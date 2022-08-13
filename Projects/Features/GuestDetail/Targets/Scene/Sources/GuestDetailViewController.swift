@@ -27,6 +27,7 @@ struct GuestDetailViewModel {
     var age: Int
     var address: String
     var career: String
+    var isLiked: Bool
     var images: [UserProfileImagewCellViewModel]
     var keywords: KeywordsViewModel
     var answers: WhoIAmViewModel
@@ -133,6 +134,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             for: .highlighted
         )
         $0.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
+        $0.addTarget(self, action: #selector(likeButtonDidTouchUpOutside), for: .touchUpOutside)
         $0.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return $0
     }(ImageMTButton(customButtonType: .iconMainLight))
@@ -232,6 +234,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             self.careerLabel.text = viewModel?.career ?? ""
             self.keywordContainerView.viewModel = viewModel?.keywords
             self.whoIAmContainerView.viewModel = viewModel?.answers
+
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
                 self?.pageControl.numberOfPages = self?.viewModel?.images.count ?? 1
@@ -239,6 +242,15 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
                 self?.pageControl.subviews.forEach {
                     $0.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
                 }
+            }
+
+            guard let viewModel = viewModel else { return }
+            let isLikedImage = viewModel.isLiked ? likeButton.customButtonType.highlightedImage : likeButton.customButtonType.enableImage
+            likeButton.setBackgroundImage(isLikedImage, for: .normal)
+            likeButton.setBackgroundImage(isLikedImage, for: .highlighted)
+            if viewModel.isLiked {
+                likeButton.removeTarget(self, action: nil, for: .touchUpInside)
+                likeButton.addTarget(self, action: #selector(likeButtonDidTapWithoutAction), for: .touchUpInside)
             }
         }
     }
@@ -397,6 +409,26 @@ extension GuestDetailViewController {
             withDuration: 0.25,
             animations: {
                 self.likeButton.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+            }
+        )
+    }
+
+    @objc
+    func likeButtonDidTouchUpOutside() {
+        UIView.animate(
+            withDuration: 0.05,
+            animations: {
+                self.likeButton.transform = CGAffineTransform.identity
+            }
+        )
+    }
+
+    @objc
+    func likeButtonDidTapWithoutAction() {
+        UIView.animate(
+            withDuration: 0.05,
+            animations: {
+                self.likeButton.transform = CGAffineTransform.identity
             }
         )
     }

@@ -24,10 +24,10 @@ public final class MyGuestListDataSource: MyGuestListDataSourceProtocol {
     }
 
     public func getMyLikeGuestList(request: GetMyLikeGuestListRequest) async throws -> GetMyLikeGuestListResponse {
-        return try await network.send(request)
+        try await network.send(request)
     }
 
     public func getMatchingGuestList(request: GetMatchingGuestListRequest) async throws -> GetMatchingGuestListResponse {
-        return try await network.send(request)
+        try await network.send(request)
     }
 }
