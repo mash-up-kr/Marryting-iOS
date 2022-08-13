@@ -117,6 +117,29 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
                                                selector: #selector(keyboardWillHide),
                                                name: UIResponder.keyboardWillHideNotification,
                                                object:nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(nameTextDidChange(_:)),
+                                               name: UITextField.textDidChangeNotification,
+                                               object: nameTextField)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(addressTextDidChange(_:)),
+                                               name: UITextField.textDidChangeNotification,
+                                               object: addressTextField)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(jobTextDidChange(_:)),
+                                               name: UITextField.textDidChangeNotification,
+                                               object: jobTextField)
+    }
+    
+    private func characterLimit(textField: UITextField, maxLength: Int) {
+        if let text = textField.text {
+            // 초과되는 텍스트 제거
+            if text.count >= maxLength {
+                let index = text.index(text.startIndex, offsetBy: maxLength)
+                let newString = text.prefix(upTo: index)
+                textField.text = String(newString)
+            }
+        }
     }
     
     @objc func keyboardWillShow(notification: NSNotification) {
@@ -132,6 +155,24 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
                           let keyboardRectangle = keyboardFrame.cgRectValue
                           let keyboardHeight = keyboardRectangle.height
             self.scrollView.contentInset.bottom = keyboardHeight + 56
+        }
+    }
+    
+    @objc private func nameTextDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            characterLimit(textField: textField, maxLength: 5)
+        }
+    }
+    
+    @objc private func addressTextDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            characterLimit(textField: textField, maxLength: 10)
+        }
+    }
+    
+    @objc private func jobTextDidChange(_ notification: Notification) {
+        if let textField = notification.object as? UITextField {
+            characterLimit(textField: textField, maxLength: 10)
         }
     }
     
