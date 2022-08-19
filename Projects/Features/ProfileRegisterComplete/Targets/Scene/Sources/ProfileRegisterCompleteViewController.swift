@@ -105,9 +105,8 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
         return v
     }()
     
-    lazy var gotoMeetingListSceneButton: TextImageMTButton = {
-        let v = TextImageMTButton()
-        v.customButtonType = .mainLight
+    lazy var gotoMeetingListSceneButton: MTButton = {
+        let v = MTButton.create(.mainLight)
         v.title = "LET’S GO"
         v.addTarget(self, action: #selector(didTapGotoMeetingListSceneButton), for: .touchUpInside)
         return v

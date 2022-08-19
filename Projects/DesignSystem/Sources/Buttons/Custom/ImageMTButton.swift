@@ -8,14 +8,14 @@
 
 import UIKit
 
-public final class ImageMTButton: MTButton {
+final class ImageMTButton: MTButton {
     
     
     // MARK: Parameters
     
-    public var customButtonType: CustomButtonType   = .iconMainLight
+    var customButtonType: CustomButtonType   = .iconMainLight
     
-    public convenience init(customButtonType: CustomButtonType) {
+    convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
         self.customButtonType = customButtonType
 
@@ -49,7 +49,7 @@ extension ImageMTButton {
         case iconMainLight
         case iconSubDark
         
-        public var enableImage: UIImage? {
+        var enableImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_enable)
@@ -62,7 +62,7 @@ extension ImageMTButton {
             }
         }
         
-        public var highlightedImage: UIImage? {
+        var highlightedImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_highlight)
@@ -75,7 +75,7 @@ extension ImageMTButton {
             }
         }
         
-        public var disabledImage: UIImage? {
+        var disabledImage: UIImage? {
             switch self {
             case .iconSubDark:
                 return .create(.ic_trash_disable)

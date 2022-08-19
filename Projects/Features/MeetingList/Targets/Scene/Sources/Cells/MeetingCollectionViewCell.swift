@@ -59,8 +59,8 @@ final class MeetingCollectionViewCell: UICollectionViewCell {
         return v
     }()
     
-    lazy var enterButton: ImageMTButton = {
-        let v = ImageMTButton(customButtonType: .iconSub1Light)
+    lazy var enterButton: MTButton = {
+        let v = MTButton.create(.iconSub1Light)
         v.isUserInteractionEnabled = true
         v.addTarget(self, action: #selector(didTapMeetingEnterButton), for: .touchUpInside)
         return v

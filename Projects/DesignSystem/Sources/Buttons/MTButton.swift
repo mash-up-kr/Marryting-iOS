@@ -36,11 +36,11 @@ extension MTButton {
 
     public static func create(_ type: MTButtonType) -> MTButton {
         switch type {
-        case .mainDarkTextImage:
+        case .mainDark:
             return TextImageMTButton(customButtonType: .mainDark)
-        case .mainLightTextImage:
+        case .mainLight:
             return TextImageMTButton(customButtonType: .mainLight)
-        case .mainSmallDarkTextImage:
+        case .mainSmallDark:
             return TextImageMTButton(customButtonType: .mainSmallDark)
         case .iconSub1Light:
             return ImageMTButton(customButtonType: .iconSub1Light)
@@ -48,12 +48,19 @@ extension MTButton {
             return ImageMTButton(customButtonType: .iconSub2Light)
         case .iconMainLight:
             return ImageMTButton(customButtonType: .iconMainLight)
+        case .iconMainLightSelected:
+            let v = ImageMTButton(customButtonType: .iconMainLight)
+            v.setBackgroundImage(v.customButtonType.highlightedImage, for: .normal)
+            v.setBackgroundImage(v.customButtonType.highlightedImage, for: .highlighted)
+            return v
         case .iconSubDark:
             return ImageMTButton(customButtonType: .iconSubDark)
         case .subLight:
             return TextMTButton()
         case .text:
             return TextMTButton()
+        case .addImage:
+            return AddImageButton()
         }
     }
 }

@@ -118,16 +118,16 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         return view
     }()
     
-    lazy var leftButton: TextImageMTButton = {
-        let button = TextImageMTButton(customButtonType: .mainSmallDark)
+    lazy var leftButton: MTButton = {
+        let button = MTButton.create(.mainSmallDark)
         button.title = "PRE"
         button.isEnabled = true
         button.addTarget(self, action: #selector(pressPrevButton(_:)), for: .touchUpInside)
         return button
     }()
     
-    lazy var rightButton: TextImageMTButton = {
-        let button = TextImageMTButton(customButtonType: .mainDark)
+    lazy var rightButton: MTButton = {
+        let button = MTButton.create(.mainDark)
         button.addTarget(self, action: #selector(pressNextButton(_:)), for: .touchUpInside)
         return button
     }()

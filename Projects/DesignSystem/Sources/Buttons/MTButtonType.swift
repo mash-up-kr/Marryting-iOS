@@ -9,14 +9,16 @@
 import Foundation
 
 public enum MTButtonType {
-    case mainDarkTextImage
-    case mainLightTextImage
-    case mainSmallDarkTextImage
+    case mainDark
+    case mainLight
+    case mainSmallDark
     case iconSub1Light
     case iconSub2Light
     case iconMainLight
+    case iconMainLightSelected
     case iconSubDark
     case subLight
     case text
+    case addImage
 
 }

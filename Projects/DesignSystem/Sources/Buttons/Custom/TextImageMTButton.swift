@@ -11,13 +11,13 @@ import UIKit
 /// 텍스트와 이미지가 함께 쓰이는 Marryting 버튼
 /// - Parameters:
 ///   - customButtonType: 3가지 버튼 타입
-public final class TextImageMTButton: MTButton {
+final class TextImageMTButton: MTButton {
 
     // MARK: Parameters
 
-    public var customButtonType: CustomButtonType   = .mainLight
+    var customButtonType: CustomButtonType   = .mainLight
 
-    public convenience init(customButtonType: CustomButtonType) {
+    convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
         self.customButtonType = customButtonType
         layout()
@@ -53,9 +53,9 @@ public final class TextImageMTButton: MTButton {
                                        bottom: 0,
                                        right: customButtonType.imagePadding)
         self.contentEdgeInsets = .init(top: 8,
-                                       left: customButtonType.imagePadding + 36,
+                                       left: customButtonType.imagePadding + customButtonType.contentLeftPadding,
                                        bottom: 8,
-                                       right: 8)
+                                       right: customButtonType.contentRightPadding)
         self.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 0)
     }
 }
@@ -183,6 +183,27 @@ extension TextImageMTButton {
             }
         }
 
+        var contentLeftPadding: CGFloat {
+            switch self {
+            case .mainDark:
+                return 36
+            case .mainLight:
+                return 36
+            case .mainSmallDark:
+                return 8
+            }
+        }
+
+        var contentRightPadding: CGFloat {
+            switch self {
+            case .mainDark:
+                return 8
+            case .mainLight:
+                return 8
+            case .mainSmallDark:
+                return 24
+            }
+        }
         var imageViewWidth: CGFloat {
             return 40
         }

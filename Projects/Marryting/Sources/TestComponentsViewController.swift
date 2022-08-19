@@ -16,28 +16,28 @@ final class TestComponentsViewController: UIViewController {
         $0.title = "NEXT"
         $0.isEnabled = true
         return $0
-    }(MTButton.create(.mainDarkTextImage))
+    }(MTButton.create(.mainDark))
 
     private lazy var button2: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "NEXT"
         $0.isEnabled = false
         return $0
-    }(MTButton.create(.mainDarkTextImage))
+    }(MTButton.create(.mainDark))
 
     private lazy var button3: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "BUTTON"
         $0.isEnabled = true
         return $0
-    }(MTButton.create(.mainLightTextImage))
+    }(MTButton.create(.mainLight))
 
     private lazy var button4: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "BUTTON"
         $0.isEnabled = false
         return $0
-    }(MTButton.create(.mainLightTextImage))
+    }(MTButton.create(.mainLight))
 
     private lazy var button5: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
