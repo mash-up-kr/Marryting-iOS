@@ -11,62 +11,62 @@ import DesignSystem
 
 final class TestComponentsViewController: UIViewController {
 
-    private lazy var button1: TextImageMTButton = {
+    private lazy var button1: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "NEXT"
         $0.isEnabled = true
         return $0
-    }(TextImageMTButton(customButtonType: .mainDark))
+    }(MTButton.create(.mainDarkTextImage))
 
-    private lazy var button2: TextImageMTButton = {
+    private lazy var button2: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "NEXT"
         $0.isEnabled = false
         return $0
-    }(TextImageMTButton(customButtonType: .mainDark))
+    }(MTButton.create(.mainDarkTextImage))
 
-    private lazy var button3: TextImageMTButton = {
+    private lazy var button3: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "BUTTON"
         $0.isEnabled = true
         return $0
-    }(TextImageMTButton(customButtonType: .mainLight))
+    }(MTButton.create(.mainLightTextImage))
 
-    private lazy var button4: TextImageMTButton = {
+    private lazy var button4: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "BUTTON"
         $0.isEnabled = false
         return $0
-    }(TextImageMTButton(customButtonType: .mainLight))
+    }(MTButton.create(.mainLightTextImage))
 
-    private lazy var button5: TextMTButton = {
+    private lazy var button5: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.title = "BUTTON"
         return $0
-    }(TextMTButton())
+    }(MTButton.create(.text))
 
-    private lazy var button6: ImageMTButton = {
+    private lazy var button6: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
 
         return $0
-    }(ImageMTButton(customButtonType: .iconMainLight))
+    }(MTButton.create(.iconMainLight))
 
-    private lazy var button7: ImageMTButton = {
+    private lazy var button7: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.isEnabled = true
         return $0
-    }(ImageMTButton(customButtonType: .iconSubDark))
+    }(MTButton.create(.iconSubDark))
 
-    private lazy var button8: ImageMTButton = {
+    private lazy var button8: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
         return $0
-    }(ImageMTButton(customButtonType: .iconSub1Light))
+    }(MTButton.create(.iconSub1Light))
 
-    private lazy var button9: ImageMTButton = {
+    private lazy var button9: MTButton = {
         $0.translatesAutoresizingMaskIntoConstraints = false
 
         return $0
-    }(ImageMTButton(customButtonType: .iconSub2Light))
+    }(MTButton.create(.iconSub2Light))
 
     private lazy var stackView: UIStackView = {
         $0.translatesAutoresizingMaskIntoConstraints = false

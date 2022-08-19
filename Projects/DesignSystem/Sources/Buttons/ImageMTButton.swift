@@ -8,18 +8,12 @@
 
 import UIKit
 
-public final class ImageMTButton: UIButton, CodeBased {
+public final class ImageMTButton: MTButton {
     
     
     // MARK: Parameters
     
     public var customButtonType: CustomButtonType   = .iconMainLight
-    
-    public var title: String                        = "" {
-        didSet {
-            self.setTitle(title, for: .normal)
-        }
-    }
     
     public convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
@@ -29,13 +23,13 @@ public final class ImageMTButton: UIButton, CodeBased {
         layout()
     }
     
-    func attribute() {
+    override func attribute() {
         self.setBackgroundImage(self.customButtonType.enableImage, for: .normal)
         self.setBackgroundImage(self.customButtonType.highlightedImage, for: .highlighted)
         self.setBackgroundImage(self.customButtonType.disabledImage, for: .disabled)
     }
     
-    func layout() {
+    override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: ButtonConstant.circleButtonHeight),

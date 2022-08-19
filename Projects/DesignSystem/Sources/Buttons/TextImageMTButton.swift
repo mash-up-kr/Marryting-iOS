@@ -11,17 +11,11 @@ import UIKit
 /// 텍스트와 이미지가 함께 쓰이는 Marryting 버튼
 /// - Parameters:
 ///   - customButtonType: 3가지 버튼 타입
-public final class TextImageMTButton: BaseButton {
+public final class TextImageMTButton: MTButton {
 
     // MARK: Parameters
 
     public var customButtonType: CustomButtonType   = .mainLight
-
-    public var title: String                        = "" {
-        didSet {
-            self.setTitle(title, for: .normal)
-        }
-    }
 
     public convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
