@@ -33,7 +33,6 @@ class GuestListWorker: GuestListWorkerProtocol {
         do {
             let token = userDataSource.data?.token ?? ""
             let dto = try await guestListDataSource.getGuestList(request: .init(token: token))
-            print(dto)
             guard let guestListDTO = dto.data else { return dummyGuests }
             let guestList = guestListDTO.map(Guest.init)
             return guestList

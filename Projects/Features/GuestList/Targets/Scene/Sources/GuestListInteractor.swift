@@ -40,7 +40,6 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
             do {
                 let guests = try await worker.fetchGuests()
                 self.guests = guests
-                print(self.guests)
                 self.presenter?.presentGuests(response: .init(guests: guests))
             }
             catch {
