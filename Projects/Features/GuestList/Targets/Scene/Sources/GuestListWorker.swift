@@ -21,16 +21,21 @@ protocol GuestListWorkerProtocol {
 class GuestListWorker: GuestListWorkerProtocol {
     
     private let guestListDataSource: GuestListDataSourceProtocol
+    private let userDataSource: UserDataSoureceProtocol
     
-    init(guestListDataSource: GuestListDataSourceProtocol = GuestListDataSource()) {
+    init(guestListDataSource: GuestListDataSourceProtocol = GuestListDataSource(),
+         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
         self.guestListDataSource = guestListDataSource
+        self.userDataSource = userDataSource
     }
     
     func fetchGuests() async throws -> [Guest] {
         do {
-            let dto = try await guestListDataSource.getGuestList(request: .init())
-            // TODO: dto 명세후 매핑 로직 작성
-            return dummyGuests
+            let token = userDataSource.data?.token ?? ""
+            let dto = try await guestListDataSource.getGuestList(request: .init(token: token))
+            guard let guestListDTO = dto.data else { return dummyGuests }
+            let guestList = guestListDTO.map(Guest.init)
+            return guestList
         }
         catch {
             return dummyGuests
