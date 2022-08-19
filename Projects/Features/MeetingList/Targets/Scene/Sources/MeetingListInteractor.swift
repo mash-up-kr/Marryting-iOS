@@ -23,7 +23,7 @@ final class MeetingListInteractor: MeetingListBusinessLogic, MeetingListDataStor
     var presenter: MeetingListPresentationLogic?
     var worker: MeetingListWorkerProtocol?
     
-    var selectedMeetingId: String?
+    var selectedMeetingId: Int?
     
     init(worker: MeetingListWorkerProtocol = MeetingListWorker()) {
         self.worker = worker

@@ -31,7 +31,7 @@ enum MeetingList {
     enum Select {
         
         struct Request {
-            var meetingId: String
+            var meetingId: Int
         }
     }
 }

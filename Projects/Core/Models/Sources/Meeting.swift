@@ -9,13 +9,13 @@
 import Foundation
 
 public struct Meeting {
-    public var id: String
+    public var id: Int
     public var groomName: String
     public var brideName: String
     public var date: Date
     
     public init(
-        id: String,
+        id: Int,
         groomName: String,
         brideName: String,
         date: Date
