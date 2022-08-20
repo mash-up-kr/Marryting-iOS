@@ -19,6 +19,7 @@
 public enum DesignSystemAsset {
   public enum Assets {
     public static let btnAppleButton = DesignSystemImages(name: "btn_apple_button")
+    public static let btnDropImageButton = DesignSystemImages(name: "btn_dropImage_button")
     public static let icAddImage = DesignSystemImages(name: "ic_addImage")
     public static let icArrowBack = DesignSystemImages(name: "ic_arrow_back")
     public static let icCheckBlack = DesignSystemImages(name: "ic_check_black")
