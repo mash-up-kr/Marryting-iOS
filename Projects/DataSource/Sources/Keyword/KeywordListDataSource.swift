@@ -9,11 +9,11 @@
 import NetworkProtocol
 import Network
 
-public protocol KeywordDataSourceProtocol {
-    func getKeywords(request: GetKeywordsRequest) async throws -> GetKeywordsResponse
+public protocol KeywordListDataSourceProtocol {
+    func getKeywords(request: GetKeywordsRequest) async throws -> GetKeywordListResponse
 }
 
-public final class KeywordDataSource: KeywordDataSourceProtocol {
+public final class KeywordListDataSource: KeywordListDataSourceProtocol {
 
     private let network: NetworkProtocol
 
@@ -21,7 +21,7 @@ public final class KeywordDataSource: KeywordDataSourceProtocol {
         self.network = network
     }
 
-    public func getKeywords(request: GetKeywordsRequest) async throws -> GetKeywordsResponse {
+    public func getKeywords(request: GetKeywordsRequest) async throws -> GetKeywordListResponse {
         try await network.send(request)
     }
 }

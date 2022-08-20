@@ -54,6 +54,39 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
     }
 }
 
+extension Guest {
+    init(_ dto: GetMyLikeGuestResponseBody) {
+        let user = User(id: dto.profileID,
+                        name: dto.name,
+                        gender: dto.gender == "MALE" ? .male : .female,
+                        career: dto.career,
+                        birth: .init(),
+                        age: dto.age,
+                        address: dto.address,
+                        pictures: dto.pictures,
+                        answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
+                        keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) })
+        self.init(user: user, isLiked: true)
+    }
+}
+
+extension MatchedGuest {
+
+    init(_ dto: GetMatchingGuestResponseBody) {
+        let user = User(id: dto.profileID,
+                        name: dto.name,
+                        gender: dto.gender == "MALE" ? .male : .female,
+                        career: dto.career,
+                        birth: .init(),
+                        age: dto.age,
+                        address: dto.address,
+                        pictures: dto.pictures,
+                        answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
+                        keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) })
+        self.init(guest: Guest(user: user, isLiked: true), loveMent: dto.message)
+    }
+}
+
 private extension MyGuestListWorker {
     var dummyLikeGuests: [Guest] {
         [

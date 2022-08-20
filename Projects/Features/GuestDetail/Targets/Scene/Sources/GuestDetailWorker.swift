@@ -40,6 +40,27 @@ final class GuestDetailWorker: GuestDetailWorkerProtocol {
 
 }
 
+extension Guest {
+    public init(_ dto: GetGuestDetailResponseBody?) {
+        guard let dto = dto else {
+            fatalError()
+        }
+        let user = User(
+            id: dto.profileID,
+            name: dto.profileName,
+            gender: .male,
+            career: dto.career,
+            birth: .init(),
+            age: dto.age,
+            address: dto.address,
+            pictures: dto.pictures,
+            answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
+            keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
+        )
+        self.init(user: user, isLiked: false)
+    }
+}
+
 extension GuestDetailWorker {
     var dummyGuest: Guest {
         .init(

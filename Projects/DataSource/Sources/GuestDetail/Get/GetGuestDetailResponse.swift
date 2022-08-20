@@ -9,15 +9,15 @@
 import NetworkProtocol
 import Models
 
-public typealias GetGuestDetailResponse = BaseArrayResponse<GuestDetailDTO>
+public typealias GetGuestDetailResponse = BaseArrayResponse<GetGuestDetailResponseBody>
 
-public struct GuestDetailDTO: Codable, Response {
+public struct GetGuestDetailResponseBody: Response {
     public let profileID: Int
     public let profileName: String
     public let age: Int
     public let address, career: String
-    public let keywords: [KeywordDTO]
-    public let answers: [AnswerDTO]
+    public let keywords: [GetGuestDetailKeywordResponseBody]
+    public let answers: [GuestDetailAnswerResponseBody]
     public let pictures: [String]
 
     enum CodingKeys: String, CodingKey {
@@ -32,23 +32,28 @@ public struct GuestDetailDTO: Codable, Response {
     }
 }
 
-extension Guest {
-    public init(_ dto: GuestDetailDTO?) {
-        guard let dto = dto else {
-            fatalError()
-        }
-        let user = User(
-            id: dto.profileID,
-            name: dto.profileName,
-            gender: .male,
-            career: dto.career,
-            birth: .init(),
-            age: dto.age,
-            address: dto.address,
-            pictures: dto.pictures,
-            answers: dto.answers.map { $0.answer },
-            keyword: dto.keywords.map { $0.keyword }
-        )
-        self.init(user: user, isLiked: false)
+public struct GetGuestDetailKeywordResponseBody: Response {
+    public let keywordID: Int
+    public let keyword: String
+
+    enum CodingKeys: String, CodingKey {
+        case keywordID = "keywordId"
+        case keyword = "keyword"
+    }
+}
+
+public struct GuestDetailAnswerResponseBody: Response {
+    public let answer: String
+    public let questionID: Int
+
+    enum CodingKeys: String, CodingKey {
+        case answer
+        case questionID = "questionId"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        answer = (try? values.decode(String.self, forKey: .answer)) ?? ""
+        questionID = (try? values.decode(Int.self, forKey: .questionID)) ?? -1
     }
 }

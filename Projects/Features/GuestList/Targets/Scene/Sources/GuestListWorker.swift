@@ -43,6 +43,25 @@ class GuestListWorker: GuestListWorkerProtocol {
     }
 }
 
+extension Guest {
+
+    #warning("서버 수정 후에 주석으로 대체해야함")
+    init(_ dto: GetGuestResponseBody) {
+        let user = User(id: dto.profileID,
+                        name: dto.name,
+                        gender: .male, //dto.gender == "MALE" ? .male : .female,
+                        career: dto.career,
+                        birth: .init(),
+                        age: dto.age,
+                        address: dto.address,
+                        pictures: dto.profileURL,
+                        answers: [], //dto.answers.map { $0.answer },
+                        keyword: [] //dto.keywords.map { $0.keyword }
+        )
+        self.init(user: user, isLiked: false)
+    }
+}
+
 private extension GuestListWorker {
     var dummyGuests: [Guest] {
         [

@@ -9,11 +9,11 @@
 import NetworkProtocol
 import Network
 
-public typealias GetKeywordsResponse = BaseArrayResponse<KeywordResponseBody>
+public typealias GetKeywordListResponse = BaseArrayResponse<GetKeywordResponseBody>
 
-public struct KeywordResponseBody: Codable, Response {
-    var keywordID: Int
-    var keyword: String
+public struct GetKeywordResponseBody: Response {
+    public let keywordID: Int
+    public let keyword: String
 
     enum CodingKeys: String, CodingKey {
         case keywordID = "keywordId"

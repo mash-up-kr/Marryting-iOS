@@ -12,7 +12,7 @@ public struct GetKeywordsRequest: Request {
 
     public typealias Body = EmptyRequestBody
 
-    public typealias Output = GetKeywordsResponse
+    public typealias Output = GetKeywordListResponse
 
     public var endpoint: String = "/api/v1/keywords"
 

@@ -11,10 +11,10 @@ import NetworkProtocol
 public typealias GetQuestionsResponse = BaseArrayResponse<GetQuestionResponseBody>
 
 public struct GetQuestionResponseBody: Codable, Response {
-    var questionID: Int
-    var question: String
-    var answer1: String
-    var answer2: String
+    public let questionID: Int
+    public let question: String
+    public let answer1: String
+    public let answer2: String
 
     enum CodingKeys: String, CodingKey {
         case questionID = "questionId"
