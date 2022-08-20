@@ -30,13 +30,12 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
 
     func fetchMyLikeGuests() async throws -> [Guest] {
         do {
-            let token = userDataSource.data?.token ?? ""
-            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init(token: token))
-            guard let myLikeGuestListDTO = dto.data else { return dummyLikeGuests }
+            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init())
+            guard let myLikeGuestListDTO = dto.data else { return [] }
             let myLikeGuestList = myLikeGuestListDTO.map { Guest($0) }
             return myLikeGuestList
         } catch {
-            return dummyLikeGuests
+            return []
         }
     }
 
@@ -44,11 +43,11 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
         do {
             let token = userDataSource.data?.token ?? ""
             let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init(token: token))
-            guard let matchingGuestListDTO = dto.data else { return dummyMatchingGuests }
+            guard let matchingGuestListDTO = dto.data else { return [] }
             let matchingGuestList = matchingGuestListDTO.map { MatchedGuest($0) }
             return matchingGuestList
         } catch {
-            return dummyMatchingGuests
+            return []
         }
 
     }
@@ -84,137 +83,5 @@ extension MatchedGuest {
                         answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
                         keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) })
         self.init(guest: Guest(user: user, isLiked: true), loveMent: dto.message)
-    }
-}
-
-private extension MyGuestListWorker {
-    var dummyLikeGuests: [Guest] {
-        [
-            .init(
-                user: .init(
-                    id: 1,
-                    name: "박건우",
-                    gender: .male,
-                    career: "IT회사 개발자",
-                    birth: .init(),
-                    age: 21,
-                    address: "서울시 금천구",
-                    pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
-                    answers: [],
-                    keyword: []
-                ),
-                isLiked: false
-            ),
-            .init(
-                user: .init(
-                    id: 2,
-                    name: "이재용",
-                    gender: .male,
-                    career: "학생",
-                    birth: .init(),
-                    age: 25,
-                    address: "포항항",
-                    pictures: ["https://i.pinimg.com/originals/2c/2c/60/2c2c60b20cb817a80afd381ae23dab05.jpg"],
-                    answers: [],
-                    keyword: []
-                ),
-                isLiked: false
-            )
-        ]
-    }
-
-    var dummyMatchingGuests: [MatchedGuest] {
-        [
-            .init(
-                guest:.init(
-                    user: .init(
-                        id: 3,
-                        name: "박재민",
-                        gender: .male,
-                        career: "IT회사 개발자",
-                        birth: .init(),
-                        age: 25,
-                        address: "비공개",
-                        pictures: ["https://img.theqoo.net/img/fzxPW.jpg"],
-                        answers: [],
-                        keyword: []
-                    ),
-                    isLiked: true
-                ),
-                loveMent: "그대가 찾는 사람, 바로 저입니다"
-            ),
-            .init(
-                guest: .init(
-                    user: .init(
-                        id: 4,
-                        name: "강진호",
-                        gender: .male,
-                        career: "IT회사 개발자",
-                        birth: .init(),
-                        age: 30,
-                        address: "비공개",
-                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
-                        answers: [],
-                        keyword: []
-                    ),
-                    isLiked: false
-                ),
-                loveMent: "그대의 눈동자에 cheers~!"
-            ),
-            .init(
-                guest: .init(
-                    user: .init(
-                        id: 4,
-                        name: "강진호",
-                        gender: .male,
-                        career: "IT회사 개발자",
-                        birth: .init(),
-                        age: 30,
-                        address: "비공개",
-                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
-                        answers: [],
-                        keyword: []
-                    ),
-                    isLiked: false
-                ),
-                loveMent: "그대의 눈동자에 cheers~!"
-            ),
-            .init(
-                guest: .init(
-                    user: .init(
-                        id: 4,
-                        name: "강진호",
-                        gender: .male,
-                        career: "IT회사 개발자",
-                        birth: .init(),
-                        age: 30,
-                        address: "비공개",
-                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
-                        answers: [],
-                        keyword: []
-                    ),
-                    isLiked: false
-                ),
-                loveMent: "그대의 눈동자에 cheers~!"
-            ),
-            .init(
-                guest: .init(
-                    user: .init(
-                        id: 4,
-                        name: "강진호",
-                        gender: .male,
-                        career: "IT회사 개발자",
-                        birth: .init(),
-                        age: 30,
-                        address: "비공개",
-                        pictures: ["https://post-phinf.pstatic.net/MjAxOTAyMTZfMTMz/MDAxNTUwMjg0NTQ3Njk3.nOALV-TOkthnpIEg3kFCA6QA221DrLgZsBJxMKE1Hj0g.I_EYQvpkiwhl8Jj9sTBfNIs5U7Hai968vAqa5BJHlpAg.JPEG/n1233.jpg?type=w1200"],
-                        answers: [],
-                        keyword: []
-                    ),
-                    isLiked: false
-                ),
-                loveMent: "그대의 눈동자에 cheers~!"
-            )
-        ]
     }
 }

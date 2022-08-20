@@ -35,6 +35,6 @@ class LikeRequestPresenter: LikeRequestPresentationLogic
     }
     
     func presentLikeRequestError(response: LikeRequest.RequestLike.Response.Error) {
-        self.viewController?.displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error())
+        self.viewController?.displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error(message: response.message))
     }
 }
