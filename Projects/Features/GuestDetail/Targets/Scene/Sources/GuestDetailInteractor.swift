@@ -57,12 +57,17 @@ private extension GuestDetailInteractor {
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                answers: [ "생각을 정리하고 이야기",
-                           "자주 할수록 좋아요",
-                           "계획적인 데이트"
-                         ],
+                answers: [
+                    .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                    .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                    .init(questionID: 3, answer: "계획적인 데이트")
+                ],
                 keyword: [
-                    "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    .init(id: 1, keyword: "활동적인"),
+                    .init(id: 2, keyword: "유머있는"),
+                    .init(id: 3, keyword: "논리적인"),
+                    .init(id: 4, keyword: "애교있는"),
+                    .init(id: 5, keyword: "낙천적인")
                 ]
             ),
             isLiked: false

@@ -9,10 +9,23 @@
 import UIKit
 import DesignSystem
 
+protocol SelectTagListViewDelegate: AnyObject {
+    func sendKeywords(keyword: [Keyword])
+}
 final class SelectTagListView: UIView {
     // MARK: - Properties
-    var tagList = [0: "긍정적이다", 1: "따듯하다", 2: "유머가 있다", 3: "다정하다", 4: "편안하다", 5: "친절하다", 6: "낙천적이다"]
-    var isChecked: [Int: String] = [:]
+    var tagList: [Keyword] = [
+        Keyword(keyword: "긍정적이다", keywordId: "0"),
+        Keyword(keyword: "따듯하다", keywordId: "1"),
+        Keyword(keyword: "유머가 있다", keywordId: "2"),
+        Keyword(keyword: "다정하다", keywordId: "3"),
+        Keyword(keyword: "편안하다", keywordId: "4"),
+        Keyword(keyword: "친절하다", keywordId: "5"),
+        Keyword(keyword: "낙천적이다", keywordId: "6")
+    ]
+    private var checkedKeywords: [Keyword] = []
+    
+    weak var delegate: SelectTagListViewDelegate?
     
     // MARK: - Objects
     let collectionView: UICollectionView = {
@@ -69,7 +82,7 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
             return UICollectionViewCell()
         }
         
-        cell.setData(tagList[indexPath.row] ?? "비어있음")
+        cell.setData(tagList[indexPath.row])
         return cell
     }
     
@@ -78,7 +91,20 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
             fatalError()
         }
         
-        cell.isClicked.toggle()
+        var isClicked = cell.isClicked
+        isClicked.toggle()
+        
+        if isClicked && checkedKeywords.count >= 5 { return }
+        
+        cell.isClicked = isClicked
+        
+        let keyword = tagList[indexPath.row]
+        if cell.isClicked {
+            checkedKeywords.append(keyword)
+        } else {
+            checkedKeywords = checkedKeywords.filter { $0.keywordId != keyword.keywordId }
+        }
+        delegate?.sendKeywords(keyword: self.checkedKeywords)
     }
 }
 
@@ -89,7 +115,7 @@ extension SelectTagListView: UICollectionViewDelegateFlowLayout {
         
         let label = UILabel()
         label.font = .body1()
-        label.text = tagList[indexPath.row]
+        label.text = tagList[indexPath.row].keyword
         label.sizeToFit()
         
         let size = label.frame.size

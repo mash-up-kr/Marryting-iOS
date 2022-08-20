@@ -14,6 +14,7 @@ public enum UserInfo {
     case birth
     case address
     case job
+    case authCode
     
     var korean: String {
         switch self {
@@ -27,6 +28,8 @@ public enum UserInfo {
             return "사는 곳"
         case .job:
             return "직업"
+        case .authCode:
+            return "인증코드"
         }
     }
     
@@ -42,6 +45,8 @@ public enum UserInfo {
             return "ex) 서울시 광진구"
         case .job:
             return "ex) IT 기획자"
+        case .authCode:
+            return "ex) SD2K02"
         }
     }
     
@@ -57,6 +62,8 @@ public enum UserInfo {
             return 4
         case .job:
             return 5
+        case .authCode:
+            return 6
         }
     }
 }

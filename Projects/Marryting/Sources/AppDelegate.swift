@@ -6,6 +6,8 @@ import UIKit
 import ProfileRegister
 import GuestDetailScene
 import MyGuestListScene
+import AuthCodeScene
+import LikeRequestCompleteScene
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

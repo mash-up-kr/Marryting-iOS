@@ -9,6 +9,7 @@
 import UIKit
 
 public enum Assets: String {
+    case btn_dropImage_button
     case ic_check_black
     case ic_close
     case ic_clover
@@ -53,6 +54,7 @@ public enum Assets: String {
     case img_yellow_dongrami
     case ic_sharp_place_grey100
     case ic_symbols_work_grey100
+    case img_header_code
     
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")

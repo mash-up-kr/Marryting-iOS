@@ -13,6 +13,7 @@
 import UIKit
 import MeetingListRoutingProtocol
 import GuestListScene
+import AuthCodeScene
 
 public final class MeetingListRouter: MeetingListRoutingLogic, MeetingListDataPassing {
     public weak var viewController: UIViewController?
@@ -32,6 +33,11 @@ public final class MeetingListRouter: MeetingListRoutingLogic, MeetingListDataPa
         }
         let destinationVC = GuestListViewController()
         destinationVC.router?.dataStore?.meetingId = dataStore.selectedMeetingId
+        viewController?.navigationController?.pushViewController(destinationVC, animated: true)
+    }
+    
+    public func routeToAuthCodeScene() {
+        let destinationVC = AuthCodeViewController()
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 }

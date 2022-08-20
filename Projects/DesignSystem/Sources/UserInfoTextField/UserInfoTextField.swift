@@ -115,7 +115,8 @@ public final class UserInfoTextField: UITextField {
         textColor = Pallete.Dark.white.color
         tintColor = Pallete.Dark.white.color
         
-        layer.borderColor = Pallete.Dark.grey600.color?.cgColor
+        backgroundColor = Pallete.Dark.grey700.color
+        layer.borderColor = Pallete.Dark.grey700.color?.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 8
         

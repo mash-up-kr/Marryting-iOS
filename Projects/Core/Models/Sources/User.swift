@@ -37,6 +37,33 @@ public struct User: Codable {
     
     public var answers: [Answer]
     
+    public var answer1: Answer {
+        if answers.isEmpty {
+            return .init(questionID: 0, answer: "")
+        }
+        else {
+            return answers[0]
+        }
+    }
+    
+    public var answer2: Answer {
+        if answers.count < 2 {
+            return .init(questionID: 0, answer: "")
+        }
+        else {
+            return answers[1]
+        }
+    }
+    
+    public var answer3: Answer {
+        if answers.count < 3 {
+            return .init(questionID: 0, answer: "")
+        }
+        else {
+            return answers[2]
+        }
+    }
+    
     public var keyword: [Keyword]
     
     public init(

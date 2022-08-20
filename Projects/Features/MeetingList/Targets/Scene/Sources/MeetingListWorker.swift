@@ -41,3 +41,16 @@ final class MeetingListWorker: MeetingListWorkerProtocol {
         }
     }
 }
+
+extension Meeting {
+    init(_ dto: GetMeetingListDTO) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        self.init(
+            id: dto.weddingID,
+            groomName: dto.groomName,
+            brideName: dto.brideName,
+            date: dateFormatter.date(from: dto.weddingDate) ?? Date()
+        )
+    }
+}

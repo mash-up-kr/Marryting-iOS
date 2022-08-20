@@ -9,7 +9,12 @@
 import UIKit
 import DesignSystem
 
+protocol SelectValuesCellDelegate: AnyObject {
+    func sendAnswer(answer: Answer)
+}
 class SelectValuesCell: UITableViewCell {
+    weak var delegate: SelectValuesCellDelegate?
+    
     let situationLabel: UILabel = {
         let label = UILabel()
         label.font = .body2()
@@ -63,13 +68,13 @@ class SelectValuesCell: UITableViewCell {
         }
     }
     
-    func setQuestionType(_ type: QuestionType) {
-        container.questionType = type
+    func setQuestion(_ question: Question) {
+        container.question = question
     }
 }
 
 extension SelectValuesCell: AnswerSelectionContainerDelegate {
-    func answerSelectionBoxDidTap(_ selection: AnswerSelection) {
-        
+    func answerSelectionBoxDidTap(_ selection: Answer) {
+        delegate?.sendAnswer(answer: selection)
     }
 }

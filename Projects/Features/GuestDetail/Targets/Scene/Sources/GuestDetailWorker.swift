@@ -15,29 +15,50 @@ import Models
 import DataSource
 
 protocol GuestDetailWorkerProtocol {
-//    func fetchGuest(_ id: Int) async throws -> Guest
+    //    func fetchGuest(_ id: Int) async throws -> Guest
 }
 
 final class GuestDetailWorker: GuestDetailWorkerProtocol {
-//    private let guestDetailDataSource: GuestDetailDataSourceProtocol
-//    private let userDataSource: UserDataSoureceProtocol
-//
-//    init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
-//         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
-//        self.guestDetailDataSource = guestDetailDataSource
-//        self.userDataSource = userDataSource
-//    }
-//
-//    func fetchGuest(_ id: Int) async throws -> Guest {
-//        do {
-//            let dto = try await guestDetailDataSource.getGuestDetail(request: .init(profileID: id))
-//            guard let data = dto.data else { return dummyGuest }
-//            return data.map(Guest.init)
-//        } catch {
-//
-//        }
-//    }
+    //    private let guestDetailDataSource: GuestDetailDataSourceProtocol
+    //    private let userDataSource: UserDataSoureceProtocol
+    //
+    //    init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
+    //         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+    //        self.guestDetailDataSource = guestDetailDataSource
+    //        self.userDataSource = userDataSource
+    //    }
+    //
+    //    func fetchGuest(_ id: Int) async throws -> Guest {
+    //        do {
+    //            let dto = try await guestDetailDataSource.getGuestDetail(request: .init(profileID: id))
+    //            guard let data = dto.data else { return dummyGuest }
+    //            return data.map(Guest.init)
+    //        } catch {
+    //
+    //        }
+    //    }
 
+}
+
+extension Guest {
+    public init(_ dto: GetGuestDetailResponseBody?) {
+        guard let dto = dto else {
+            fatalError()
+        }
+        let user = User(
+            id: dto.profileID,
+            name: dto.profileName,
+            gender: .male,
+            career: dto.career,
+            birth: .init(),
+            age: dto.age,
+            address: dto.address,
+            pictures: dto.pictures,
+            answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
+            keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
+        )
+        self.init(user: user, isLiked: false)
+    }
 }
 
 extension GuestDetailWorker {
@@ -57,12 +78,17 @@ extension GuestDetailWorker {
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                            "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                answers: [ "생각을 정리하고 이야기",
-                           "자주 할수록 좋아요",
-                           "계획적인 데이트"
-                         ],
+                answers: [
+                    .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                    .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                    .init(questionID: 3, answer: "계획적인 데이트")
+                ],
                 keyword: [
-                    "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                    .init(id: 1, keyword: "활동적인"),
+                    .init(id: 2, keyword: "유머있는"),
+                    .init(id: 3, keyword: "논리적인"),
+                    .init(id: 4, keyword: "애교있는"),
+                    .init(id: 5, keyword: "낙천적인")
                 ]
             ),
             isLiked: false
