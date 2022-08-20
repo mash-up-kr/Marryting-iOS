@@ -6,4 +6,15 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public typealias Keyword = String
+public struct Keyword: Codable {
+    public var id: Int
+    public var keyword: String
+
+    public init(
+        id: Int,
+        keyword: String
+    ) {
+        self.id = id
+        self.keyword = keyword
+    }
+}
