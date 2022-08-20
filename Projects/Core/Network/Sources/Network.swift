@@ -32,6 +32,7 @@ public final class Network: NetworkProtocol {
                           let httpResponse = response as? HTTPURLResponse,
                           (200..<400).contains(httpResponse.statusCode)
                     else {
+                        print(response as! HTTPURLResponse)
                         continuation.resume(with: .failure(NetworkError.badServerResponse))
                         return
                     }

@@ -60,6 +60,7 @@ public enum DesignSystemAsset {
     public static let imgBlueDongrami = DesignSystemImages(name: "img_blue_dongrami")
     public static let imgBubble = DesignSystemImages(name: "img_bubble")
     public static let imgBubbleBack = DesignSystemImages(name: "img_bubble_back")
+    public static let imgHeaderCode = DesignSystemImages(name: "img_header_code")
     public static let imgLogin = DesignSystemImages(name: "img_login")
     public static let imgYellowDongrami = DesignSystemImages(name: "img_yellow_dongrami")
     public static let logo = DesignSystemImages(name: "logo")
