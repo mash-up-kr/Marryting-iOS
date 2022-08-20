@@ -36,9 +36,9 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
                     },
                     keywords: .init(keywords: user.keyword.map { .init(keyword: $0.keyword) }),
                     answers: .init(
-                        fightAnswer: user.answers[0].answer,
-                        communicationAnswer: user.answers[1].answer,
-                        dateAnswer: user.answers[2].answer
+                        fightAnswer: user.answer1.answer,
+                        communicationAnswer: user.answer2.answer,
+                        dateAnswer: user.answer3.answer
                     )
                 )
             )
