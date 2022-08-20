@@ -22,7 +22,6 @@ protocol ProfileRegisterContentView {
     func hideKeyboardAndSendUserInfo()
 }
 protocol EnterUserInfoViewDelegate: AnyObject {
-//    func sendUserInfo(_ info: UserInfo, allEntered: Bool)
     func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool)
 }
 final class EnterUserInfoView: UIView, ProfileRegisterContentView {
@@ -30,7 +29,7 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
     // MARK: UI Properties
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.contentInset.bottom = 108
+        scrollView.contentInset.bottom = 40
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
@@ -165,14 +164,12 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         let textFieldArr = contentView.arrangedSubviews.compactMap { $0 as? UserInfoTextField }
         guard let currentTextField: UserInfoTextField = textFieldArr.first(where: { $0.isEditing}) else { return }
         let tag = currentTextField.type.tag
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            let frameOriginY = 80 * tag + 14 * (tag - 1)
-            let offset = CGPoint(x: 0, y: frameOriginY)
-            self?.scrollView.setContentOffset(offset, animated: false) // true로 하면 움직이지 않음
-        }
+        let frameOriginY = 80 * tag + 14 * (tag - 1)
+        let offset = CGPoint(x: 0, y: frameOriginY)
+        self.scrollView.setContentOffset(offset, animated: true)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                          let keyboardRectangle = keyboardFrame.cgRectValue
-                          let keyboardHeight = keyboardRectangle.height
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
             self.scrollView.contentInset.bottom = keyboardHeight + 56
         }
     }
@@ -197,6 +194,7 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         hideKeyboardAndSendUserInfo()
+        self.scrollView.contentInset.bottom = 40
     }
     
     func hideKeyboardAndSendUserInfo() {

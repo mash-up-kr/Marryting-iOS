@@ -11,7 +11,7 @@ import DesignSystem
 import SnapKit
 
 protocol RegisterProfileImageViewDelegate: AnyObject {
-    func tapRegisterimageButton(_ sender: UIButton, completion: @escaping ([UIImage]) -> Void)
+    func tapRegisterimageButton(_ sender: UIButton)
 }
 final class RegisterProfileImageView: UIView {
     weak var delegate: RegisterProfileImageViewDelegate?
@@ -118,8 +118,6 @@ extension RegisterProfileImageView: UICollectionViewDelegateFlowLayout {
 
 extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
-        delegate?.tapRegisterimageButton(sender, completion: { images in
-            self.images = images
-        })
+        delegate?.tapRegisterimageButton(sender)
     }
 }
