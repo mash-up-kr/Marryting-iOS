@@ -85,10 +85,10 @@ enum ProfileRegister
             var image: UIImage
         }
         struct Response {
-            var imageURLString: String
+            var image: UIImage
         }
         struct ViewModel {
-            var imageURLString: String
+            var image: UIImage
         }
     }
 
