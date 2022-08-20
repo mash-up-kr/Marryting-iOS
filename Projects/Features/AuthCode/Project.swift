@@ -4,13 +4,13 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 let project = Project.make(
-    name: "MeetingList",
+    name: "AuthCode",
     targets: [
         Target(
-            name: "MeetingListRoutingProtocol",
+            name: "AuthCodeRoutingProtocol",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.MeetingListRoutingProtocol",
+            bundleId: "kr.mash-up.AuthCodeRoutingProtocol",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/RoutingProtocol/**"],
@@ -18,31 +18,30 @@ let project = Project.make(
             dependencies: []
         ),
         Target(
-            name: "MeetingListRouter",
+            name: "AuthCodeRouter",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.MeetingListRouter",
+            bundleId: "kr.mash-up.AuthCodeRouter",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Router/**"],
             resources: [],
             dependencies: [
-                .target(name: "MeetingListRoutingProtocol"),
-                .project(target: "GuestListScene", path: "../GuestList"),
-                .project(target: "AuthCodeScene", path: "../AuthCode")
+                .target(name: "AuthCodeRoutingProtocol"),
+                .project(target: "GuestListScene", path: "../GuestList")
             ]
         ),
         Target(
-            name: "MeetingListScene",
+            name: "AuthCodeScene",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.MeetingListScene",
+            bundleId: "kr.mash-up.AuthCodeScene",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Scene/Sources/**"],
             resources: ["Targets/Scene/Resources/**"],
             dependencies: [
-                .target(name: "MeetingListRouter"),
+                .target(name: "AuthCodeRouter"),
                 .project(target: "DesignSystem", path: "../../DesignSystem"),
                 .project(target: "Models", path: "../../Core/CoreKit"),
                 .project(target: "DataSource", path: "../../DataSource"),
@@ -51,14 +50,14 @@ let project = Project.make(
             ]
         ),
         Target(
-            name: "MeetingListSceneTests",
+            name: "AuthCodeSceneTests",
             platform: .iOS,
             product: .staticLibrary,
-            bundleId: "kr.mash-up.MeetingListSceneTests",
+            bundleId: "kr.mash-up.AuthCodeSceneTests",
             deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
             infoPlist: .default,
             sources: ["Targets/Scene/Tests/**"],
-            dependencies: [.target(name: "MeetingListScene")]
+            dependencies: [.target(name: "AuthCodeScene")]
         ),
     ]
 )

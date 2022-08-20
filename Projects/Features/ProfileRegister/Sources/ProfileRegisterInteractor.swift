@@ -61,7 +61,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     func fetchNextPage() {
         if pageNumber < pageSize {
             pageNumber += 1
-            print(pageNumber)
             switch pageNumber {
             case 1:
                 self.fetchFirstPage()
@@ -100,11 +99,9 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     }
 
     private func fetchKeywords() {
-        print("Hello")
         guard let worker = worker else {
             return
         }
-        print("a")
         Task {
             do {
                 let keywords = try await worker.fetchKeywords()

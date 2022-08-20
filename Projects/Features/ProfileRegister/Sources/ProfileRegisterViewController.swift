@@ -13,7 +13,6 @@
 import UIKit
 import SnapKit
 import DesignSystem
-import BSImagePicker
 import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
@@ -173,7 +172,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private func configureUI() {
         configureUIObjectsLayout()
     }
-    
+
     private func configureUIObjectsLayout() {
         self.view.backgroundColor = Pallete.Dark.background.color
         
@@ -320,8 +319,8 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.popoverPresentationController?.sourceView = self.view
         alertController.popoverPresentationController?.sourceRect = CGRect(origin: self.view.center, size: CGSize.zero)
-        cropper.cancelButtonText = "Retake"
-
+        
+        cropper.cancelButtonText = "다시 선택"
 
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
             if granted {
@@ -337,7 +336,8 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
             self.picker.sourceType = .photoLibrary
             self.present(self.picker, animated: true, completion: nil)
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in }))
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+        }))
         self.present(alertController, animated: true, completion: nil)
     }
 }
@@ -345,6 +345,7 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
 extension ProfileRegisterViewController: UIImageCropperProtocol {
     public func didCropImage(originalImage: UIImage?, croppedImage: UIImage?) {
         guard let croppedImage = croppedImage else { return }
+
         self.interactor?.uploadImage(.init(image: croppedImage))
     }
 
@@ -352,9 +353,6 @@ extension ProfileRegisterViewController: UIImageCropperProtocol {
         picker.dismiss(animated: true, completion: nil)
     }
 }
-
-// MARK: EnterUserInfoViewDelegate
-
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
     func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool) {
         interactor?.didTapUserInfoPageNextButton(userInfo)

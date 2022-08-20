@@ -71,6 +71,13 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
         return v
     }()
     
+    lazy var addButton: MTButton = {
+        let button = MTButton.create(.mainDark)
+        button.title = "ADD"
+        button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
+        return button
+    }()
+    
     private var meetingViewModels: [MeetingCellViewModel] = [] {
         didSet {
             DispatchQueue.main.async {
@@ -91,9 +98,15 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
         view.backgroundColor = Pallete.Light.background.color
         
         view.addSubview(collectionView)
+        view.addSubview(addButton)
         
         collectionView.snp.makeConstraints { make in
             make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        addButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(40)
+            make.height.equalTo(56)
+            make.centerX.equalToSuperview()
         }
     }
     
@@ -101,6 +114,10 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
     
     func displayMeetings(viewModel: MeetingList.List.ViewModel) {
         meetingViewModels = viewModel.meetings
+    }
+    
+    @objc func didTapAddButton() {
+        router?.routeToAuthCodeScene()
     }
 }
 

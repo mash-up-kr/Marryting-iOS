@@ -62,13 +62,25 @@ public protocol Request {
     var body: Body? { get }
 }
 
+public struct Token: Codable {
+    public var token: String
+}
+
 public extension Request {
     var query: QueryItems {
         return [:]
     }
     
     var header: HTTPHeader {
-        return [:]
+        return ["Authorization": "Bearer" + " " + token]
+    }
+    
+    private var token: String {
+        guard let data = UserDefaults.standard.data(forKey: "userInfo") else {
+            return ""
+        }
+        let token = try? JSONDecoder().decode(Token.self, from: data)
+        return token?.token ?? ""
     }
     
     var body: Body? {
