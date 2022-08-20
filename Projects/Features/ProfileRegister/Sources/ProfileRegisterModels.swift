@@ -30,6 +30,38 @@ enum ProfileRegister
   }
 }
 
+struct CreateProfileRequestDTO {
+    var name: String
+    var gender: String
+    var birth: String
+    var address: String
+    var career: String
+    var answers: [Answer]
+    var keywords: [Keyword]
+    var pictures: [UIImage]
+    
+    init(name: String = "", gender: String = "", birth: String = "", address: String = "", career: String = "", answers: [Answer] = [], keywords: [Keyword] = [], pictures: [UIImage] = []) {
+        self.name = name
+        self.gender = gender
+        self.birth = birth
+        self.address = address
+        self.career = career
+        self.answers = answers
+        self.keywords = keywords
+        self.pictures = pictures
+    }
+}
+
+struct Answer {
+    var answer: String
+    var questionId: String
+}
+
+struct Keyword {
+    var keyword: String
+    var keywordId: String
+}
+
 struct UserInfo {
     var name: String
     var gender: String

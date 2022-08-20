@@ -30,7 +30,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let scale = UIScreen.main.scale
         return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
     }
-    var firstPageData: UserInfo = UserInfo()
+    var profileData: CreateProfileRequestDTO = CreateProfileRequestDTO()
     
     // MARK: Object lifecycle
     
@@ -293,6 +293,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     @objc func pressNextButton(_ sender: UIButton) {
         if pageNum < pageSize {
             pageNum += 1
+            rightButton.isEnabled = false
         }
     }
 }
@@ -325,6 +326,8 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
             self.checkedAsset.forEach {
                 self.images.append($0.getAssetThumbnail())
             }
+            self.profileData.pictures = self.images
+            self.rightButton.isEnabled = self.images.count > 0
             completion(self.images)
         })
     }
@@ -371,7 +374,11 @@ extension PHAsset {
 
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
     func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
-        firstPageData = info
+        profileData.name = info.name
+        profileData.address = info.address
+        profileData.gender = info.gender
+        profileData.birth = info.birth
+        profileData.career = info.job
         rightButton.isEnabled = allEntered
     }
 }
