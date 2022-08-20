@@ -287,7 +287,8 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
     }
     
     @objc func didTapDoneButton() {
-        interactor?.requestLike()
+        let message = messageTextView.text ?? ""
+        interactor?.requestLike(request: .init(message: message))
     }
     
     /// 배경 터치시 messageTextView 포커싱 해제

@@ -11,13 +11,45 @@
 //
 
 import UIKit
+import DataSource
 
 protocol LikeRequestWorkerProtocol {
     func getMyName() -> String
+    func requestLike(message: String, receiverProfileId: Int) async throws
 }
 
 class LikeRequestWorker: LikeRequestWorkerProtocol {
+    
+    let userDataSource: UserDataSoureceProtocol
+    let likeDataSource: LikeDataSourceProtocol
+    
+    init(
+        userDataSource: UserDataSoureceProtocol = UserDataSourece(),
+        likeDataSource: LikeDataSourceProtocol = LikeDataSource()
+    ) {
+        self.userDataSource = userDataSource
+        self.likeDataSource = likeDataSource
+    }
+    
     func getMyName() -> String {
-        "박우인"
+        userDataSource.data?.user.name ?? ""
+    }
+    
+    func requestLike(message: String, receiverProfileId: Int) async throws {
+        let senderProfileId = userDataSource.data?.user.id ?? 0
+        let request = PostLikeRequest(
+            body: .init(
+                message: message,
+                receiverProfileId: receiverProfileId,
+                senderProfileId: senderProfileId
+            )
+        )
+        do {
+            _ = try await likeDataSource.postLike(request: request)
+        }
+        catch {
+            throw error
+        }
+        
     }
 }
