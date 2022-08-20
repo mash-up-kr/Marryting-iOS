@@ -135,6 +135,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var selectTagListView: SelectTagListView = {
         let view = SelectTagListView()
+        view.delegate = self
         return view
     }()
     
@@ -293,7 +294,20 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     @objc func pressNextButton(_ sender: UIButton) {
         if pageNum < pageSize {
             pageNum += 1
-            rightButton.isEnabled = false
+            switch pageNum {
+            case 1:
+                rightButton.isEnabled = !(profileData.name.isEmpty &&
+                                 profileData.address.isEmpty &&
+                                 profileData.gender.isEmpty &&
+                                 profileData.birth.isEmpty &&
+                                 profileData.career.isEmpty)
+            case 2:
+                rightButton.isEnabled = profileData.pictures.count > 0
+            case 3:
+                rightButton.isEnabled = profileData.keywords.count == 5
+            default:
+                rightButton.isEnabled = profileData.answers.count == 3 // FIXME: 3개가 아닐 수 있음
+            }
         }
     }
 }
@@ -391,6 +405,13 @@ extension ProfileRegisterViewController: UITextFieldDelegate {
             return true
         }
         return false
+    }
+}
+
+extension ProfileRegisterViewController: SelectTagListViewDelegate {
+    func sendKeywords(keyword keywords: [Keyword]) {
+        profileData.keywords = keywords
+        rightButton.isEnabled = keywords.count == 5
     }
 }
 
