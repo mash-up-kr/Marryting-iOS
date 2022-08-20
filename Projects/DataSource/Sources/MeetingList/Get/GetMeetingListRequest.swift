@@ -18,11 +18,5 @@ public struct GetMeetingListRequest: Request {
 
     public var method: HTTPMethod = .get
 
-    public var header: HTTPHeader = [:]
-
-    public init(token: String) {
-        header[authorizationKey] = "Bearer" + " " + token
-    }
-
-    private let authorizationKey: String = "Authorization"
+    public init() {}
 }

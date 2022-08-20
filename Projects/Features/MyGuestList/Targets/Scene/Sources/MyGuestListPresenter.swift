@@ -30,7 +30,7 @@ final class MyGuestListPresenter: MyGuestListPresentationLogic {
                         .init(myGuestCardViewModel:
                                 .init(
                                     id: $0.user.id,
-                                    imageUrl: $0.user.pictures[0],
+                                    imageUrl: $0.user.picture,
                                     name: $0.user.name,
                                     age: $0.user.age,
                                     address: $0.user.address,
@@ -52,7 +52,7 @@ final class MyGuestListPresenter: MyGuestListPresentationLogic {
                                 .init(myGuestCardViewModel:
                                         .init(
                                             id: $0.guest.user.id,
-                                            imageUrl: $0.guest.user.pictures[0],
+                                            imageUrl: $0.guest.user.picture,
                                             name: $0.guest.user.name,
                                             age: $0.guest.user.age,
                                             address: $0.guest.user.address,
