@@ -25,8 +25,12 @@ public final class UserInfoTextField: UITextField {
             setPlaceHolder(type.placeholder)
             if type == .gender {
                 setSelectGenderMode()
+                clearButtonMode = .never
             } else if type == .birth {
                 setSelectBirthMode()
+                clearButtonMode = .never
+            } else {
+                clearButtonMode = .whileEditing
             }
         }
     }
@@ -110,7 +114,6 @@ public final class UserInfoTextField: UITextField {
         font = .subtitle1()
         textColor = Pallete.Dark.white.color
         tintColor = Pallete.Dark.white.color
-        clearButtonMode = .whileEditing
         
         layer.borderColor = Pallete.Dark.grey600.color?.cgColor
         layer.borderWidth = 1
@@ -190,6 +193,7 @@ extension UserInfoTextField: UIPickerViewDelegate, UIPickerViewDataSource {
     }
     
     public func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        self.text = genderData[row]
         return genderData[row]
     }
     
