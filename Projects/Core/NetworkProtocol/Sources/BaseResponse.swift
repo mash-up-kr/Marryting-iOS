@@ -24,3 +24,5 @@ public struct BaseArrayResponse<T: Response>: Response {
     public var status: Int
     public var data: [T]?
 }
+
+public struct EmptyResponseBody: Response {}
