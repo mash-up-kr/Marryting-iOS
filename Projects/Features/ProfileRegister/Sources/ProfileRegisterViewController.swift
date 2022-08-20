@@ -152,6 +152,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var selectValuesView: SelectValuesView = {
         let view = SelectValuesView()
+        view.delegate = self
         return view
     }()
     
@@ -412,6 +413,13 @@ extension ProfileRegisterViewController: SelectTagListViewDelegate {
     func sendKeywords(keyword keywords: [Keyword]) {
         profileData.keywords = keywords
         rightButton.isEnabled = keywords.count == 5
+    }
+}
+
+extension ProfileRegisterViewController: SelectValuesViewDelegate {
+    func sendAnswers(answers: [Answer]) {
+        profileData.answers = answers
+        rightButton.isEnabled = answers.count == 3
     }
 }
 

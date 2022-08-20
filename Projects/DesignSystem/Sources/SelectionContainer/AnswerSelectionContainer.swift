@@ -7,9 +7,10 @@
 //
 
 import UIKit
+import DesignSystem
 
 public protocol AnswerSelectionContainerDelegate: AnyObject {
-    func answerSelectionBoxDidTap(_ selection: AnswerSelection )
+    func answerSelectionBoxDidTap(_ selection: Answer)
 }
 
 
@@ -17,12 +18,12 @@ public class AnswerSelectionContainer: UIView {
 
     public weak var delegate: AnswerSelectionContainerDelegate?
 
-    public var questionType: QuestionType = .none {
+    public var question: Question = Question.dummy {
         didSet {
-            titleLabel.text = questionType.question.question
+            titleLabel.text = question.question
             
-            selectionBox1.viewModel = .init(isSelect: false, answer: questionType.question.answer1)
-            selectionBox2.viewModel = .init(isSelect: false, answer: questionType.question.answer2)
+            selectionBox1.viewModel = .init(isSelect: false, answer: question.answer1)
+            selectionBox2.viewModel = .init(isSelect: false, answer: question.answer2)
         }
     }
 
@@ -49,18 +50,22 @@ public class AnswerSelectionContainer: UIView {
 
     private var selection: AnswerSelection = .none {
         didSet {
+            let answer: Answer
             switch selection {
             case .first:
+                answer = Answer(answer: question.answer1, questionId: question.questionId)
                 selectionBox1.isSelect = true
                 selectionBox2.isSelect = false
             case .second:
+                answer = Answer(answer: question.answer2, questionId: question.questionId)
                 selectionBox1.isSelect = false
                 selectionBox2.isSelect = true
             default:
                 selectionBox1.isSelect = false
                 selectionBox2.isSelect = false
+                return
             }
-            self.delegate?.answerSelectionBoxDidTap(selection)
+            self.delegate?.answerSelectionBoxDidTap(answer)
         }
     }
 
