@@ -9,7 +9,14 @@
 import UIKit
 import DesignSystem
 
+protocol SelectValuesViewDelegate: AnyObject {
+    func sendAnswers(answers: [Answer])
+}
 final class SelectValuesView: UIView {
+    var question: [Question] = Question.tempDummy
+    private var selectedAnswers: [Answer] = []
+    weak var delegate: SelectValuesViewDelegate?
+    
     // MARK: UI Properties
     let tableView: UITableView = {
         let tableView = UITableView()
@@ -52,12 +59,21 @@ final class SelectValuesView: UIView {
 }
 extension SelectValuesView: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return QuestionType.questions.count
+        return question.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = SelectValuesCell()
-        cell.setQuestionType(QuestionType(rawValue: indexPath.row) ?? .none)
+        cell.delegate = self
+        cell.setQuestion(question[indexPath.row])
         return cell
+    }
+}
+
+extension SelectValuesView: SelectValuesCellDelegate {
+    func sendAnswer(answer: Answer) {
+        selectedAnswers = selectedAnswers.filter { $0.questionId != answer.questionId }
+        selectedAnswers.append(answer)
+        delegate?.sendAnswers(answers: selectedAnswers)
     }
 }

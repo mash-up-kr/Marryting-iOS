@@ -104,6 +104,7 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
         } else {
             checkedKeywords = checkedKeywords.filter { $0.keywordId != keyword.keywordId }
         }
+        delegate?.sendKeywords(keyword: self.checkedKeywords)
     }
 }
 

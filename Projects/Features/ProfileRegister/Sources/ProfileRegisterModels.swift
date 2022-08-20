@@ -11,6 +11,7 @@
 //
 
 import UIKit
+import DesignSystem
 
 enum ProfileRegister
 {
@@ -50,11 +51,6 @@ struct CreateProfileRequestDTO {
         self.keywords = keywords
         self.pictures = pictures
     }
-}
-
-struct Answer {
-    var answer: String
-    var questionId: String
 }
 
 struct Keyword {
