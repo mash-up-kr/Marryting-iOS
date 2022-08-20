@@ -82,9 +82,8 @@ public final class LikeRequestCompleteViewController: UIViewController, LikeRequ
         return v
     }()
     
-    lazy var goToLikeSceneButton: TextMTButton = {
-        let v = TextMTButton()
-        v.customButtonType = .subLight
+    lazy var goToLikeSceneButton: MTButton = {
+        let v = MTButton.create(.subLight)
         v.title = "나의 좋아요 보러가기"
         v.addTarget(self, action: #selector(didTapGoToLikeSceneButton), for: .touchUpInside)
         return v

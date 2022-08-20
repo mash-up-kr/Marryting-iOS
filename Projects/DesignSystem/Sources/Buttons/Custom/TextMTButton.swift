@@ -8,16 +8,10 @@
 
 import UIKit
 
-public final class TextMTButton: BaseButton {
+final class TextMTButton: MTButton {
 
     // MARK: Parameters
-    public var customButtonType: CustomButtonType   = .subLight
-
-    public var title: String                        = "" {
-        didSet {
-            self.setTitle(title, for: .normal)
-        }
-    }
+    var customButtonType: CustomButtonType   = .subLight
 
     override func attribute() {
         self.setTitleColor(customButtonType.enableTextColor, for: .normal)
@@ -43,7 +37,7 @@ extension TextMTButton {
 
     // MARK: 버튼 타입
     
-    public enum CustomButtonType {
+    enum CustomButtonType {
         case subLight
 
         var enableTextColor: UIColor? {

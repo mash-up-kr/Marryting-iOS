@@ -8,20 +8,14 @@
 
 import UIKit
 
-public final class ImageMTButton: UIButton, CodeBased {
+final class ImageMTButton: MTButton {
     
     
     // MARK: Parameters
     
-    public var customButtonType: CustomButtonType   = .iconMainLight
+    var customButtonType: CustomButtonType   = .iconMainLight
     
-    public var title: String                        = "" {
-        didSet {
-            self.setTitle(title, for: .normal)
-        }
-    }
-    
-    public convenience init(customButtonType: CustomButtonType) {
+    convenience init(customButtonType: CustomButtonType) {
         self.init(frame: .zero)
         self.customButtonType = customButtonType
 
@@ -29,13 +23,13 @@ public final class ImageMTButton: UIButton, CodeBased {
         layout()
     }
     
-    func attribute() {
+    override func attribute() {
         self.setBackgroundImage(self.customButtonType.enableImage, for: .normal)
         self.setBackgroundImage(self.customButtonType.highlightedImage, for: .highlighted)
         self.setBackgroundImage(self.customButtonType.disabledImage, for: .disabled)
     }
     
-    func layout() {
+    override func layout() {
         self.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: ButtonConstant.circleButtonHeight),
@@ -55,7 +49,7 @@ extension ImageMTButton {
         case iconMainLight
         case iconSubDark
         
-        public var enableImage: UIImage? {
+        var enableImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_enable)
@@ -68,7 +62,7 @@ extension ImageMTButton {
             }
         }
         
-        public var highlightedImage: UIImage? {
+        var highlightedImage: UIImage? {
             switch self {
             case .iconSub1Light:
                 return .create(.ic_right_highlight)
@@ -81,7 +75,7 @@ extension ImageMTButton {
             }
         }
         
-        public var disabledImage: UIImage? {
+        var disabledImage: UIImage? {
             switch self {
             case .iconSubDark:
                 return .create(.ic_trash_disable)

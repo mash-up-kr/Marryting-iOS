@@ -48,12 +48,9 @@ final class GuestCardView: UIView {
         return v
     }()
     
-    lazy var likeButton: ImageMTButton = {
-        let v = ImageMTButton(customButtonType: .iconMainLight)
-        v.setBackgroundImage(
-            v.customButtonType.enableImage,
-            for: .highlighted
-        )
+    lazy var likeButton: MTButton = {
+        let v = MTButton.create(.iconMainLight)
+        v.setBackgroundImage(.create(.ic_heart_enable), for: .highlighted)
         v.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
         v.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return v

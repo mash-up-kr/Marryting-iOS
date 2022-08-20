@@ -155,8 +155,8 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         return v
     }()
     
-    lazy var doneButton: TextImageMTButton = {
-        let v = TextImageMTButton(customButtonType: .mainLight)
+    lazy var doneButton: MTButton = {
+        let v = MTButton.create(.mainLight)
         v.title = "DONE"
         v.isEnabled = false
         v.addTarget(self, action: #selector(didTapDoneButton), for: .touchUpInside)

@@ -128,16 +128,12 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         return $0
     }(UILabel())
 
-    private lazy var likeButton: ImageMTButton = {
-        $0.setBackgroundImage(
-            $0.customButtonType.enableImage,
-            for: .highlighted
-        )
+    private lazy var likeButton: MTButton = {
         $0.addTarget(self, action: #selector(likeButtonDidTap), for: .touchUpInside)
         $0.addTarget(self, action: #selector(likeButtonDidTouchUpOutside), for: .touchUpOutside)
         $0.addTarget(self, action: #selector(likeButtonDidTouchDown), for: .touchDown)
         return $0
-    }(ImageMTButton(customButtonType: .iconMainLight))
+    }(MTButton.create(.iconMainLightSelected))
 
     private let addressStackView: UIStackView = {
         $0.axis = .horizontal
@@ -245,7 +241,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
             }
 
             guard let viewModel = viewModel else { return }
-            let isLikedImage = viewModel.isLiked ? likeButton.customButtonType.highlightedImage : likeButton.customButtonType.enableImage
+            let isLikedImage: UIImage? = viewModel.isLiked ? .create(.ic_heart_highlight) : .create(.ic_heart_enable)
             likeButton.setBackgroundImage(isLikedImage, for: .normal)
             likeButton.setBackgroundImage(isLikedImage, for: .highlighted)
             if viewModel.isLiked {

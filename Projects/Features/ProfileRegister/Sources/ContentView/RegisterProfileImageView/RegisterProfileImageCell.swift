@@ -20,8 +20,8 @@ final class RegisterProfileImageCell: UICollectionViewCell {
     
     // MARK: UI
     
-    lazy var registerimageButton: AddImageButton = {
-        let view = AddImageButton()
+    lazy var registerimageButton: MTButton = {
+        let view = MTButton.create(.addImage)
         return view
     }()
     
@@ -68,7 +68,7 @@ final class RegisterProfileImageCell: UICollectionViewCell {
         registerimageButton.isHidden = image != nil
     }
     
-    @objc func tapRegisterimageButton(_ sender: AddImageButton) {
+    @objc func tapRegisterimageButton(_ sender: UIButton) {
         delegate?.tapRegisterimageButton(sender)
     }
 }
