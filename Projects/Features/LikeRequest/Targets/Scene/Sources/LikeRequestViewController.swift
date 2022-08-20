@@ -274,7 +274,9 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
     }
     
     func displayLikeRequestSuccess() {
-        router?.routeToLikeRequestCompleteScene()
+        DispatchQueue.main.async {
+            self.router?.routeToLikeRequestCompleteScene()
+        }
     }
     
     func displayLikeRequestError(viewModel: LikeRequest.RequestLike.ViewModel.Error) {

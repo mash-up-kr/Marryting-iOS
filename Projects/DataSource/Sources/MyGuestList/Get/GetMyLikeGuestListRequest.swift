@@ -17,13 +17,7 @@ public struct GetMyLikeGuestListRequest: Request {
     public var endpoint: String = "/api/v1/like/profiles"
 
     public var method: HTTPMethod = .get
-
-    public var header: HTTPHeader = [:]
-
-    private let authorizationKey: String = "Authorization"
-
-    public init(token: String) {
-        header[authorizationKey] = "Bearer" + " " + token
-    }
+    
+    public init() {}
 }
 

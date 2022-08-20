@@ -26,6 +26,15 @@ public struct User: Codable {
     
     public var pictures: [String]
     
+    public var picture: String {
+        if pictures.isEmpty {
+            return ""
+        }
+        else {
+            return pictures[0]
+        }
+    }
+    
     public var answers: [Answer]
     
     public var keyword: [Keyword]
