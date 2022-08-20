@@ -23,16 +23,3 @@ public struct GetMeetingListDTO: Codable, Response {
         case groomName, brideName, weddingDate
     }
 }
-
-extension Meeting {
-    public init(_ dto: GetMeetingListDTO) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        self.init(
-            id: dto.weddingID,
-            groomName: dto.groomName,
-            brideName: dto.brideName,
-            date: dateFormatter.date(from: dto.weddingDate) ?? Date()
-        )
-    }
-}

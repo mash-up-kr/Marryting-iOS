@@ -6,4 +6,15 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public typealias Answer = String
+public struct Answer: Codable {
+    public var questionID: Int
+    public var answer: String
+
+    public init(
+        questionID: Int,
+        answer: String
+    ) {
+        self.questionID = questionID
+        self.answer = answer
+    }
+}

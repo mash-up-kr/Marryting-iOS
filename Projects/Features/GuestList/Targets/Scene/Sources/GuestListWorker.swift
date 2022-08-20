@@ -43,6 +43,25 @@ class GuestListWorker: GuestListWorkerProtocol {
     }
 }
 
+extension Guest {
+
+    #warning("서버 수정 후에 주석으로 대체해야함")
+    init(_ dto: GetGuestResponseBody) {
+        let user = User(id: dto.profileID,
+                        name: dto.name,
+                        gender: .male, //dto.gender == "MALE" ? .male : .female,
+                        career: dto.career,
+                        birth: .init(),
+                        age: dto.age,
+                        address: dto.address,
+                        pictures: dto.profileURL,
+                        answers: [], //dto.answers.map { $0.answer },
+                        keyword: [] //dto.keywords.map { $0.keyword }
+        )
+        self.init(user: user, isLiked: false)
+    }
+}
+
 private extension GuestListWorker {
     var dummyGuests: [Guest] {
         [
@@ -61,12 +80,17 @@ private extension GuestListWorker {
                                "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                                "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
                                "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                    answers: [ "생각을 정리하고 이야기",
-                               "자주 할수록 좋아요",
-                               "계획적인 데이트"
-                             ],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
                     keyword: [
-                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
                     ]
                 ),
                 isLiked: false
@@ -83,12 +107,17 @@ private extension GuestListWorker {
                     pictures: ["https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
                                "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
                                "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png"],
-                    answers: [ "생각을 정리하고 이야기",
-                               "자주 할수록 좋아요",
-                               "계획적인 데이트"
-                             ],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
                     keyword: [
-                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
                     ]
                 ),
                 isLiked: false
@@ -104,12 +133,17 @@ private extension GuestListWorker {
                     address: "비공개",
                     pictures: ["https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png",
                                "https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png"],
-                    answers: [ "생각을 정리하고 이야기",
-                               "자주 할수록 좋아요",
-                               "계획적인 데이트"
-                             ],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
                     keyword: [
-                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
                     ]
                 ),
                 isLiked: true
@@ -124,12 +158,17 @@ private extension GuestListWorker {
                     age: 30,
                     address: "비공개",
                     pictures: ["https://user-images.githubusercontent.com/56102421/179954903-b631811a-ac0c-48f2-9b1f-727e88e7cb3f.png"],
-                    answers: [ "생각을 정리하고 이야기",
-                               "자주 할수록 좋아요",
-                               "계획적인 데이트"
-                             ],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
                     keyword: [
-                        "활동적인", "유머있는", "논리적인", "애교있는", "낙천적인"
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
                     ]
                     
                 ),

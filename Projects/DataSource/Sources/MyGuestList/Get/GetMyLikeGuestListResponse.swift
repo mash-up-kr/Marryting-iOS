@@ -9,15 +9,15 @@
 import NetworkProtocol
 import Models
 
-public typealias GetMyLikeGuestListResponse = BaseArrayResponse<GetMyLikeGuestListDTO>
+public typealias GetMyLikeGuestListResponse = BaseArrayResponse<GetMyLikeGuestResponseBody>
 
-public struct GetMyLikeGuestListDTO: Codable, Response {
+public struct GetMyLikeGuestResponseBody: Response {
     public let address: String
     public let age: Int
-    public let answers: [AnswerDTO]
+    public let answers: [GetMyLikeGuestAnswerResponseBody]
     public let career: String
     public let gender: String
-    public let keywords: [KeywordDTO]
+    public let keywords: [GetMyLikeGuestKeywordResponseBody]
     public let name: String
     public let pictures: [String]
     public let profileID: Int
@@ -28,18 +28,28 @@ public struct GetMyLikeGuestListDTO: Codable, Response {
     }
 }
 
-public extension Guest {
-    init(_ dto: GetMyLikeGuestListDTO) {
-        let user = User(id: dto.profileID,
-                        name: dto.name,
-                        gender: dto.gender == "MALE" ? .male : .female,
-                        career: dto.career,
-                        birth: .init(),
-                        age: dto.age,
-                        address: dto.address,
-                        pictures: dto.pictures,
-                        answers: dto.answers.map { $0.answer },
-                        keyword: dto.keywords.map { $0.keyword })
-        self.init(user: user, isLiked: true)
+public struct GetMyLikeGuestAnswerResponseBody: Response {
+    public let answer: String
+    public let questionID: Int
+
+    enum CodingKeys: String, CodingKey {
+        case answer
+        case questionID = "questionId"
+    }
+
+    public init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        answer = (try? values.decode(String.self, forKey: .answer)) ?? ""
+        questionID = (try? values.decode(Int.self, forKey: .questionID)) ?? -1
+    }
+}
+
+public struct GetMyLikeGuestKeywordResponseBody: Response {
+    public let keywordID: Int
+    public let keyword: String
+
+    enum CodingKeys: String, CodingKey {
+        case keywordID = "keywordId"
+        case keyword = "keyword"
     }
 }
