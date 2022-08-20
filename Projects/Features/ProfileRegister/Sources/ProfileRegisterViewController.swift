@@ -30,6 +30,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let scale = UIScreen.main.scale
         return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
     }
+    var firstPageData: UserInfo = UserInfo()
     
     // MARK: Object lifecycle
     
@@ -139,6 +140,12 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var enterUserInfoView: EnterUserInfoView = {
         let view = EnterUserInfoView()
+        view.delegate = self
+        view.nameTextField.delegate = self
+        view.genderTextField.delegate = self
+        view.birthTextField.delegate = self
+        view.addressTextField.delegate = self
+        view.jobTextField.delegate = self
         return view
     }()
     
@@ -238,6 +245,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
+        
+        guard let changedPage = contentViewArr[pageNum - 1] as? ProfileRegisterContentView else {
+            return
+        }
+        changedPage.hideKeyboardAndSendUserInfo()
     }
     
     private func changeTopUI() {
@@ -354,5 +366,38 @@ extension PHAsset {
             }
         )
         return thumbnail
+    }
+}
+
+extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
+    func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
+        firstPageData = info
+        rightButton.isEnabled = allEntered
+    }
+}
+
+extension ProfileRegisterViewController: UITextFieldDelegate {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let utf8Char = string.cString(using: .utf8)
+        let isBackSpace = strcmp(utf8Char, "\\b")
+        if string.hasCharacters() || isBackSpace == -92{
+            return true
+        }
+        return false
+    }
+}
+
+extension String {
+    func hasCharacters() -> Bool{
+        do{
+            let regex = try NSRegularExpression(pattern: "^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ\\s]$", options: .caseInsensitive)
+            if let _ = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportCompletion, range: NSMakeRange(0, self.count)){
+                return true
+            }
+        }catch{
+            print(error.localizedDescription)
+            return false
+        }
+        return false
     }
 }
