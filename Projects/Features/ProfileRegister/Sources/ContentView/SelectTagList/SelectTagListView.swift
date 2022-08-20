@@ -9,21 +9,42 @@
 import UIKit
 import DesignSystem
 
-protocol SelectTagListViewDelegate: AnyObject {
-    func sendKeywords(keyword: [Keyword])
+struct SelectTagListKeywordModel {
+    var keywordID: Int
+    var keyword: String
 }
+
+struct SelectTagListViewModel {
+    var selectedKeywordList: [SelectTagListKeywordModel]
+    var keywordList: [SelectTagListKeywordModel]
+}
+
+protocol SelectTagListViewDelegate: AnyObject {
+    func sendKeywords(keyword: [SelectTagListKeywordModel])
+}
+
 final class SelectTagListView: UIView {
     // MARK: - Properties
-    var tagList: [Keyword] = [
-        Keyword(keyword: "긍정적이다", keywordId: "0"),
-        Keyword(keyword: "따듯하다", keywordId: "1"),
-        Keyword(keyword: "유머가 있다", keywordId: "2"),
-        Keyword(keyword: "다정하다", keywordId: "3"),
-        Keyword(keyword: "편안하다", keywordId: "4"),
-        Keyword(keyword: "친절하다", keywordId: "5"),
-        Keyword(keyword: "낙천적이다", keywordId: "6")
-    ]
-    private var checkedKeywords: [Keyword] = []
+
+    var viewModel: SelectTagListViewModel? {
+        didSet {
+            self.checkedKeywords = viewModel?.selectedKeywordList ?? []
+            self.tagList = viewModel?.keywordList ?? []
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    var checkedKeywords: [SelectTagListKeywordModel] = [] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+
+    private var tagList: [SelectTagListKeywordModel] = []
+
     
     weak var delegate: SelectTagListViewDelegate?
     
@@ -102,7 +123,7 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
         if cell.isClicked {
             checkedKeywords.append(keyword)
         } else {
-            checkedKeywords = checkedKeywords.filter { $0.keywordId != keyword.keywordId }
+            checkedKeywords = checkedKeywords.filter { $0.keywordID != keyword.keywordID }
         }
         delegate?.sendKeywords(keyword: self.checkedKeywords)
     }
@@ -155,24 +176,6 @@ final class CenterAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #if canImport(SwiftUI) && DEBUG

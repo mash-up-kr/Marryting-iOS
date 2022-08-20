@@ -58,7 +58,7 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     // MARK: Function
     
-    func setData(_ keyword: Keyword) {
+    func setData(_ keyword: SelectTagListKeywordModel) {
         titleLabel.text = keyword.keyword
         titleLabel.sizeToFit()
     }
