@@ -25,7 +25,7 @@ final class RegisterProfileImageView: UIView {
     
     let itemSize: CGSize = {
         let width = UIScreen.main.bounds.width - 80
-        return CGSize(width: width, height: width * 374 / 280)
+        return CGSize(width: width, height: (width * 3 / 4) + 56)
     }()
     
     let itemSpacing = 16.0
@@ -119,5 +119,9 @@ extension RegisterProfileImageView: UICollectionViewDelegateFlowLayout {
 extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
         delegate?.tapRegisterimageButton(sender)
+    }
+    
+    func deleteImage(for image: UIImage) {
+        images = images.filter { $0 != image }
     }
 }

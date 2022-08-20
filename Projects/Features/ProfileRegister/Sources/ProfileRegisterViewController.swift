@@ -315,7 +315,7 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
         alertController.popoverPresentationController?.sourceView = self.view
         alertController.popoverPresentationController?.sourceRect = CGRect(origin: self.view.center, size: CGSize.zero)
         
-        cropper.cancelButtonText = "Retake"
+        cropper.cancelButtonText = "다시 선택"
         
         
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
