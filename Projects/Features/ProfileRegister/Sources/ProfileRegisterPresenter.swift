@@ -14,18 +14,57 @@ import UIKit
 
 protocol ProfileRegisterPresentationLogic
 {
-  func presentSomething(response: ProfileRegister.Something.Response)
+    func presentFirstPage(response: ProfileRegister.FetchFirstPage.Response)
+    func presentImagePage(response: ProfileRegister.FetchImagePage.Response)
+    func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
+    func presentSelectedKeyword(response: ProfileRegister.SelectKeywords.Response)
+    func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
 }
 
 class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 {
-  weak var viewController: ProfileRegisterDisplayLogic?
-  
-  // MARK: Do something
-  
-  func presentSomething(response: ProfileRegister.Something.Response)
-  {
-    let viewModel = ProfileRegister.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+
+    weak var viewController: ProfileRegisterDisplayLogic?
+
+    func presentFirstPage(response: ProfileRegister.FetchFirstPage.Response) {
+        viewController?.displayFirstPage(
+            viewModel: .init(
+                enterUserInfoViewModel: .init(
+                    name: response.name,
+                    gender: response.gender == .male ? "남성" : "여성",
+                    birth: response.birth,
+                    address: response.address,
+                    career: response.career),
+                pageNumber: response.pageNumber
+            )
+        )
+    }
+    
+    func presentImagePage(response: ProfileRegister.FetchImagePage.Response) {
+        viewController?.displayImagePage(viewModel:
+                .init(images: response.images, pageNumber: response.pageNumber)
+        )
+    }
+
+    func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response) {
+        viewController?.displayKeywordPage(
+            viewModel: .init(
+                keywords: response.keywords, selectedKeywords: response.selectedKeywords,
+                pageNumber: response.pageNumber
+            )
+        )
+    }
+
+    func presentSelectedKeyword(response: ProfileRegister.SelectKeywords.Response) {
+        viewController?.displaySelectedKeyword(
+            viewModel: .init(selectedKeywords: response.keywords.map {
+                .init(keywordID: $0.id, keyword: $0.keyword)
+            })
+        )
+    }
+
+    func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response) {
+        
+    }
+
 }

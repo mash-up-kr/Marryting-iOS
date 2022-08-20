@@ -17,7 +17,11 @@ import BSImagePicker
 import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
-    func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
+    func displayFirstPage(viewModel: ProfileRegister.FetchFirstPage.ViewModel)
+    func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel)
+    func displaySelectedKeyword(viewModel: ProfileRegister.SelectKeywords.ViewModel)
+    func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel)
+    func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel)
 }
 
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
@@ -30,8 +34,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let scale = UIScreen.main.scale
         return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
     }
-    var profileData: CreateProfileRequestDTO = CreateProfileRequestDTO()
-    
+
     // MARK: Object lifecycle
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -67,12 +70,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private let pageSize = 4
     private let sideSpace = 32
-    
-    private var pageNum = 1 {
-        didSet {
-            changePage()
-        }
-    }
+
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
@@ -122,6 +120,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     lazy var leftButton: MTButton = {
         let button = MTButton.create(.mainSmallDark)
         button.title = "PRE"
+        button.isHidden = true
         button.isEnabled = true
         button.addTarget(self, action: #selector(pressPrevButton(_:)), for: .touchUpInside)
         return button
@@ -129,6 +128,8 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var rightButton: MTButton = {
         let button = MTButton.create(.mainDark)
+        button.title = "NEXT"
+        button.isEnabled = false
         button.addTarget(self, action: #selector(pressNextButton(_:)), for: .touchUpInside)
         return button
     }()
@@ -173,7 +174,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private func configureUI() {
         configureUIObjectsLayout()
-        changePage()
         PHPhotoLibrary.shared().register(self)
     }
     
@@ -230,33 +230,32 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-    
-    private func changePage() {
-        changeTopUI()
-        
-        loadViewIfNeeded()
-        
-        contentView.subviews.forEach({ $0.removeFromSuperview() })
-        
-        contentView.addSubview(contentViewArr[pageNum - 1])
 
-        contentViewArr[pageNum - 1].snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.trailing.equalToSuperview()
-            make.top.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-        
-        guard let changedPage = contentViewArr[pageNum - 1] as? ProfileRegisterContentView else {
-            return
-        }
-        changedPage.hideKeyboardAndSendUserInfo()
+        self.updatePage(1)
     }
-    
-    private func changeTopUI() {
-        let titleText = titleStringList[pageNum - 1]
-        let titlehighlightText = titlehighlightStringList[pageNum - 1]
+
+    private func updatePage(_ pageNumber: Int) {
+        self.updateTopView(pageNumber)
+        self.updateContentView(pageNumber)
+    }
+
+    private func updateContentView(_ pageNumber: Int) {
+        UIView.transition(with: contentView, duration: 0.33, options: .transitionCrossDissolve, animations: {
+            self.contentView.subviews.forEach { $0.removeFromSuperview() }
+        }, completion: { _ in
+            UIView.transition(with: self.contentView, duration: 0.2, options: .curveLinear,
+                              animations: {
+                self.contentView.addSubview(self.contentViewArr[pageNumber-1])
+                self.contentViewArr[pageNumber-1].snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            }, completion: nil)
+        })
+    }
+
+    private func updateTopView(_ pageNumber: Int) {
+        let titleText = titleStringList[pageNumber - 1]
+        let titlehighlightText = titlehighlightStringList[pageNumber - 1]
         let attributedStr = NSMutableAttributedString(string: titleText)
         attributedStr.addAttribute(.foregroundColor,
                                    value: UIColor.white,
@@ -264,54 +263,53 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         attributedStr.addAttribute(.foregroundColor,
                                    value: Pallete.Dark.subGreen.color ?? UIColor.white,
                                    range: (titleText as NSString).range(of: titlehighlightText))
+
         titleLabel.attributedText = attributedStr
-        subTitleLabel.text = subTitleStringList[pageNum - 1]
-        if pageNum == 1 {
-            leftButton.isHidden = true
-        } else {
-            leftButton.isHidden = false
-        }
-        if pageNum == pageSize {
-            rightButton.title = "DONE"
-        } else {
-            rightButton.title = "NEXT"
-        }
-        pageControl.currentPage = pageNum - 1
+        subTitleLabel.text = subTitleStringList[pageNumber - 1]
     }
-    
-    func displaySomething(viewModel: ProfileRegister.Something.ViewModel)
-    {
-        //nameTextField.text = viewModel.name
-    }
-    
+
     // MARK: Action
     
     @objc func pressPrevButton(_ sender: UIButton) {
-        if pageNum > 1 {
-            pageNum -= 1
-        }
+        interactor?.fetchNextPage()
+
     }
     
     @objc func pressNextButton(_ sender: UIButton) {
-        if pageNum < pageSize {
-            pageNum += 1
-            switch pageNum {
-            case 1:
-                rightButton.isEnabled = !(profileData.name.isEmpty &&
-                                 profileData.address.isEmpty &&
-                                 profileData.gender.isEmpty &&
-                                 profileData.birth.isEmpty &&
-                                 profileData.career.isEmpty)
-            case 2:
-                rightButton.isEnabled = profileData.pictures.count > 0
-            case 3:
-                rightButton.isEnabled = profileData.keywords.count == 5
-            default:
-                rightButton.isEnabled = profileData.answers.count == 3 // FIXME: 3개가 아닐 수 있음
-            }
-        }
+        interactor?.fetchNextPage()
     }
+
+    func displayFirstPage(viewModel: ProfileRegister.FetchFirstPage.ViewModel) {
+        let viewModel = viewModel.enterUserInfoViewModel
+        enterUserInfoView.viewModel = viewModel
+        leftButton.isHidden = false
+        rightButton.isEnabled = !(viewModel.name.isEmpty &&
+                                  viewModel.address.isEmpty &&
+                                  viewModel.gender.isEmpty &&
+                                  viewModel.birth.isEmpty &&
+                                  viewModel.career.isEmpty)
+    }
+
+    func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel) {
+        rightButton.isEnabled = viewModel.images.count > 0
+        updatePage(viewModel.pageNumber)
+    }
+
+    func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
+        
+        rightButton.isEnabled = viewModel.keywords.count == 5
+    }
+
+    func displaySelectedKeyword(viewModel: ProfileRegister.SelectKeywords.ViewModel) {
+        selectTagListView.checkedKeywords = viewModel.selectedKeywords
+    }
+    func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel) {
+
+    }
+
 }
+
+// MARK: RegisterProfileImageViewDelegate
 
 extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
     func tapRegisterimageButton(_ sender: UIButton, completion: @escaping ([UIImage]) -> Void) {
@@ -341,12 +339,15 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
             self.checkedAsset.forEach {
                 self.images.append($0.getAssetThumbnail())
             }
-            self.profileData.pictures = self.images
+            #warning("interacotr에 알려야함")
+//            self.profileData.pictures = self.images
             self.rightButton.isEnabled = self.images.count > 0
             completion(self.images)
         })
     }
 }
+
+// MARK: PHPhotoLibraryChangeObserver
 
 extension ProfileRegisterViewController: PHPhotoLibraryChangeObserver {
     public func photoLibraryDidChange(_ changeInstance: PHChange) {
@@ -367,7 +368,8 @@ extension ProfileRegisterViewController: PHPhotoLibraryChangeObserver {
     }
 }
 
-// ---- PHAsset + Extension ----
+// MARK:  ---- PHAsset + Extension ----
+
 extension PHAsset {
     func getAssetThumbnail() -> UIImage {
         let manager = PHImageManager.default()
@@ -387,16 +389,25 @@ extension PHAsset {
     }
 }
 
+// MARK: EnterUserInfoViewDelegate
+
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
-    func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
-        profileData.name = info.name
-        profileData.address = info.address
-        profileData.gender = info.gender
-        profileData.birth = info.birth
-        profileData.career = info.job
+//    func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
+//
+//        profileData.name = info.name
+//        profileData.address = info.address
+//        profileData.gender = info.gender
+//        profileData.birth = info.birth
+//        profileData.career = info.job
+//    }
+
+    func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool) {
+        interactor?.didTapUserInfoPageNextButton(userInfo)
         rightButton.isEnabled = allEntered
     }
 }
+
+// MARK: UITextFieldDelegate
 
 extension ProfileRegisterViewController: UITextFieldDelegate {
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -410,30 +421,14 @@ extension ProfileRegisterViewController: UITextFieldDelegate {
 }
 
 extension ProfileRegisterViewController: SelectTagListViewDelegate {
-    func sendKeywords(keyword keywords: [Keyword]) {
-        profileData.keywords = keywords
-        rightButton.isEnabled = keywords.count == 5
+    func sendKeywords(keyword keywords: [SelectTagListKeywordModel]) {
+        interactor?.selectKeywords(.init(keywords: keywords))
     }
 }
 
 extension ProfileRegisterViewController: SelectValuesViewDelegate {
     func sendAnswers(answers: [Answer]) {
-        profileData.answers = answers
+//        profileData.answers = answers
         rightButton.isEnabled = answers.count == 3
-    }
-}
-
-extension String {
-    func hasCharacters() -> Bool{
-        do{
-            let regex = try NSRegularExpression(pattern: "^[a-zA-Z가-힣ㄱ-ㅎㅏ-ㅣ\\s]$", options: .caseInsensitive)
-            if let _ = regex.firstMatch(in: self, options: NSRegularExpression.MatchingOptions.reportCompletion, range: NSMakeRange(0, self.count)){
-                return true
-            }
-        }catch{
-            print(error.localizedDescription)
-            return false
-        }
-        return false
     }
 }

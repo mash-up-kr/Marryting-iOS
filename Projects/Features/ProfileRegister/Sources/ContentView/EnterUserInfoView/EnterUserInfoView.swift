@@ -10,11 +10,20 @@ import UIKit
 import DesignSystem
 import SnapKit
 
+struct EnterUserInfoViewModel {
+    var name: String
+    var gender: String
+    var birth: String
+    var address: String
+    var career: String
+}
+
 protocol ProfileRegisterContentView {
     func hideKeyboardAndSendUserInfo()
 }
 protocol EnterUserInfoViewDelegate: AnyObject {
-    func sendUserInfo(_ info: UserInfo, allEntered: Bool)
+//    func sendUserInfo(_ info: UserInfo, allEntered: Bool)
+    func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool)
 }
 final class EnterUserInfoView: UIView, ProfileRegisterContentView {
     weak var delegate: EnterUserInfoViewDelegate?
@@ -75,7 +84,17 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         super.init(coder: coder)
         configureUI()
     }
-    
+
+    var viewModel: EnterUserInfoViewModel? {
+        didSet {
+            nameTextField.text = viewModel?.name
+            addressTextField.text = viewModel?.address
+            jobTextField.text = viewModel?.career
+            birthTextField.text = viewModel?.birth
+            genderTextField.text = viewModel?.gender
+        }
+    }
+
     // MARK: Configure UI
     
     private func configureUI() {
@@ -188,11 +207,11 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         let gender = genderTextField.text ?? ""
         let birth = birthTextField.text ?? ""
         let address = addressTextField.text ?? ""
-        let job = jobTextField.text ?? ""
+        let career = jobTextField.text ?? ""
         
-        let allEntered = [name, gender, birth, address, job]
-        
-        delegate?.sendUserInfo(UserInfo(name: name, gender: gender, birth: birth, address: address, job: job), allEntered: allEntered.filter { $0.count == 0}.isEmpty)
+        let allEntered = [name, gender, birth, address, career]
+
+        delegate?.sendUserInfo(.init(name: name, gender: gender, birth: birth, address: address, career: career), allEntered: allEntered.filter { $0.count == 0}.isEmpty)
     }
     
     @objc func tapScrollView() {

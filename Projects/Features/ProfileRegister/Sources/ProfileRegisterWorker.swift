@@ -10,11 +10,38 @@
 //  see http://clean-swift.com
 //
 
-import UIKit
+import DataSource
+import Models
 
 protocol ProfileRegisterWorkerProtocol {
-    
+    func fetchKeywords() async throws -> [Keyword]
+    func fetchQuestions() async throws -> [Answer]
+    func registerProfile() async throws -> Void
 }
 
-class ProfileRegisterWorker {
+class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
+
+    func fetchKeywords() async throws -> [Keyword] {
+        return dummyKeywords
+    }
+
+    func fetchQuestions() async throws -> [Answer] {
+        return []
+    }
+
+    func registerProfile() async throws -> Void {
+        return
+    }
+
+}
+
+extension ProfileRegisterWorker {
+    var dummyKeywords: [Keyword] {
+        [
+//            .init(keyword: "매혹적인", keywordId: <#T##String#>)
+//            .init(keyword: 1, keywordId: "매혹적인"),
+//            .init(keywordID: 2, keyword: "열정적인"),
+//            .init(keywordID: 3, keyword: "귀여운"),
+        ]
+    }
 }

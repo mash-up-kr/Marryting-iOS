@@ -11,15 +11,113 @@
 //
 
 import UIKit
+import Models
 
 protocol ProfileRegisterBusinessLogic {
+    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request)
+    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request)
+    func fetchPrevPage()
+    func fetchNextPage()
+    func uploadImage(_ image: ProfileRegister.UploadImage.Request)
+    func registerProfile()
 }
 
 protocol ProfileRegisterDataStore {
+
 }
 
-class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore
-{
-  var presenter: ProfileRegisterPresentationLogic?
-  var worker: ProfileRegisterWorker?
+class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore {
+    var presenter: ProfileRegisterPresentationLogic?
+    var worker: ProfileRegisterWorker?
+
+    typealias URLString = String
+
+    private let pageSize: Int = 4
+    private var pageNumber: Int = 1
+
+    private var selectedKeywords: [Keyword] = []
+    private var selectedImages: [UIImage] = []
+    private var userInfo: ProfileRegister.FetchFirstPage.Response?
+
+    init(worker: ProfileRegisterWorker = ProfileRegisterWorker()) {
+        self.worker = worker
+    }
+
+    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request) {
+        selectedKeywords.append(contentsOf: keywords.keywords.map {
+            Keyword(id: $0.keywordID, keyword: $0.keyword)
+        })
+
+        presenter?.presentSelectedKeyword(response: .init(keywords: selectedKeywords))
+
+    }
+
+    func fetchPrevPage() {
+        if pageNumber > 1 {
+            pageNumber -= 1
+        }
+    }
+
+    func fetchNextPage() {
+        if pageNumber < pageSize {
+            pageNumber += 1
+            switch pageNumber {
+            case 1:
+                self.fetchFirstPage()
+            case 2:
+                self.fetchImages()
+            case 3:
+                self.fetchKeywords()
+            default:
+                self.fetchQuestions()
+            }
+        }
+    }
+
+    func uploadImage(_ image: ProfileRegister.UploadImage.Request) {
+        guard let worker = worker else {
+            return
+        }
+        selectedImages.append(image.image)
+    }
+
+    private func fetchFirstPage() {
+        guard let userInfo = userInfo else {
+            return
+        }
+
+        presenter?.presentFirstPage(response: userInfo)
+    }
+
+    private func fetchImages() {
+        presenter?.presentImagePage(
+            response: .init(
+                images: selectedImages, pageNumber: pageNumber
+            )
+        )
+    }
+
+    private func fetchKeywords() {
+        guard let worker = worker else {
+            return
+        }
+
+        Task {
+            do {
+//                let keywords = try await worker.fetchKeywords()
+            }
+        }
+    }
+
+    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request) {
+        
+    }
+
+    func fetchQuestions() {
+
+    }
+
+    func registerProfile() {
+
+    }
 }
