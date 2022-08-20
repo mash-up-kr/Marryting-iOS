@@ -147,7 +147,7 @@ extension MeetingListViewController: UICollectionViewDelegate {
 
 extension MeetingListViewController: MeetingCollectionViewCellDelegate {
     
-    func didTapMeetingEnterButton(id: String) {
+    func didTapMeetingEnterButton(id: Int) {
         interactor?.selectItem(request: .init(meetingId: id))
         router?.routeToGuestListScene()
     }

@@ -16,8 +16,8 @@ public struct GuestDetailDTO: Codable, Response {
     public let profileName: String
     public let age: Int
     public let address, career: String
-    public let keywords: [String]
-    public let answers: [String]
+    public let keywords: [KeywordDTO]
+    public let answers: [AnswerDTO]
     public let pictures: [String]
 
     enum CodingKeys: String, CodingKey {
@@ -37,16 +37,18 @@ extension Guest {
         guard let dto = dto else {
             fatalError()
         }
-        let user = User(id: dto.profileID,
-                        name: dto.profileName,
-                        gender: .male,
-                        career: dto.career,
-                        birth: .init(),
-                        age: dto.age,
-                        address: dto.address,
-                        pictures: dto.pictures,
-                        answers: dto.answers,
-                        keyword: dto.keywords)
+        let user = User(
+            id: dto.profileID,
+            name: dto.profileName,
+            gender: .male,
+            career: dto.career,
+            birth: .init(),
+            age: dto.age,
+            address: dto.address,
+            pictures: dto.pictures,
+            answers: dto.answers.map { $0.answer },
+            keyword: dto.keywords.map { $0.keyword }
+        )
         self.init(user: user, isLiked: false)
     }
 }

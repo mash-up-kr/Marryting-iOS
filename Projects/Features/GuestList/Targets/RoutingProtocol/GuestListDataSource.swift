@@ -10,5 +10,5 @@ import Models
 
 public protocol GuestListDataStore {
     var guests: [Guest] { get set }
-    var meetingId: String? { get set }
+    var meetingId: Int? { get set }
 }

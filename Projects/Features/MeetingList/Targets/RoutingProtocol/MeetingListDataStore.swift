@@ -11,5 +11,5 @@
 //
 
 public protocol MeetingListDataStore {
-    var selectedMeetingId: String? { get set }
+    var selectedMeetingId: Int? { get set }
 }

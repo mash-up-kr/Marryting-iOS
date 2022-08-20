@@ -28,7 +28,7 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
     
     var guests: [Guest] = []
     
-    var meetingId: String?
+    var meetingId: Int?
     
     // MARK: Business Logic
     
