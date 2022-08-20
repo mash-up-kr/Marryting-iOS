@@ -17,5 +17,6 @@ public struct GetKeywordsRequest: Request {
     public var endpoint: String = "/api/v1/keywords"
 
     public var method: HTTPMethod = .get
-    
+
+    public init() {}
 }

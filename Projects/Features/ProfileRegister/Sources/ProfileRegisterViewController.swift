@@ -18,10 +18,11 @@ import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
     func displayFirstPage(viewModel: ProfileRegister.FetchFirstPage.ViewModel)
+    func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel)
+    func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel)
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel)
     func displaySelectedKeyword(viewModel: ProfileRegister.SelectKeywords.ViewModel)
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel)
-    func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel)
 }
 
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
@@ -258,6 +259,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 
         titleLabel.attributedText = attributedStr
         subTitleLabel.text = subTitleStringList[pageNumber - 1]
+        pageControl.currentPage = pageNumber - 1
     }
 
     // MARK: Action
@@ -283,12 +285,21 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     }
 
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel) {
-        rightButton.isEnabled = viewModel.images.count > 0
         updatePage(viewModel.pageNumber)
+//        rightButton.isEnabled = viewModel.images.count > 0
+    }
+
+    func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel) {
+        registerProfileImageView.images.append(viewModel.image)
+        rightButton.isEnabled = registerProfileImageView.images.count > 0
     }
 
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
-        
+        updatePage(viewModel.pageNumber)
+        selectTagListView.viewModel = .init(
+            selectedKeywordList: viewModel.selectedKeywords.map { .init(keywordID: $0.id, keyword: $0.keyword)},
+            keywordList: viewModel.keywords.map { .init(keywordID: $0.id, keyword: $0.keyword) }
+        )
         rightButton.isEnabled = viewModel.keywords.count == 5
     }
 
@@ -335,7 +346,6 @@ extension ProfileRegisterViewController: UIImageCropperProtocol {
     public func didCropImage(originalImage: UIImage?, croppedImage: UIImage?) {
         guard let croppedImage = croppedImage else { return }
         self.interactor?.uploadImage(.init(image: croppedImage))
-        self.registerProfileImageView.images.append(croppedImage)
     }
 
     public func didCancel() {

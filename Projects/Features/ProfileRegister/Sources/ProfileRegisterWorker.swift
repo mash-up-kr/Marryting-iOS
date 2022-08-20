@@ -20,9 +20,20 @@ protocol ProfileRegisterWorkerProtocol {
 }
 
 class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
+    private let keywordListDataSource: KeywordListDataSourceProtocol
+
+    init(
+        _ keywordListDataSource: KeywordListDataSourceProtocol = KeywordListDataSource()
+    ) {
+        self.keywordListDataSource = keywordListDataSource
+    }
 
     func fetchKeywords() async throws -> [Keyword] {
-        return dummyKeywords
+        print("fetchKeywords")
+        let keywords = try await self.keywordListDataSource.getKeywords(request: GetKeywordsRequest())
+        guard let data = keywords.data else { return [] }
+        let keyowrds = data.map { Keyword(id: $0.keywordID, keyword: $0.keyword) }
+        return keyowrds
     }
 
     func fetchQuestions() async throws -> [Answer] {

@@ -19,7 +19,9 @@ final class RegisterProfileImageView: UIView {
     let maximumNumberOfImages = 5
     var images: [UIImage] = [] {
         didSet {
-            collectionView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
         }
     }
     

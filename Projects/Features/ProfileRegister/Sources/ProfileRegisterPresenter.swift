@@ -16,6 +16,7 @@ protocol ProfileRegisterPresentationLogic
 {
     func presentFirstPage(response: ProfileRegister.FetchFirstPage.Response)
     func presentImagePage(response: ProfileRegister.FetchImagePage.Response)
+    func presentUploadImage(response: ProfileRegister.UploadImage.Response)
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
     func presentSelectedKeyword(response: ProfileRegister.SelectKeywords.Response)
     func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
@@ -44,6 +45,10 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
         viewController?.displayImagePage(viewModel:
                 .init(images: response.images, pageNumber: response.pageNumber)
         )
+    }
+
+    func presentUploadImage(response: ProfileRegister.UploadImage.Response) {
+        viewController?.displayImage(viewModel: .init(image: response.image))
     }
 
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response) {
