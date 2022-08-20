@@ -26,13 +26,6 @@ protocol ProfileRegisterDisplayLogic: AnyObject {
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
     var interactor: ProfileRegisterBusinessLogic?
     var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
-    var images: [UIImage] = []
-    var checkedAsset = [PHAsset]()
-    var fetchResult = PHFetchResult<PHAsset>()
-    var thumbnailSize: CGSize {
-        let scale = UIScreen.main.scale
-        return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
-    }
 
     // MARK: Object lifecycle
     
@@ -66,9 +59,12 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     }
     
     // MARK: Properties
-    
-    private let pageSize = 4
+
     private let sideSpace = 32
+
+    private let picker = UIImagePickerController()
+    private let cropper = UIImageCropper(cropRatio: 3/4)
+
 
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
@@ -95,7 +91,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl(frame: CGRect(x: 0, y: 0, width: 50, height: 8))
-        pageControl.numberOfPages = pageSize
+        pageControl.numberOfPages = 4
         pageControl.currentPage = 0
         pageControl.isUserInteractionEnabled = false
         // iOS 14.0부터 양옆에 생긴 padding 값 제거
@@ -174,7 +170,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     private func configureUI() {
         configureUIObjectsLayout()
-        PHPhotoLibrary.shared().register(self)
     }
     
     private func configureUIObjectsLayout() {
@@ -242,15 +237,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private func updateContentView(_ pageNumber: Int) {
         UIView.transition(with: contentView, duration: 0.33, options: .transitionCrossDissolve, animations: {
             self.contentView.subviews.forEach { $0.removeFromSuperview() }
-        }, completion: { _ in
-            UIView.transition(with: self.contentView, duration: 0.2, options: .curveLinear,
-                              animations: {
-                self.contentView.addSubview(self.contentViewArr[pageNumber-1])
-                self.contentViewArr[pageNumber-1].snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
-            }, completion: nil)
-        })
+            self.contentView.addSubview(self.contentViewArr[pageNumber-1])
+            self.contentViewArr[pageNumber-1].snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }, completion: nil)
     }
 
     private func updateTopView(_ pageNumber: Int) {
@@ -317,10 +308,7 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         alertController.popoverPresentationController?.sourceView = self.view
         alertController.popoverPresentationController?.sourceRect = CGRect(origin: self.view.center, size: CGSize.zero)
-        
         cropper.cancelButtonText = "다시 선택"
-        
-        
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
             if granted {
                 DispatchQueue.main.async {
@@ -330,26 +318,12 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
                     })
                 }
             }
-            deseletedAsset.forEach {
-                guard let index = self.checkedAsset.firstIndex(of: $0) else { return }
-                self.checkedAsset.remove(at: index)
-            }
-            // TODO: - 이미 가지고 있던 이미지는 다시 불러오지 않도록 수정
-            self.images = []
-            self.checkedAsset.forEach {
-                self.images.append($0.getAssetThumbnail())
-            }
-            #warning("interacotr에 알려야함")
-//            self.profileData.pictures = self.images
-            self.rightButton.isEnabled = self.images.count > 0
-            completion(self.images)
         })
         alertController.addAction(UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { _ in
             self.picker.sourceType = .photoLibrary
             self.present(self.picker, animated: true, completion: nil)
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
-        }))
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in }))
         self.present(alertController, animated: true, completion: nil)
     }
 
@@ -387,52 +361,41 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
 //    }
 }
 
-// MARK: PHPhotoLibraryChangeObserver
-
-extension ProfileRegisterViewController: PHPhotoLibraryChangeObserver {
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        // 기본 라이브러리 쓰고 있지 않아서 필요 없어 보임
-        getCanAccessImages()
-
+extension ProfileRegisterViewController: UIImageCropperProtocol {
+    public func didCropImage(originalImage: UIImage?, croppedImage: UIImage?) {
+        guard let croppedImage = croppedImage else { return }
+        self.interactor?.uploadImage(.init(image: croppedImage))
+        self.registerProfileImageView.images.append(croppedImage)
     }
 
-}
-// MARK:  ---- PHAsset + Extension ----
-
-extension PHAsset {
-    func getAssetThumbnail() -> UIImage {
-        let manager = PHImageManager.default()
-        let option = PHImageRequestOptions()
-        var thumbnail = UIImage()
-        option.isSynchronous = true
-        manager.requestImage(
-            for: self,
-            targetSize: CGSize(width: self.pixelWidth, height: self.pixelHeight),
-            contentMode: .aspectFit,
-            options: option,
-            resultHandler: {(result, info) -> Void in
-                thumbnail = result ?? UIImage()
-            }
-        )
-        return thumbnail
+    public func didCancel() {
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
 // MARK: EnterUserInfoViewDelegate
 
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
-//    func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
-//
-//        profileData.name = info.name
-//        profileData.address = info.address
-//        profileData.gender = info.gender
-//        profileData.birth = info.birth
-//        profileData.career = info.job
-//    }
-
     func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool) {
         interactor?.didTapUserInfoPageNextButton(userInfo)
         rightButton.isEnabled = allEntered
+    }
+}
+
+// MARK: SelectTagListViewDelegate
+
+extension ProfileRegisterViewController: SelectTagListViewDelegate {
+    func sendKeywords(keyword keywords: [SelectTagListKeywordModel]) {
+        interactor?.selectKeywords(.init(keywords: keywords))
+    }
+}
+
+// MARK: SelectValuesViewDelegate
+
+extension ProfileRegisterViewController: SelectValuesViewDelegate {
+    func sendAnswers(answers: [Answer]) {
+//        profileData.answers = answers
+        rightButton.isEnabled = answers.count == 3
     }
 }
 
@@ -449,15 +412,3 @@ extension ProfileRegisterViewController: UITextFieldDelegate {
     }
 }
 
-extension ProfileRegisterViewController: SelectTagListViewDelegate {
-    func sendKeywords(keyword keywords: [SelectTagListKeywordModel]) {
-        interactor?.selectKeywords(.init(keywords: keywords))
-    }
-}
-
-extension ProfileRegisterViewController: SelectValuesViewDelegate {
-    func sendAnswers(answers: [Answer]) {
-//        profileData.answers = answers
-        rightButton.isEnabled = answers.count == 3
-    }
-}

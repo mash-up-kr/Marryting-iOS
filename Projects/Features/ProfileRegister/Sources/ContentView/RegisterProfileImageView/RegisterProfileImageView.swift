@@ -120,8 +120,4 @@ extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
         delegate?.tapRegisterimageButton(sender)
     }
-    
-    func deleteImage(for image: UIImage) {
-        images = images.filter { $0 != image }
-    }
 }
