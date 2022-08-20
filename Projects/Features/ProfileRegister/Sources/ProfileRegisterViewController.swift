@@ -30,7 +30,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         let scale = UIScreen.main.scale
         return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
     }
-    var firstPageData: UserInfo = UserInfo()
+    var profileData: CreateProfileRequestDTO = CreateProfileRequestDTO()
     
     // MARK: Object lifecycle
     
@@ -135,6 +135,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     
     lazy var selectTagListView: SelectTagListView = {
         let view = SelectTagListView()
+        view.delegate = self
         return view
     }()
     
@@ -293,6 +294,20 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     @objc func pressNextButton(_ sender: UIButton) {
         if pageNum < pageSize {
             pageNum += 1
+            switch pageNum {
+            case 1:
+                rightButton.isEnabled = !(profileData.name.isEmpty &&
+                                 profileData.address.isEmpty &&
+                                 profileData.gender.isEmpty &&
+                                 profileData.birth.isEmpty &&
+                                 profileData.career.isEmpty)
+            case 2:
+                rightButton.isEnabled = profileData.pictures.count > 0
+            case 3:
+                rightButton.isEnabled = profileData.keywords.count == 5
+            default:
+                rightButton.isEnabled = profileData.answers.count == 3 // FIXME: 3개가 아닐 수 있음
+            }
         }
     }
 }
@@ -325,6 +340,8 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
             self.checkedAsset.forEach {
                 self.images.append($0.getAssetThumbnail())
             }
+            self.profileData.pictures = self.images
+            self.rightButton.isEnabled = self.images.count > 0
             completion(self.images)
         })
     }
@@ -371,7 +388,11 @@ extension PHAsset {
 
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
     func sendUserInfo(_ info: UserInfo, allEntered: Bool) {
-        firstPageData = info
+        profileData.name = info.name
+        profileData.address = info.address
+        profileData.gender = info.gender
+        profileData.birth = info.birth
+        profileData.career = info.job
         rightButton.isEnabled = allEntered
     }
 }
@@ -384,6 +405,13 @@ extension ProfileRegisterViewController: UITextFieldDelegate {
             return true
         }
         return false
+    }
+}
+
+extension ProfileRegisterViewController: SelectTagListViewDelegate {
+    func sendKeywords(keyword keywords: [Keyword]) {
+        profileData.keywords = keywords
+        rightButton.isEnabled = keywords.count == 5
     }
 }
 
