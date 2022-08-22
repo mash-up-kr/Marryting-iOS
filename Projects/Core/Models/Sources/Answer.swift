@@ -6,7 +6,7 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public struct Answer: Codable {
+public struct Answer {
     public var questionID: Int
     public var answer: String
 

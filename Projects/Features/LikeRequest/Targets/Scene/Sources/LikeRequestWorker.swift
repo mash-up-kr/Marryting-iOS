@@ -20,23 +20,26 @@ protocol LikeRequestWorkerProtocol {
 
 class LikeRequestWorker: LikeRequestWorkerProtocol {
     
-    let userDataSource: UserDataSoureceProtocol
+    let userLocalDataSource: UserLocalDataSoureceProtocol
     let likeDataSource: LikeDataSourceProtocol
     
     init(
-        userDataSource: UserDataSoureceProtocol = UserDataSourece(),
+        userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece(),
         likeDataSource: LikeDataSourceProtocol = LikeDataSource()
     ) {
-        self.userDataSource = userDataSource
+        self.userLocalDataSource = userLocalDataSource
         self.likeDataSource = likeDataSource
     }
     
     func getMyName() -> String {
-        userDataSource.data?.user.name ?? ""
+        guard let user = userLocalDataSource.read(key: .localUser) else {
+            return ""
+        }
+        return user.name
     }
     
     func requestLike(message: String, receiverProfileId: Int) async throws {
-        let senderProfileId = userDataSource.data?.user.id ?? 0
+        let senderProfileId = userLocalDataSource.read(key: .localUser)?.id ?? 0
         let request = PostLikeRequest(
             body: .init(
                 message: message,

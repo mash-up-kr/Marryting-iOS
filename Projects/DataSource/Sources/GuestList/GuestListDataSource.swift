@@ -22,6 +22,6 @@ public final class GuestListDataSource: GuestListDataSourceProtocol {
     }
     
     public func getGuestList(request: GetGuestListRequest) async throws -> GetGuestListResponse {
-        try await network.send(request)
+        return try await network.send(request)
     }
 }

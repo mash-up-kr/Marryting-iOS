@@ -62,10 +62,6 @@ public protocol Request {
     var body: Body? { get }
 }
 
-public struct Token: Codable {
-    public var token: String
-}
-
 public extension Request {
     var query: QueryItems {
         return [:]
@@ -76,11 +72,10 @@ public extension Request {
     }
     
     private var token: String {
-        guard let data = UserDefaults.standard.data(forKey: "userInfo") else {
+        guard let token = UserDefaults.standard.string(forKey: "token") else {
             return ""
         }
-        let token = try? JSONDecoder().decode(Token.self, from: data)
-        return token?.token ?? ""
+        return token
     }
     
     var body: Body? {
