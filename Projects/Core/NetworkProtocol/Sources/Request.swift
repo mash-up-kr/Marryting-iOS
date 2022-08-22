@@ -76,7 +76,7 @@ public extension Request {
     }
     
     private var token: String {
-        guard let data = UserDefaults.standard.data(forKey: "userInfo") else {
+        guard let data = UserDefaults.standard.data(forKey: "token") else {
             return ""
         }
         let token = try? JSONDecoder().decode(Token.self, from: data)

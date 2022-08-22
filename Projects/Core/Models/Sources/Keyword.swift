@@ -6,7 +6,7 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
-public struct Keyword: Codable {
+public struct Keyword {
     public var id: Int
     public var keyword: String
 

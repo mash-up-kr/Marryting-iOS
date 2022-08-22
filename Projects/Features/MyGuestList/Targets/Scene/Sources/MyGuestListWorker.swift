@@ -20,16 +20,17 @@ protocol MyGuestListWorkerProtocol {
 
 final class MyGuestListWorker: MyGuestListWorkerProtocol {
     private let myGuestListDataSource: MyGuestListDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userDataSource: UserLocalDataSoureceProtocol
 
     init(myGuestListDataSource: MyGuestListDataSourceProtocol = MyGuestListDataSource(),
-         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+         userDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.myGuestListDataSource = myGuestListDataSource
         self.userDataSource = userDataSource
     }
 
     func fetchMyLikeGuests() async throws -> [Guest] {
         do {
+
             let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init())
             guard let myLikeGuestListDTO = dto.data else { return [] }
             let myLikeGuestList = myLikeGuestListDTO.map { Guest($0) }
@@ -41,8 +42,7 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
 
     func fetchMatchingGuests() async throws -> [MatchedGuest] {
         do {
-            let token = userDataSource.data?.token ?? ""
-            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init(token: token))
+            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init())
             guard let matchingGuestListDTO = dto.data else { return [] }
             let matchingGuestList = matchingGuestListDTO.map { MatchedGuest($0) }
             return matchingGuestList

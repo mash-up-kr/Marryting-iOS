@@ -27,25 +27,26 @@ class LoginWorker: LoginWorkerProtocol {
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
     private let testUserDatSource: TestTokenDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userLocalDataSource: UserLocalDataSoureceProtocol
 
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
          testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource(),
-         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+         userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
         self.testUserDatSource = testUserDataSource
-        self.userDataSource = userDataSource
+        self.userLocalDataSource = userLocalDataSource
 
         appleLoginManager.delegate = self
     }
 
     func loginWithoutAppleLogin() async {
-        let testToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyMDA1NzI5fQ.Qa2V4A98Q1lOly_xg1ME-9Uj9AhMkKL4l_6f6fDIxw8"
-        userDataSource.save(DdipUser(self.dummyUser, testToken))
+        let testToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyOTY1NTQ5fQ.wC4PbrFqNgF1fyQJQT-DUn8bpxSUDhdK0nKu0eoOBuQ"
+        userLocalDataSource.save(testToken, key: .token)
+        userLocalDataSource.save(LocalUser.init(id: 1, name: "박재민", gender: .male, career: "안드로이드 개발자", birth: .init(), age: 25, address: "서울시 송파구", pictures: [""], answers: [], keyword: []), key: .localUser)
     }
 
     func appleLogin() {
@@ -72,7 +73,6 @@ extension LoginWorker: AppleLoginManagerDelegate {
             do {
                 #warning("테스트 리퀘스트입니다.")
                 let user = try await login()
-//                userDataSource.save(self.dummyUser)
                 fetchUser?(.success(user))
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))

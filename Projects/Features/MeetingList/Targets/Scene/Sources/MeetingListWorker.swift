@@ -21,12 +21,12 @@ protocol MeetingListWorkerProtocol {
 final class MeetingListWorker: MeetingListWorkerProtocol {
 
     private let meetingListDataSource: MeetingListDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userLocalDataSource: UserLocalDataSoureceProtocol
 
     init(meetingListDataSource: MeetingListDataSourceProtocol = MeetingListDataSource(),
-         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+         userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.meetingListDataSource = meetingListDataSource
-        self.userDataSource = userDataSource
+        self.userLocalDataSource = userLocalDataSource
     }
 
     func fetchMeetings() async throws -> [Meeting] {

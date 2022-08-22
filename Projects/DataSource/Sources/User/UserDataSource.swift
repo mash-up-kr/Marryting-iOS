@@ -7,31 +7,44 @@
 //
 
 import Foundation
-import Models
+import NetworkProtocol
 
-public protocol UserDataSoureceProtocol {
-    var data: DdipUser? { get }
-
-    func save(_ user: DdipUser)
-
-    func removeAll()
+public enum LocalStorageKey: String {
+    case token
+    case localUser
 }
 
-public final class UserDataSourece: UserDataSoureceProtocol {
+public protocol UserLocalDataSoureceProtocol {
+    func read(key: LocalStorageKey) -> LocalUser?
+    func save<T: Codable>(_ data: T, key: LocalStorageKey)
+    func removeAll(key: LocalStorageKey)
+}
 
-    private let key: String = "userInfo"
-
-    public var data: DdipUser? {
-        return UserDefaults.standard.getCodable(for: key)
-    }
+public final class UserLocalDataSourece: UserLocalDataSoureceProtocol {
 
     public init() {}
 
-    public func save(_ user: DdipUser) {
-        UserDefaults.standard.storeCodable(user, key: key)
+    public func read(key: LocalStorageKey) -> LocalUser?  {
+        do {
+            guard let data = UserDefaults.standard.data(forKey: key.rawValue) else {
+                return nil
+            }
+            return try JSONDecoder().decode(LocalUser.self, from: data)
+        } catch let error {
+            print("Error decoding: \(error)")
+            return nil
+        }
+    }
+    public func save<T: Codable>(_ data: T, key: LocalStorageKey) {
+        do {
+            let data = try JSONEncoder().encode(data)
+            UserDefaults.standard.set(data, forKey: key.rawValue)
+        } catch let error {
+            print("Error encoding: \(error)")
+        }
     }
 
-    public func removeAll() {
-        UserDefaults.standard.removeObject(forKey: key)
+    public func removeAll(key: LocalStorageKey) {
+        UserDefaults.standard.removeObject(forKey: key.rawValue)
     }
 }
