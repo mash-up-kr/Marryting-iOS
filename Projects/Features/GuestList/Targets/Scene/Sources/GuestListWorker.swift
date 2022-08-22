@@ -15,7 +15,7 @@ import Models
 import DataSource
 
 protocol GuestListWorkerProtocol {
-    func fetchGuests() async throws -> [Guest]
+    func fetchGuests(weddingID: Int) async throws -> [Guest]
 }
 
 class GuestListWorker: GuestListWorkerProtocol {
@@ -29,18 +29,14 @@ class GuestListWorker: GuestListWorkerProtocol {
         self.userDataSource = userDataSource
     }
     
-    func fetchGuests() async throws -> [Guest] {
+    func fetchGuests(weddingID: Int) async throws -> [Guest] {
         do {
-            let dto = try await guestListDataSource.getGuestList(request: .init())
-            guard let guestListDTO = dto.data else {
-                print("더미")
-                return dummyGuests }
+            let dto = try await guestListDataSource.getGuestList(request: .init(weddingID: weddingID))
+            guard let guestListDTO = dto.data else { return [] }
             let guestList = guestListDTO.map { self.convertToGuest($0) }
             return guestList
-        }
-        catch {
-            print("더미 nil")
-            return dummyGuests
+        } catch {
+            return []
         }
     }
 
@@ -49,6 +45,7 @@ class GuestListWorker: GuestListWorkerProtocol {
     }
 }
 
+#if DEBUG
 private extension GuestListWorker {
     var dummyGuests: [Guest] {
         [
@@ -164,3 +161,4 @@ private extension GuestListWorker {
         ]
     }
 }
+#endif

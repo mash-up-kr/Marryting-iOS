@@ -14,6 +14,7 @@ import DataSource
 import Models
 import UIKit
 import AuthenticationServices
+import NetworkProtocol
 
 protocol LoginWorkerProtocol {
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
@@ -44,8 +45,8 @@ class LoginWorker: LoginWorkerProtocol {
     }
 
     func loginWithoutAppleLogin() async {
-        let testToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyOTY1NTQ5fQ.wC4PbrFqNgF1fyQJQT-DUn8bpxSUDhdK0nKu0eoOBuQ"
-        userLocalDataSource.save(testToken, key: .token)
+        let testToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyOTY1NTQ5fQ.wC4PbrFqNgF1fyQJQT-DUn8bpxSUDhdK0nKu0eoOBuQ"
+        userLocalDataSource.saveToken(testToken, key: .token)
         userLocalDataSource.save(LocalUser.init(id: 1, name: "박재민", gender: .male, career: "안드로이드 개발자", birth: .init(), age: 25, address: "서울시 송파구", pictures: [""], answers: [], keyword: []), key: .localUser)
     }
 

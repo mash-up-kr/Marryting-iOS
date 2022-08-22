@@ -15,6 +15,7 @@ public enum LocalStorageKey: String {
 }
 
 public protocol UserLocalDataSoureceProtocol {
+    func saveToken(_ token: String, key: LocalStorageKey)
     func read(key: LocalStorageKey) -> LocalUser?
     func save<T: Codable>(_ data: T, key: LocalStorageKey)
     func removeAll(key: LocalStorageKey)
@@ -24,6 +25,10 @@ public final class UserLocalDataSourece: UserLocalDataSoureceProtocol {
 
     public init() {}
 
+    public func saveToken(_ token: String, key: LocalStorageKey) {
+        UserDefaults.standard.set(token, forKey: key.rawValue)
+    }
+    
     public func read(key: LocalStorageKey) -> LocalUser?  {
         do {
             guard let data = UserDefaults.standard.data(forKey: key.rawValue) else {
