@@ -85,6 +85,12 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         return v
     }()
 
+    private lazy var emptyView: EmptyView = {
+        let v = EmptyView()
+        v.isHidden = true
+        return v
+    }()
+
     // MARK: Store Properties
 
     enum DisplayType {
@@ -137,6 +143,7 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
         self.view.backgroundColor = Pallete.Light.background.color
         self.collectionView.backgroundColor = Pallete.Light.background.color
         self.view.addSubviews(self.navigationView, self.myGuestMenuView, self.collectionView)
+        self.view.addSubview(self.emptyView)
         self.navigationView.addSubview(self.backButton)
 
         self.navigationView.snp.makeConstraints { make in
@@ -157,16 +164,27 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.view.snp.bottom)
         }
+        self.emptyView.snp.makeConstraints { make in
+            make.edges.equalTo(self.collectionView)
+        }
     }
     
     // MARK: Display Logic
 
     func displayMyLikeGuests(viewModel: MyGuestList.FetchMyLikeGuests.ViewModel) {
         self.myLikeGuestViewModels = viewModel.myLikeGuestCellViewModels
+        DispatchQueue.main.async { [weak self] in
+            self?.emptyView.isHidden = !viewModel.myLikeGuestCellViewModels.isEmpty
+            self?.emptyView.imageView.image = .create(.ic_my_like_list_empty_view)
+        }
     }
 
     func displayMatchingGuests(viewModel: MyGuestList.FetchMatchingGuests.ViewModel) {
         self.matchingViewModels = viewModel.matchingGuestCellViewModels
+        DispatchQueue.main.async { [weak self] in
+            self?.emptyView.isHidden = !viewModel.matchingGuestCellViewModels.isEmpty
+            self?.emptyView.imageView.image = .create(.ic_matching_list_empty_view)
+        }
     }
 
     @objc func didTapBackButton() {
