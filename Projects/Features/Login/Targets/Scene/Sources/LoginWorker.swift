@@ -18,10 +18,8 @@ import NetworkProtocol
 
 protocol LoginWorkerProtocol {
     var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
-
+    
     func appleLogin()
-
-    func loginWithoutAppleLogin() async
 }
 
 class LoginWorker: LoginWorkerProtocol {
@@ -44,12 +42,6 @@ class LoginWorker: LoginWorkerProtocol {
         appleLoginManager.delegate = self
     }
 
-    func loginWithoutAppleLogin() async {
-        let testToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyOTY1NTQ5fQ.wC4PbrFqNgF1fyQJQT-DUn8bpxSUDhdK0nKu0eoOBuQ"
-        userLocalDataSource.saveToken(testToken, key: .token)
-        userLocalDataSource.save(LocalUser.init(id: 1, name: "박재민", gender: .male, career: "안드로이드 개발자", birth: .init(), age: 25, address: "서울시 송파구", pictures: [""], answers: [], keyword: []), key: .localUser)
-    }
-
     func appleLogin() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
@@ -65,35 +57,49 @@ class LoginWorker: LoginWorkerProtocol {
 
 extension LoginWorker: AppleLoginManagerDelegate {
 
-    func appleLoginFail() {
-        fetchUser?(.failure(.appleLoginError))
+    func appleLoginFail(_ error: Login.LoginError) {
+        print(error)
+        fetchUser?(.failure(error))
     }
 
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
         Task {
             do {
-                #warning("테스트 리퀘스트입니다.")
-                let user = try await login()
-                fetchUser?(.success(user))
+                let result = try await login(token: user.userIdentifier)
+                fetchUser?(result)
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))
             }
         }
     }
 
-    private func login() async throws -> User {
+    private func login(token: String) async throws -> (Result<User, Login.LoginError>) {
         do {
-            let dto = try await loginDataSource.login(request: .init())
-            // TODO: dto 명세후 매핑 로직 작성
+            print("login ", token)
+            let dto = try await loginDataSource.login(
+                request: .init(
+                    body: .init(oauthType: "APPLE", thirdPartyToken: token)
+                )
+            )
+            guard let data = dto.data else {
+                return .failure(Login.LoginError.noUser)
+            }
 
-            return dummyUser
+            let token = data.accessToken
+            userLocalDataSource.saveToken(token, key: .token)
+            return .success(convertToUser(data))
         } catch {
-            return dummyUser
+            return .failure(Login.LoginError.noUser)
         }
+    }
+
+    private func convertToUser(_ body: PostLoginResponseBody) -> User {
+        let profile = body.profile
+        return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
     }
 }
 
-
+#if DEBUG
 private extension LoginWorker {
     var dummyUser: User {
         .init(
@@ -110,3 +116,4 @@ private extension LoginWorker {
         )
     }
 }
+#endif

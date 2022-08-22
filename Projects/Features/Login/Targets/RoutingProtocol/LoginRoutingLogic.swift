@@ -10,4 +10,5 @@ public protocol LoginRoutingLogic {
     func removeFromParent()
     func routeToGuestListViewController()
     func routeToMeetingListViewController()
+    func routeToProfileRegisterViewController()
 }

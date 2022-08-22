@@ -14,6 +14,7 @@ import UIKit
 import LoginRoutingProtocol
 import GuestListScene
 import MeetingListScene
+import ProfileRegister
 
 public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     public weak var viewController: UIViewController?
@@ -34,6 +35,11 @@ public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     public func routeToMeetingListViewController() {
 
         let destinationVC = MeetingListViewController()
+        viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
+    }
+
+    public func routeToProfileRegisterViewController() {
+        let destinationVC = ProfileRegisterViewController()
         viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
     }
 }

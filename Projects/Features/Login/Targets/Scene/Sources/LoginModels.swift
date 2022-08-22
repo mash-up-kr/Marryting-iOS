@@ -24,8 +24,9 @@ enum Login {
     }
 
     enum LoginError: Error {
-
+        case parsing
         case appleLoginError
         case loginDataSourceError
+        case noUser
     }
 }
