@@ -41,7 +41,7 @@ class GuestListWorker: GuestListWorkerProtocol {
     }
 
     private func convertToGuest(_ dto: GetGuestResponseBody) -> Guest {
-        return .init(user: .init(id: dto.profileID, name: dto.name, gender: .male, career: dto.career, birth: .init(), age: dto.age, address: dto.address, pictures: dto.profileURL, answers: [], keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword)}), isLiked: false)
+        return .init(user: .init(id: dto.profileID, name: dto.name, gender: .male, career: dto.career, birth: .init(), age: dto.age, address: dto.address, pictures: dto.profileURL, answers: dto.answers.map { .init(questionID: $0.questionId, answer: $0.answer) }, keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword)}), isLiked: false)
     }
 }
 
