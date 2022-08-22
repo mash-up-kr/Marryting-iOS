@@ -14,6 +14,7 @@ import UIKit
 import LoginRoutingProtocol
 import GuestListScene
 import MeetingListScene
+import ProfileRegister
 
 public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     public weak var viewController: UIViewController?
@@ -34,6 +35,16 @@ public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     public func routeToMeetingListViewController() {
 
         let destinationVC = MeetingListViewController()
+        viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
+    }
+
+    public func routeToProfileRegisterViewController() {
+        guard let dataStore = dataStore else {
+            return
+        }
+
+        let destinationVC = ProfileRegisterViewController()
+        // ✅ 이거 가져가세용 : dataStore.thirdPartyToken
         viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
     }
 }

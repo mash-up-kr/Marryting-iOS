@@ -15,6 +15,7 @@ import UIKit
 protocol LoginPresentationLogic {
     func presentLogin()
     func failLogin()
+    func presentSignUp()
 }
 
 class LoginPresenter: LoginPresentationLogic {
@@ -26,5 +27,9 @@ class LoginPresenter: LoginPresentationLogic {
     
     func failLogin() {
         viewController?.displayLoginFail()
+    }
+
+    func presentSignUp() {
+        viewController?.displaySignUp()
     }
 }
