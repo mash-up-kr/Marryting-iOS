@@ -39,7 +39,12 @@ public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
     }
 
     public func routeToProfileRegisterViewController() {
+        guard let dataStore = dataStore else {
+            return
+        }
+
         let destinationVC = ProfileRegisterViewController()
+        // ✅ 이거 가져가세용 : dataStore.thirdPartyToken
         viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
     }
 }

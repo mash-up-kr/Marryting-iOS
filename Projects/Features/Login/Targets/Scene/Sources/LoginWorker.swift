@@ -17,18 +17,19 @@ import AuthenticationServices
 import NetworkProtocol
 
 protocol LoginWorkerProtocol {
-    var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
+    var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)? { get set }
     
     func appleLogin()
 }
 
 class LoginWorker: LoginWorkerProtocol {
+
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
     private let testUserDatSource: TestTokenDataSourceProtocol
     private let userLocalDataSource: UserLocalDataSoureceProtocol
 
-    var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
+    var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
@@ -72,7 +73,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
         }
     }
 
-    private func login(token: String) async throws -> (Result<User, Login.LoginError>) {
+    private func login(token: String) async throws -> (Result<Login.FetchUser.Response, Login.LoginError>) {
         do {
             let dto = try await loginDataSource.login(
                 request: .init(
@@ -80,14 +81,14 @@ extension LoginWorker: AppleLoginManagerDelegate {
                 )
             )
             guard let data = dto.data else {
-                return .failure(Login.LoginError.noUser)
+                return .failure(Login.LoginError.noUser(token))
             }
 
             let token = data.accessToken
             userLocalDataSource.saveToken(token, key: .token)
-            return .success(convertToUser(data))
+            return .success(.init(user: convertToUser(data)))
         } catch {
-            return .failure(Login.LoginError.noUser)
+            return .failure(Login.LoginError.noUser(token))
         }
     }
 
