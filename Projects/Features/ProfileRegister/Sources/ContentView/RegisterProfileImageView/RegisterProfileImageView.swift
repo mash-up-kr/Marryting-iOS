@@ -12,6 +12,7 @@ import SnapKit
 
 protocol RegisterProfileImageViewDelegate: AnyObject {
     func tapRegisterimageButton(_ sender: UIButton)
+    func imageRemoved(images: [UIImage])
 }
 final class RegisterProfileImageView: UIView {
     weak var delegate: RegisterProfileImageViewDelegate?
@@ -27,7 +28,7 @@ final class RegisterProfileImageView: UIView {
     
     let itemSize: CGSize = {
         let width = UIScreen.main.bounds.width - 80
-        return CGSize(width: width, height: (width * 3 / 4) + 56)
+        return CGSize(width: width, height: (width * 4 / 3) + 56)
     }()
     
     let itemSpacing = 16.0
@@ -125,5 +126,6 @@ extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
     
     func deleteImage(for image: UIImage) {
         images = images.filter { $0 != image }
+        delegate?.imageRemoved(images: images)
     }
 }

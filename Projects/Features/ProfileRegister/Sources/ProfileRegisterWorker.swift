@@ -12,47 +12,66 @@
 
 import DataSource
 import Models
+import UIKit
+
+//private var selectedKeywords: [Keyword] = []
+//private var selectedImages: [UIImage] = []
+//private var userInfo: UserInfo = .init()
+//private var selectedAnswers: [Answer] = []
 
 protocol ProfileRegisterWorkerProtocol {
     func fetchKeywords() async throws -> [Keyword]
-    func fetchQuestions() async throws -> [Answer]
+    func fetchQuestions() async throws -> [Question]
+    func updateImage(image: UIImage) async throws -> String
     func registerProfile() async throws -> Void
 }
 
 class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     private let keywordListDataSource: KeywordListDataSourceProtocol
+    private let questiondDataSource: QuestiondDataSourceProtocol
+    private let imageDataSource: ImageDataSourceProtocol
+//    private let signUpDataSource: SignUpDataSourceProtocol
 
     init(
-        _ keywordListDataSource: KeywordListDataSourceProtocol = KeywordListDataSource()
+        keywordListDataSource: KeywordListDataSourceProtocol = KeywordListDataSource(),
+        questiondDataSource: QuestiondDataSourceProtocol = QuestionDataSource(),
+        imageDataSource: ImageDataSourceProtocol = ImageDataSource()
     ) {
         self.keywordListDataSource = keywordListDataSource
+        self.questiondDataSource = questiondDataSource
+        self.imageDataSource = imageDataSource
     }
 
     func fetchKeywords() async throws -> [Keyword] {
-        print("fetchKeywords")
         let keywords = try await self.keywordListDataSource.getKeywords(request: GetKeywordsRequest())
         guard let data = keywords.data else { return [] }
         let keyowrds = data.map { Keyword(id: $0.keywordID, keyword: $0.keyword) }
         return keyowrds
     }
 
-    func fetchQuestions() async throws -> [Answer] {
-        return []
+    func fetchQuestions() async throws -> [Question] {
+        let questions = try await self.questiondDataSource.getQuestions(request: GetQuestionsRequest())
+        guard let data = questions.data else { return [] }
+        return data.map { Question(questionId: $0.questionID, question: $0.question, answer1: $0.answer1, answer2: $0.answer2) }
+    }
+    
+    func updateImage(image: UIImage) async throws -> String {
+        guard let imageData = image.pngData() else { return "" }
+        var body = Data()
+        let boundaryPrefix = "--Boundary\r\n"
+        body.append(boundaryPrefix.data(using: .utf8)!)
+        body.append("Content-Disposition: form-data; name=\"images[]\"; filename=\"\(Date())\"\r\n".data(using: .utf8)!)
+        body.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
+        body.append(imageData)
+        body.append("\r\n".data(using: .utf8)!)
+        body.append(boundaryPrefix.data(using: .utf8)!)
+        let success = try await self.imageDataSource.postImage(request: PostImageRequest(imageData: imageData))
+        return success.data
     }
 
     func registerProfile() async throws -> Void {
+//        let userInfo = try await self.signUpDataSource.postSignUp(request: PostSignUpRequest(body: <#T##PostSignUpRequestBody#>))
         return
     }
 
-}
-
-extension ProfileRegisterWorker {
-    var dummyKeywords: [Keyword] {
-        [
-//            .init(keyword: "매혹적인", keywordId: <#T##String#>)
-//            .init(keyword: 1, keywordId: "매혹적인"),
-//            .init(keywordID: 2, keyword: "열정적인"),
-//            .init(keywordID: 3, keyword: "귀여운"),
-        ]
-    }
 }

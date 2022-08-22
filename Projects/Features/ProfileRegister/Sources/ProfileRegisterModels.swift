@@ -12,6 +12,7 @@
 
 import UIKit
 import Models
+import DesignSystem
 
 enum ProfileRegister
 {
@@ -29,12 +30,7 @@ enum ProfileRegister
 
     enum FetchFirstPage {
         struct Response {
-            var name: String
-            var gender: Gender
-            var birth: String
-            var address: String
-            var career: String
-            var pageNumber: Int
+            var userInfo: UserInfo
         }
 
         struct ViewModel {
@@ -96,13 +92,14 @@ enum ProfileRegister
         struct Request {
             var keywords: [SelectTagListKeywordModel]
         }
-        struct Response {
-            var keywords: [Keyword]
-        }
-        struct ViewModel {
-            var selectedKeywords: [SelectTagListKeywordModel]
+    }
+    
+    enum SelectAnswers {
+        struct Request {
+            var answers: [AnswerViewModel]
         }
     }
+    
     enum DidTapKeywordPageNext {
         struct Response {
             
@@ -115,11 +112,13 @@ enum ProfileRegister
 
     enum FetchQuestionPage {
         struct Response {
-
+            var questions: [Question]
+            var pageNumber: Int
         }
 
         struct ViewModel {
-
+            var questionViewModels: [QuestionViewModel]
+            var pageNumber: Int
         }
     }
 
@@ -148,40 +147,18 @@ enum ProfileRegister
     }
 }
 
-//struct CreateProfileRequestDTO {
-//    var name: String
-//    var gender: String
-//    var birth: String
-//    var address: String
-//    var career: String
-//    var answers: [Answer]
-//    var keywords: [Keyword]
-//    var pictures: [UIImage]
-//
-//    init(name: String = "", gender: String = "", birth: String = "", address: String = "", career: String = "", answers: [Answer] = [], keywords: [Keyword] = [], pictures: [UIImage] = []) {
-//        self.name = name
-//        self.gender = gender
-//        self.birth = birth
-//        self.address = address
-//        self.career = career
-//        self.answers = answers
-//        self.keywords = keywords
-//        self.pictures = pictures
-//    }
-//}
-//
-//struct UserInfo {
-//    var name: String
-//    var gender: String
-//    var birth: String
-//    var address: String
-//    var career: String
-//    
-//    init(name: String = "", gender: String = "", birth: String = "", address: String = "", career: String = "") {
-//        self.name = name
-//        self.gender = gender
-//        self.birth = birth
-//        self.address = address
-//        self.career = career
-//    }
-//}
+struct UserInfo {
+    var name: String
+    var gender: String
+    var birth: String
+    var address: String
+    var career: String
+    
+    init(name: String = "", gender: String = "", birth: String = "", address: String = "", career: String = "") {
+        self.name = name
+        self.gender = gender
+        self.birth = birth
+        self.address = address
+        self.career = career
+    }
+}

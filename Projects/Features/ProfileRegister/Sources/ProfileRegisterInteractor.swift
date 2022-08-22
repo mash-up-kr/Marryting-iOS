@@ -15,10 +15,12 @@ import Models
 
 protocol ProfileRegisterBusinessLogic {
     func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request)
+    func selectAnswers(_ answers: ProfileRegister.SelectAnswers.Request)
     func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request)
     func fetchPrevPage()
     func fetchNextPage()
     func uploadImage(_ image: ProfileRegister.UploadImage.Request)
+    func imageRemoved(_ images: [UIImage])
     func registerProfile()
 }
 
@@ -37,21 +39,55 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     private var selectedKeywords: [Keyword] = []
     private var selectedImages: [UIImage] = []
-    private var userInfo: ProfileRegister.FetchFirstPage.Response?
+    private var selectedImageUrls: [String] = []
+    private var userInfo: UserInfo = .init()
+    private var selectedAnswers: [Answer] = []
 
     init(worker: ProfileRegisterWorker = ProfileRegisterWorker()) {
         self.worker = worker
     }
-
-    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request) {
-        selectedKeywords.append(contentsOf: keywords.keywords.map {
-            Keyword(id: $0.keywordID, keyword: $0.keyword)
-        })
-
-        presenter?.presentSelectedKeyword(response: .init(keywords: selectedKeywords))
-
+    
+    // Input Flow
+    
+    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request) {
+        self.userInfo = UserInfo(name: info.name, gender: info.gender, birth: info.birth, address: info.address, career: info.career)
     }
 
+    func uploadImage(_ image: ProfileRegister.UploadImage.Request) {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let urlString = try await worker.updateImage(image: image.image)
+                selectedImageUrls.append(urlString)
+                selectedImages.append(image.image)
+                presenter?.presentUploadImage(response: .init(image: image.image))
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
+    func imageRemoved(_ images: [UIImage]) {
+        selectedImages = images
+    }
+    
+    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request) {
+        selectedKeywords = keywords.keywords.map {
+            Keyword(id: $0.keywordID, keyword: $0.keyword)
+        }
+    }
+
+    func selectAnswers(_ answers: ProfileRegister.SelectAnswers.Request) {
+        selectedAnswers = answers.answers.map {
+            Answer(questionID: $0.questionId, answer: $0.answer)
+        }
+    }
+    
+    // Paging Flow
+    
     func fetchPrevPage() {
         if pageNumber > 1 {
             pageNumber -= 1
@@ -74,20 +110,8 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         }
     }
 
-    func uploadImage(_ image: ProfileRegister.UploadImage.Request) {
-        guard let worker = worker else {
-            return
-        }
-        selectedImages.append(image.image)
-        presenter?.presentUploadImage(response: .init(image: image.image))
-    }
-
     private func fetchFirstPage() {
-        guard let userInfo = userInfo else {
-            return
-        }
-
-        presenter?.presentFirstPage(response: userInfo)
+        presenter?.presentFirstPage()
     }
 
     private func fetchImages() {
@@ -113,12 +137,18 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         }
     }
 
-    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request) {
-        
-    }
-
     func fetchQuestions() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let questions = try await worker.fetchQuestions()
+                presenter?.presentQuestionPage(response: .init(questions: questions, pageNumber: pageNumber))
+            } catch {
 
+            }
+        }
     }
 
     func registerProfile() {

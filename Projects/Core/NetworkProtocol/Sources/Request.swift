@@ -57,9 +57,15 @@ public protocol Request {
     /// http header
     /// default [:]
     var header: HTTPHeader { get }
+    /// Content-Type in header
+    /// default "application/json"
+    var contentType: String { get }
     /// post body
     /// default nil
     var body: Body? { get }
+    /// multipart data
+    /// dafulat nil
+    var multipartBody: Data? { get }
 }
 
 public struct Token: Codable {
@@ -75,6 +81,10 @@ public extension Request {
         return ["Authorization": "Bearer" + " " + token]
     }
     
+    var contentType: String {
+        return "application/json"
+    }
+    
     private var token: String {
         guard let data = UserDefaults.standard.data(forKey: "userInfo") else {
             return ""
@@ -86,9 +96,12 @@ public extension Request {
     var body: Body? {
         return nil
     }
+    
+    var multipartBody: Data? {
+        return nil
+    }
 }
 
 public extension Request {
-    var baseURL: String { "http://marrytingserver-env-2.eba-qvmbsp3m.ap-northeast-2.elasticbeanstalk.com"
-    }
+    var baseURL: String { "http://marrytingserver-env-2.eba-qvmbsp3m.ap-northeast-2.elasticbeanstalk.com" }
 }

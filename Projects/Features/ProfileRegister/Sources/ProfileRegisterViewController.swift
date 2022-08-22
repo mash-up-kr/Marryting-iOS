@@ -16,11 +16,10 @@ import DesignSystem
 import Photos
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
-    func displayFirstPage(viewModel: ProfileRegister.FetchFirstPage.ViewModel)
+    func displayFirstPage()
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel)
     func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel)
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel)
-    func displaySelectedKeyword(viewModel: ProfileRegister.SelectKeywords.ViewModel)
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel)
 }
 
@@ -236,29 +235,33 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     }
 
     private func updateContentView(_ pageNumber: Int) {
-        UIView.transition(with: contentView, duration: 0.33, options: .transitionCrossDissolve, animations: {
-            self.contentView.subviews.forEach { $0.removeFromSuperview() }
-            self.contentView.addSubview(self.contentViewArr[pageNumber-1])
-            self.contentViewArr[pageNumber-1].snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        }, completion: nil)
+        DispatchQueue.main.async {
+            UIView.transition(with: self.contentView, duration: 0.33, options: .transitionCrossDissolve, animations: {
+                self.contentView.subviews.forEach { $0.removeFromSuperview() }
+                self.contentView.addSubview(self.contentViewArr[pageNumber-1])
+                self.contentViewArr[pageNumber-1].snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+            }, completion: nil)
+        }
     }
 
     private func updateTopView(_ pageNumber: Int) {
-        let titleText = titleStringList[pageNumber - 1]
-        let titlehighlightText = titlehighlightStringList[pageNumber - 1]
-        let attributedStr = NSMutableAttributedString(string: titleText)
-        attributedStr.addAttribute(.foregroundColor,
-                                   value: UIColor.white,
-                                   range: (titleText as NSString).range(of: titleText))
-        attributedStr.addAttribute(.foregroundColor,
-                                   value: Pallete.Dark.subGreen.color ?? UIColor.white,
-                                   range: (titleText as NSString).range(of: titlehighlightText))
+        DispatchQueue.main.async {
+            let titleText = self.titleStringList[pageNumber - 1]
+            let titlehighlightText = self.titlehighlightStringList[pageNumber - 1]
+            let attributedStr = NSMutableAttributedString(string: titleText)
+            attributedStr.addAttribute(.foregroundColor,
+                                       value: UIColor.white,
+                                       range: (titleText as NSString).range(of: titleText))
+            attributedStr.addAttribute(.foregroundColor,
+                                       value: Pallete.Dark.subGreen.color ?? UIColor.white,
+                                       range: (titleText as NSString).range(of: titlehighlightText))
 
-        titleLabel.attributedText = attributedStr
-        subTitleLabel.text = subTitleStringList[pageNumber - 1]
-        pageControl.currentPage = pageNumber - 1
+            self.titleLabel.attributedText = attributedStr
+            self.subTitleLabel.text = self.subTitleStringList[pageNumber - 1]
+            self.pageControl.currentPage = pageNumber - 1
+        }
     }
 
     // MARK: Action
@@ -272,41 +275,44 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         interactor?.fetchNextPage()
     }
 
-    func displayFirstPage(viewModel: ProfileRegister.FetchFirstPage.ViewModel) {
-        let viewModel = viewModel.enterUserInfoViewModel
-        enterUserInfoView.viewModel = viewModel
-        leftButton.isHidden = false
-        rightButton.isEnabled = !(viewModel.name.isEmpty &&
-                                  viewModel.address.isEmpty &&
-                                  viewModel.gender.isEmpty &&
-                                  viewModel.birth.isEmpty &&
-                                  viewModel.career.isEmpty)
+    func displayFirstPage() {
+        DispatchQueue.main.async {
+            self.leftButton.isHidden = false
+            self.rightButton.isEnabled = false
+        }
     }
 
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel) {
-        updatePage(viewModel.pageNumber)
-//        rightButton.isEnabled = viewModel.images.count > 0
+        DispatchQueue.main.async {
+            self.updatePage(viewModel.pageNumber)
+            self.rightButton.isEnabled = false
+        }
     }
 
     func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel) {
-        registerProfileImageView.images.append(viewModel.image)
-        rightButton.isEnabled = registerProfileImageView.images.count > 0
+        DispatchQueue.main.async {
+            self.registerProfileImageView.images.append(viewModel.image)
+            self.rightButton.isEnabled = self.registerProfileImageView.images.count > 1
+        }
     }
 
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
-        updatePage(viewModel.pageNumber)
-        selectTagListView.viewModel = .init(
-            selectedKeywordList: viewModel.selectedKeywords.map { .init(keywordID: $0.id, keyword: $0.keyword)},
-            keywordList: viewModel.keywords.map { .init(keywordID: $0.id, keyword: $0.keyword) }
-        )
-        rightButton.isEnabled = viewModel.keywords.count == 5
+        DispatchQueue.main.async {
+            self.updatePage(viewModel.pageNumber)
+            self.selectTagListView.viewModel = .init(
+                selectedKeywordList: viewModel.selectedKeywords.map { .init(keywordID: $0.id, keyword: $0.keyword)},
+                keywordList: viewModel.keywords.map { .init(keywordID: $0.id, keyword: $0.keyword) }
+            )
+            self.rightButton.isEnabled = false
+        }
     }
-
-    func displaySelectedKeyword(viewModel: ProfileRegister.SelectKeywords.ViewModel) {
-        selectTagListView.checkedKeywords = viewModel.selectedKeywords
-    }
+    
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel) {
-
+        DispatchQueue.main.async {
+            self.updatePage(viewModel.pageNumber)
+            self.selectValuesView.question = viewModel.questionViewModels
+            self.rightButton.isEnabled = false
+        }
     }
 
 }
@@ -340,6 +346,10 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
         }))
         self.present(alertController, animated: true, completion: nil)
     }
+    
+    func imageRemoved(images: [UIImage]) {
+        self.interactor?.imageRemoved(images)
+    }
 }
 
 extension ProfileRegisterViewController: UIImageCropperProtocol {
@@ -365,14 +375,15 @@ extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
 extension ProfileRegisterViewController: SelectTagListViewDelegate {
     func sendKeywords(keyword keywords: [SelectTagListKeywordModel]) {
         interactor?.selectKeywords(.init(keywords: keywords))
+        rightButton.isEnabled = keywords.count == 5
     }
 }
 
 // MARK: SelectValuesViewDelegate
 
 extension ProfileRegisterViewController: SelectValuesViewDelegate {
-    func sendAnswers(answers: [Answer]) {
-//        profileData.answers = answers
+    func sendAnswers(answers: [AnswerViewModel]) {
+        interactor?.selectAnswers(.init(answers: answers))
         rightButton.isEnabled = answers.count == 3
     }
 }

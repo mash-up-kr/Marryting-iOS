@@ -7,18 +7,16 @@
 //
 
 import UIKit
-import DesignSystem
 
 public protocol AnswerSelectionContainerDelegate: AnyObject {
-    func answerSelectionBoxDidTap(_ selection: Answer)
+    func answerSelectionBoxDidTap(_ selection: AnswerViewModel)
 }
-
 
 public class AnswerSelectionContainer: UIView {
 
     public weak var delegate: AnswerSelectionContainerDelegate?
 
-    public var question: Question = Question.dummy {
+    public var question: QuestionViewModel = .init(question: "", answer1: "", answer2: "", questionId: 0) {
         didSet {
             titleLabel.text = question.question
             
@@ -50,14 +48,14 @@ public class AnswerSelectionContainer: UIView {
 
     private var selection: AnswerSelection = .none {
         didSet {
-            let answer: Answer
+            let answer: AnswerViewModel
             switch selection {
             case .first:
-                answer = Answer(answer: question.answer1, questionId: question.questionId)
+                answer = AnswerViewModel(answer: question.answer1, questionId: question.questionId)
                 selectionBox1.isSelect = true
                 selectionBox2.isSelect = false
             case .second:
-                answer = Answer(answer: question.answer2, questionId: question.questionId)
+                answer = AnswerViewModel(answer: question.answer2, questionId: question.questionId)
                 selectionBox1.isSelect = false
                 selectionBox2.isSelect = true
             default:

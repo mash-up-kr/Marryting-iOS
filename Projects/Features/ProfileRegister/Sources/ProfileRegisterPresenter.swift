@@ -14,11 +14,10 @@ import UIKit
 
 protocol ProfileRegisterPresentationLogic
 {
-    func presentFirstPage(response: ProfileRegister.FetchFirstPage.Response)
+    func presentFirstPage()
     func presentImagePage(response: ProfileRegister.FetchImagePage.Response)
     func presentUploadImage(response: ProfileRegister.UploadImage.Response)
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
-    func presentSelectedKeyword(response: ProfileRegister.SelectKeywords.Response)
     func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
 }
 
@@ -27,18 +26,8 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 
     weak var viewController: ProfileRegisterDisplayLogic?
 
-    func presentFirstPage(response: ProfileRegister.FetchFirstPage.Response) {
-        viewController?.displayFirstPage(
-            viewModel: .init(
-                enterUserInfoViewModel: .init(
-                    name: response.name,
-                    gender: response.gender == .male ? "남성" : "여성",
-                    birth: response.birth,
-                    address: response.address,
-                    career: response.career),
-                pageNumber: response.pageNumber
-            )
-        )
+    func presentFirstPage() {
+        viewController?.displayFirstPage()
     }
     
     func presentImagePage(response: ProfileRegister.FetchImagePage.Response) {
@@ -60,16 +49,15 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
         )
     }
 
-    func presentSelectedKeyword(response: ProfileRegister.SelectKeywords.Response) {
-        viewController?.displaySelectedKeyword(
-            viewModel: .init(selectedKeywords: response.keywords.map {
-                .init(keywordID: $0.id, keyword: $0.keyword)
-            })
-        )
-    }
-
     func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response) {
-        
+        viewController?.displayQuestionPage(
+            viewModel: .init(
+                questionViewModels: response.questions.map {
+                    .init(question: $0.question, answer1: $0.answer1, answer2: $0.answer2, questionId: $0.questionId)
+                },
+                pageNumber: response.pageNumber
+            )
+        )
     }
 
 }
