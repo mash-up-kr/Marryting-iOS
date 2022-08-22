@@ -31,15 +31,13 @@ final class MeetingListWorker: MeetingListWorkerProtocol {
 
     func fetchMeetings() async throws -> [Meeting] {
         do {
-            let token = userDataSource.data?.token ?? ""
-            let dto = try await meetingListDataSource.getMeetingList(request: .init(token: token))
-            print(dto)
-            guard let meetingListDTO = dto.data else { return dummyMeetings }
+            let dto = try await meetingListDataSource.getMeetingList(request: .init())
+            guard let meetingListDTO = dto.data else { return [] }
             let meetingList = meetingListDTO.map(Meeting.init)
             return meetingList
         }
         catch {
-            return dummyMeetings
+            return []
         }
     }
 }
@@ -54,17 +52,5 @@ extension Meeting {
             brideName: dto.brideName,
             date: dateFormatter.date(from: dto.weddingDate) ?? Date()
         )
-    }
-}
-
-fileprivate extension MeetingListWorker {
-    var dummyMeetings: [Meeting] {
-        [
-            .init(id: 1, groomName: "김신랑", brideName: "박신부", date: Date()),
-            .init(id: 2, groomName: "현빈", brideName: "손예진", date: Date()),
-            .init(id: 3, groomName: "신랑", brideName: "신부", date: Date()),
-            .init(id: 4, groomName: "현빈", brideName: "손예진", date: Date()),
-            .init(id: 5, groomName: "현빈", brideName: "손예진", date: Date()),
-        ]
     }
 }

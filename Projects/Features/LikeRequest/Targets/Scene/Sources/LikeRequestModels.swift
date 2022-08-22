@@ -25,15 +25,19 @@ enum LikeRequest
     }
     
     enum RequestLike {
+        struct Request {
+            var message: String
+        }
+        
         struct Response {
             struct Error {
-                
+                var message: String
             }
         }
         
         struct ViewModel {
             struct Error {
-                
+                var message: String
             }
         }
     }

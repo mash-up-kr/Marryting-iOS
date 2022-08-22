@@ -32,6 +32,7 @@ public final class Network: NetworkProtocol {
                           let httpResponse = response as? HTTPURLResponse,
                           (200..<400).contains(httpResponse.statusCode)
                     else {
+                        print(response as! HTTPURLResponse)
                         continuation.resume(with: .failure(NetworkError.badServerResponse))
                         return
                     }
@@ -71,11 +72,15 @@ private final class RequestFactory<T: Request> {
         }
         var urlRequest = URLRequest(url: url)
         if let body = request.body {
-            urlRequest.httpBody = try JSONSerialization.data(withJSONObject: body, options: [])
+            let jsonEncoder = JSONEncoder()
+            jsonEncoder.outputFormatting = .withoutEscapingSlashes
+            let data = try jsonEncoder.encode(body)
+            urlRequest.httpBody = data
         }
         request.header.forEach {
             urlRequest.setValue($0.value, forHTTPHeaderField: $0.key)
         }
+        urlRequest.addValue("application/json", forHTTPHeaderField:"Content-Type")
         urlRequest.httpMethod = request.method.rawValue
         return urlRequest
     }

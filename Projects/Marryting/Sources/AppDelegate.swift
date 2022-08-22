@@ -6,6 +6,8 @@ import UIKit
 import ProfileRegister
 import GuestDetailScene
 import MyGuestListScene
+import AuthCodeScene
+import LikeRequestCompleteScene
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
-        navigationController.pushViewController(ProfileRegisterViewController(), animated: true)
+        navigationController.pushViewController(LoginViewController(), animated: true)
         return true
     }
 

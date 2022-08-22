@@ -17,13 +17,6 @@ public struct GetGuestListRequest: Request {
     public var endpoint: String = "/api/v1/wedding/guests"
     
     public var method: HTTPMethod = .get
-    
-    public var header: HTTPHeader = [:]
 
-    public init(token: String) {
-        header[authorizationKey] = "Bearer" + " " + token
-    }
-
-    private let authorizationKey: String = "Authorization"
-
+    public init() {}
 }

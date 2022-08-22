@@ -2,8 +2,7 @@ import ProjectDescription
 
 let dependencies = Dependencies(
     carthage: [
-        .github(path: "airbnb/lottie-ios", requirement: .exact("3.4.0")),
-//        .github(path: "mikaoj/BSImagePicker", requirement: .exact("3.3.0"))
+        .github(path: "airbnb/lottie-ios", requirement: .exact("3.4.0"))
     ],
     swiftPackageManager: [
         .remote(

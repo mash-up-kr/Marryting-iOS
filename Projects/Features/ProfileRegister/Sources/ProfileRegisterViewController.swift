@@ -22,14 +22,10 @@ protocol ProfileRegisterDisplayLogic: AnyObject {
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
     var interactor: ProfileRegisterBusinessLogic?
     var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
-    var images: [UIImage] = []
-    var checkedAsset = [PHAsset]()
-    var fetchResult = PHFetchResult<PHAsset>()
-    var thumbnailSize: CGSize {
-        let scale = UIScreen.main.scale
-        return CGSize(width: (UIScreen.main.bounds.width / 3) * scale, height: 100 * scale)
-    }
     var profileData: CreateProfileRequestDTO = CreateProfileRequestDTO()
+    
+    private let picker = UIImagePickerController()
+    private let cropper = UIImageCropper(cropRatio: 3/4)
     
     // MARK: Object lifecycle
     
@@ -166,6 +162,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        cropper.delegate = self
     }
     
     // MARK: Configure UI
@@ -173,7 +170,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private func configureUI() {
         configureUIObjectsLayout()
         changePage()
-        PHPhotoLibrary.shared().register(self)
     }
     
     private func configureUIObjectsLayout() {
@@ -239,7 +235,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         contentView.subviews.forEach({ $0.removeFromSuperview() })
         
         contentView.addSubview(contentViewArr[pageNum - 1])
-
+        
         contentViewArr[pageNum - 1].snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -297,10 +293,10 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
             switch pageNum {
             case 1:
                 rightButton.isEnabled = !(profileData.name.isEmpty &&
-                                 profileData.address.isEmpty &&
-                                 profileData.gender.isEmpty &&
-                                 profileData.birth.isEmpty &&
-                                 profileData.career.isEmpty)
+                                          profileData.address.isEmpty &&
+                                          profileData.gender.isEmpty &&
+                                          profileData.birth.isEmpty &&
+                                          profileData.career.isEmpty)
             case 2:
                 rightButton.isEnabled = profileData.pictures.count > 0
             case 3:
@@ -313,8 +309,32 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 }
 
 extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
-    func tapRegisterimageButton(_ sender: UIButton, completion: @escaping ([UIImage]) -> Void) {
+    func tapRegisterimageButton(_ sender: UIButton) {
+        cropper.picker = picker
+        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        alertController.popoverPresentationController?.sourceView = self.view
+        alertController.popoverPresentationController?.sourceRect = CGRect(origin: self.view.center, size: CGSize.zero)
         
+        cropper.cancelButtonText = "다시 선택"
+        
+        
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
+            if granted {
+                DispatchQueue.main.async {
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { _ in
+                        self.picker.sourceType = .camera
+                        self.present(self.picker, animated: true, completion: nil)
+                    })
+                }
+            }
+        })
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { _ in
+            self.picker.sourceType = .photoLibrary
+            self.present(self.picker, animated: true, completion: nil)
+        })
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+        }))
+        self.present(alertController, animated: true, completion: nil)
     }
 
 //    func tapRegisterimageButton(_ sender: UIButton, completion: @escaping ([UIImage]) -> Void) {
@@ -351,42 +371,18 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
 //    }
 }
 
-extension ProfileRegisterViewController: PHPhotoLibraryChangeObserver {
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        // 기본 라이브러리 쓰고 있지 않아서 필요 없어 보임
-        getCanAccessImages()
+extension ProfileRegisterViewController: UIImageCropperProtocol {
+    public func didCropImage(originalImage: UIImage?, croppedImage: UIImage?) {
+        guard let croppedImage = croppedImage else { return }
+        self.profileData.pictures.append(croppedImage)
+        self.registerProfileImageView.images.append(croppedImage)
+        self.rightButton.isEnabled = self.profileData.pictures.count > 0
     }
-    
-    private func getCanAccessImages() {
-        let requestOptions = PHImageRequestOptions()
-        requestOptions.isSynchronous = true
-        
-        let fetchOptions = PHFetchOptions()
-        self.fetchResult = PHAsset.fetchAssets(with: fetchOptions)
-        self.fetchResult.enumerateObjects { [weak self] (asset, _, _) in
-            self?.checkedAsset.append(asset)
-            // 이미지 불러와서 images에 저장
-        }
-    }
-}
 
-// ---- PHAsset + Extension ----
-extension PHAsset {
-    func getAssetThumbnail() -> UIImage {
-        let manager = PHImageManager.default()
-        let option = PHImageRequestOptions()
-        var thumbnail = UIImage()
-        option.isSynchronous = true
-        manager.requestImage(
-            for: self,
-            targetSize: CGSize(width: self.pixelWidth, height: self.pixelHeight),
-            contentMode: .aspectFit,
-            options: option,
-            resultHandler: {(result, info) -> Void in
-                thumbnail = result ?? UIImage()
-            }
-        )
-        return thumbnail
+    //optional
+    public func didCancel() {
+        picker.dismiss(animated: true, completion: nil)
+        print("did cancel")
     }
 }
 
