@@ -39,8 +39,6 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
                 delegate?.appleLoginFail(.parsing)
                 return
             }
-
-            print(userIdentifier)
             delegate?.appleLoginSuccess(
                 AppleUser(userIdentifier: userIdentifier)
             )

@@ -58,7 +58,6 @@ class LoginWorker: LoginWorkerProtocol {
 extension LoginWorker: AppleLoginManagerDelegate {
 
     func appleLoginFail(_ error: Login.LoginError) {
-        print(error)
         fetchUser?(.failure(error))
     }
 
@@ -75,7 +74,6 @@ extension LoginWorker: AppleLoginManagerDelegate {
 
     private func login(token: String) async throws -> (Result<User, Login.LoginError>) {
         do {
-            print("login ", token)
             let dto = try await loginDataSource.login(
                 request: .init(
                     body: .init(oauthType: "APPLE", thirdPartyToken: token)
