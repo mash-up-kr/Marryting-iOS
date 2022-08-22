@@ -35,13 +35,7 @@ final class SelectTagListView: UIView {
             }
         }
     }
-    var checkedKeywords: [SelectTagListKeywordModel] = [] {
-        didSet {
-            DispatchQueue.main.async { [weak self] in
-                self?.collectionView.reloadData()
-            }
-        }
-    }
+    var checkedKeywords: [SelectTagListKeywordModel] = []
 
     private var tagList: [SelectTagListKeywordModel] = []
 
@@ -60,6 +54,8 @@ final class SelectTagListView: UIView {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
+    
+    // 빨 보 노 파 초
     
     // MARK: CustomView Init
     override init(frame: CGRect) {
@@ -112,12 +108,28 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
             fatalError()
         }
         
-        var isClicked = cell.isClicked
-        isClicked.toggle()
+        let isClicked = cell.isClicked
         
-        if isClicked && checkedKeywords.count >= 5 { return }
+        if !isClicked && checkedKeywords.count >= 5 { return }
         
-        cell.isClicked = isClicked
+        if isClicked {
+            cell.unclick()
+        } else {
+            switch checkedKeywords.count {
+                case 0:
+                    cell.click(backgroundColor: Pallete.Light.main300.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.main300.color)
+                case 1:
+                    cell.click(backgroundColor: Pallete.Light.subPurple.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subPurple.color)
+                case 2:
+                    cell.click(backgroundColor: Pallete.Light.subYellow.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subYellow.color)
+                case 3:
+                    cell.click(backgroundColor: Pallete.Light.subBlue.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subBlue.color)
+                case 4:
+                    cell.click(backgroundColor: Pallete.Light.subGreen.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subGreen.color)
+                default:
+                    break
+            }
+        }
         
         let keyword = tagList[indexPath.row]
         if cell.isClicked {

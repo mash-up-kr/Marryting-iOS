@@ -14,24 +14,31 @@ public enum AnswerSelection {
     case second
 }
 
-public struct Answer {
+public struct AnswerViewModel {
     public var answer: String
-    public var questionId: String
+    public var questionId: Int
     
-    static let dummy: Answer = .init(answer: "", questionId: "")
+    public init(answer: String, questionId: Int) {
+        self.answer = answer
+        self.questionId = questionId
+    }
 }
 
-public struct Question {
+public struct QuestionViewModel {
     public var question: String
     public var answer1: String
     public var answer2: String
-    public var questionId: String
-
-    static let dummy: Question = .init(question: "", answer1: "", answer2: "", questionId: "")
+    public var questionId: Int
     
-    public static let tempDummy: [Question] = [
-        Question(question: "싸울 때", answer1: "생각 정리하고 이야기", answer2: "그 자리에서 바로 이야기", questionId: "0"),
-        Question(question: "연락할 때", answer1: "별로 중요하지 않아요", answer2: "자주 할수록 좋아요", questionId: "1"),
-        Question(question: "데이트할 때", answer1: "계획적인 데이트", answer2:  "데이트할 때", questionId: "2")
-    ]
+    public init(
+        question: String,
+        answer1: String,
+        answer2: String,
+        questionId: Int
+    ) {
+        self.question = question
+        self.answer1 = answer1
+        self.answer2 = answer2
+        self.questionId = questionId
+    }
 }

@@ -10,8 +10,9 @@ import UIKit
 import DesignSystem
 
 protocol SelectValuesCellDelegate: AnyObject {
-    func sendAnswer(answer: Answer)
+    func sendAnswer(answer: AnswerViewModel)
 }
+
 class SelectValuesCell: UITableViewCell {
     weak var delegate: SelectValuesCellDelegate?
     
@@ -68,13 +69,13 @@ class SelectValuesCell: UITableViewCell {
         }
     }
     
-    func setQuestion(_ question: Question) {
+    func setQuestion(_ question: QuestionViewModel) {
         container.question = question
     }
 }
 
 extension SelectValuesCell: AnswerSelectionContainerDelegate {
-    func answerSelectionBoxDidTap(_ selection: Answer) {
+    func answerSelectionBoxDidTap(_ selection: AnswerViewModel) {
         delegate?.sendAnswer(answer: selection)
     }
 }
