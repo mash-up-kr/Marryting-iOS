@@ -27,6 +27,6 @@ enum Login {
         case parsing
         case appleLoginError
         case loginDataSourceError
-        case noUser
+        case noUser(String)
     }
 }

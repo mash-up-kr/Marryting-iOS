@@ -23,6 +23,8 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
     var presenter: LoginPresentationLogic?
     var worker: LoginWorkerProtocol?
 
+    var thirdPartyToken: String?
+
     init(worker: LoginWorkerProtocol = LoginWorker()) {
         self.worker = worker
     }
@@ -34,7 +36,8 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
                 self?.presenter?.presentLogin()
             case .failure(let error):
                 switch error {
-                case .noUser:
+                case .noUser(let token):
+                    self?.thirdPartyToken = token
                     self?.presenter?.presentSignUp()
                 default:
                     self?.presenter?.failLogin()
