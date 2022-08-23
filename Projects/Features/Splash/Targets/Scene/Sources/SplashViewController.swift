@@ -63,11 +63,6 @@ public final class SplashViewController: UIViewController, SplashDisplayLogic {
         return v
     }()
 
-    lazy var animationView: AnimationView = {
-        let v = AnimationView(name: "walking", bundle: .module)
-        v.play()
-        return v
-    }()
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -78,7 +73,6 @@ public final class SplashViewController: UIViewController, SplashDisplayLogic {
     
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.main300.color
-        self.view.addSubview(self.animationView)
         self.view.addSubview(self.titleLabel)
 
         self.titleLabel.snp.makeConstraints { make in
