@@ -2,7 +2,8 @@ import ProjectDescription
 
 let dependencies = Dependencies(
     carthage: [
-        .github(path: "airbnb/lottie-ios", requirement: .exact("3.4.0"))
+        .github(path: "airbnb/lottie-ios", requirement: .exact("3.4.0")),
+        .github(path: "TimOliver/TOCropViewController", requirement: .exact("2.5.2"))
     ],
     swiftPackageManager: [
         .remote(
