@@ -35,23 +35,27 @@ public final class SplashRouter: SplashRoutingLogic, SplashDataPassing {
 
     public func routeToLoginViewController() {
         let loginViewController = LoginViewController()
+        let navigationController = UINavigationController(rootViewController: loginViewController)
+        navigationController.isNavigationBarHidden = true
         UIView.transition(
             with: self.window!,
             duration: 0.2,
             options: .transitionCrossDissolve,
             animations: {
-                self.window?.rootViewController = loginViewController
+                self.window?.rootViewController = navigationController
             }, completion: nil)
     }
 
     public func routeToMeetingListViewController() {
         let meetingListViewController = MeetingListViewController()
+        let navigationController = UINavigationController(rootViewController: meetingListViewController)
+        navigationController.isNavigationBarHidden = true
         UIView.transition(
             with: self.window!,
             duration: 0.2,
             options: .transitionCrossDissolve,
             animations: {
-                self.window?.rootViewController = meetingListViewController
+                self.window?.rootViewController = navigationController
             }, completion: nil)
     }
 }
