@@ -93,6 +93,10 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
     public override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
+    }
+
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         interactor?.fetchMeetings()
     }
     

@@ -86,13 +86,19 @@ extension LoginWorker: AppleLoginManagerDelegate {
 
             let token = data.accessToken
             userLocalDataSource.saveToken(token, key: .token)
-            return .success(.init(user: convertToUser(data)))
+            userLocalDataSource.save(self.convertToLocalUser(data), key: .localUser)
+            return .success(.init(user: self.convertToUser(data)))
         } catch {
             return .failure(Login.LoginError.noUser(token))
         }
     }
 
     private func convertToUser(_ body: PostLoginResponseBody) -> User {
+        let profile = body.profile
+        return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
+    }
+
+    private func convertToLocalUser(_ body: PostLoginResponseBody) -> LocalUser {
         let profile = body.profile
         return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
     }

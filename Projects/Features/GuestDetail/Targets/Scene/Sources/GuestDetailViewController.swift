@@ -1,6 +1,6 @@
 //
 //  GuestDetailViewController.swift
-//  
+//
 //
 //  Created by Woody on 2022/07/20.
 //  Copyright (c) 2022 ___ORGANIZATIONNAME___. All rights reserved.
@@ -36,21 +36,21 @@ struct GuestDetailViewModel {
 public final class GuestDetailViewController: UIViewController, GuestDetailDisplayLogic {
     var interactor: GuestDetailBusinessLogic?
     public var router: (GuestDetailRoutingLogic & GuestDetailDataPassing)?
-    
+
     // MARK: Object lifecycle
-    
+
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
-    
+
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     // MARK: Setup
-    
+
     private func setup() {
         let viewController = self
         let interactor = GuestDetailInteractor()
@@ -76,6 +76,18 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         $0.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(backButtonDidTap)))
         return $0
     }(UIImageView())
+
+    private lazy var changeMeetingButton: UIButton = {
+        let v = UIButton(type: .system)
+        v.setTitleColor(Pallete.Light.grey500.color, for: .normal)
+        v.setTitle("결혼식 변경", for: .normal)
+        v.layer.cornerRadius = 8
+        v.layer.borderWidth = 1
+        v.layer.borderColor = Pallete.Light.grey100.color?.cgColor
+        v.isHidden = true
+        v.addTarget(self, action: #selector(changeMeetingButtonDidTap), for: .touchUpInside)
+        return v
+    }()
 
     private let scrollView: UIScrollView = {
         return $0
@@ -288,6 +300,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.contentView.addSubviews(self.keywordContainerView, self.whoIAmContainerView)
         self.scrollView.addSubview(self.contentView)
         self.navigationView.addSubview(self.backButton)
+        self.navigationView.addSubview(self.changeMeetingButton)
         self.topHeaderStackView.addArrangedSubview(self.profileStackView)
         self.profileStackView.addArrangedSubview(self.nameLabel)
         self.profileStackView.addArrangedSubview(self.ageLabel)
@@ -306,6 +319,12 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.backButton.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview().inset(20)
+        }
+        self.changeMeetingButton.snp.makeConstraints { make in
+            make.centerY.equalTo(self.backButton)
+            make.trailing.equalToSuperview().inset(20)
+            make.width.equalTo(82)
+            make.height.equalTo(27)
         }
         self.scrollView.snp.makeConstraints { make in
             make.leading.trailing.bottom.equalToSuperview()
@@ -368,6 +387,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.topHeaderStackView.subviews.forEach { $0.removeFromSuperview() }
         self.topHeaderStackView.addArrangedSubviews(self.helloLabel, self.profileStackView)
         self.likeButton.isHidden = true
+        self.changeMeetingButton.isHidden = false
     }
 
     // MARK: Display Logic
@@ -427,6 +447,12 @@ extension GuestDetailViewController {
                 self.likeButton.transform = CGAffineTransform.identity
             }
         )
+    }
+
+    @objc
+    func changeMeetingButtonDidTap() {
+        print("changeMeetingButtonDidTap")
+        router?.routeToMeetingListScene()
     }
 }
 

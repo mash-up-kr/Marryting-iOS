@@ -37,4 +37,7 @@ public final class GuestDetailRouter: GuestDetailRoutingLogic, GuestDetailDataPa
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 
+    public func routeToMeetingListScene() {
+        viewController?.navigationController?.popToRootViewController(animated: true)
+    }
 }

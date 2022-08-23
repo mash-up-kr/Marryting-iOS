@@ -33,9 +33,9 @@ final class SplashInteractor: SplashBusinessLogic, SplashDataStore {
 
         if worker.judgeIsUserLocallyExisted() &&
             worker.judgeIsTokenLocallyExisted() {
-            presenter?.presentLogin()
-        } else {
             presenter?.presentMeetingList()
+        } else {
+            presenter?.presentLogin()
         }
 
     }

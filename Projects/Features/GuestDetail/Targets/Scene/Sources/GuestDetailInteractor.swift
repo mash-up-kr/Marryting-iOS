@@ -31,46 +31,17 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
 
     func fetchGuest() {
         guard let selectedGuest = targetGuest else {
-            // TODO: 에러처리
-            presenter?.presentGuest(response: .init(guest: dummyGuest))
+            // 마이 페이지 일경우
+            guard let worker = worker else {
+                return
+            }
+
+            let user = worker.fetchUser()
+            presenter?.presentGuest(response: .init(guest: .init(user: user, isLiked: false)))
+            
             return
         }
 
         presenter?.presentGuest(response: .init(guest: selectedGuest))
-    }
-}
-
-private extension GuestDetailInteractor {
-    var dummyGuest: Guest {
-        .init(
-            user: .init(
-                id: 1,
-                name: "박건우",
-                gender: .male,
-                career: "IT회사 개발자",
-                birth: .init(),
-                age: 21,
-                address: "서울시 금천구",
-                pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
-                           "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                answers: [
-                    .init(questionID: 1, answer: "생각을 정리하고 이야기"),
-                    .init(questionID: 2, answer: "자주 할수록 좋아요"),
-                    .init(questionID: 3, answer: "계획적인 데이트")
-                ],
-                keyword: [
-                    .init(id: 1, keyword: "활동적인"),
-                    .init(id: 2, keyword: "유머있는"),
-                    .init(id: 3, keyword: "논리적인"),
-                    .init(id: 4, keyword: "애교있는"),
-                    .init(id: 5, keyword: "낙천적인")
-                ]
-            ),
-            isLiked: false
-        )
     }
 }

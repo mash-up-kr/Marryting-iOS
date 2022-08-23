@@ -15,83 +15,26 @@ import Models
 import DataSource
 
 protocol GuestDetailWorkerProtocol {
-    //    func fetchGuest(_ id: Int) async throws -> Guest
+    func fetchUser() -> User
 }
 
 final class GuestDetailWorker: GuestDetailWorkerProtocol {
-    //    private let guestDetailDataSource: GuestDetailDataSourceProtocol
-    //    private let userDataSource: UserDataSoureceProtocol
-    //
-    //    init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
-    //         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
-    //        self.guestDetailDataSource = guestDetailDataSource
-    //        self.userDataSource = userDataSource
-    //    }
-    //
-    //    func fetchGuest(_ id: Int) async throws -> Guest {
-    //        do {
-    //            let dto = try await guestDetailDataSource.getGuestDetail(request: .init(profileID: id))
-    //            guard let data = dto.data else { return dummyGuest }
-    //            return data.map(Guest.init)
-    //        } catch {
-    //
-    //        }
-    //    }
+    private let guestDetailDataSource: GuestDetailDataSourceProtocol
+    private let userLocalDataSourece: UserLocalDataSoureceProtocol
 
-}
-
-extension Guest {
-    public init(_ dto: GetGuestDetailResponseBody?) {
-        guard let dto = dto else {
-            fatalError()
-        }
-        let user = User(
-            id: dto.profileID,
-            name: dto.profileName,
-            gender: .male,
-            career: dto.career,
-            birth: .init(),
-            age: dto.age,
-            address: dto.address,
-            pictures: dto.pictures,
-            answers: dto.answers.map { .init(questionID: $0.questionID, answer: $0.answer) },
-            keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
-        )
-        self.init(user: user, isLiked: false)
+    init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
+         userLocalDataSourece: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
+        self.guestDetailDataSource = guestDetailDataSource
+        self.userLocalDataSourece = userLocalDataSourece
     }
-}
 
-extension GuestDetailWorker {
-    var dummyGuest: Guest {
-        .init(
-            user: .init(
-                id: 1,
-                name: "박건우",
-                gender: .male,
-                career: "IT회사 개발자",
-                birth: .init(),
-                age: 21,
-                address: "서울시 금천구",
-                pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
-                           "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
-                           "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
-                answers: [
-                    .init(questionID: 1, answer: "생각을 정리하고 이야기"),
-                    .init(questionID: 2, answer: "자주 할수록 좋아요"),
-                    .init(questionID: 3, answer: "계획적인 데이트")
-                ],
-                keyword: [
-                    .init(id: 1, keyword: "활동적인"),
-                    .init(id: 2, keyword: "유머있는"),
-                    .init(id: 3, keyword: "논리적인"),
-                    .init(id: 4, keyword: "애교있는"),
-                    .init(id: 5, keyword: "낙천적인")
-                ]
-            ),
-            isLiked: false
-        )
+    func fetchUser() -> User {
+        userLocalDataSourece.read(key: .localUser).map { [weak self] localUser in
+            return self!.convertToUser(localUser)
+        }!
+    }
+
+    func convertToUser(_ user: LocalUser) -> User {
+        return .init(id: user.id, name: user.name, gender: user.gender == .male ? .male : .female, career: user.career, birth: user.birth, age: user.age, address: user.address, pictures: user.pictures, answers: user.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: user.keyword.map { .init(id: $0.id, keyword: $0.keyword)})
     }
 }
