@@ -25,6 +25,7 @@ let project = Project.make(
         .project(target: "MyGuestListScene", path: "../MyGuestList"),
         .project(target: "MeetingListScene", path: "../MeetingList"),
         .project(target: "ProfileRegisterCompleteScene", path: "../ProfileRegisterComplete"),
+        .project(target: "SplashScene", path: "../Splash"),
       ]
     ),
     Target(

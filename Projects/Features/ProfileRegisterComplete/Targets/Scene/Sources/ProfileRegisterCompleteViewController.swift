@@ -54,9 +54,12 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
 
     // MARK: UI
 
-    lazy var animationView: AnimationView = {
-        let v = AnimationView(name: "complete", bundle: .module)
-        v.play()
+    lazy var imageView: UIImageView = {
+        let v = UIImageView(asset: .nice_completed)
+        return v
+    }()
+    lazy var animationView: UIImageView = {
+        let v = UIImageView()
         return v
     }()
 
@@ -120,15 +123,21 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
     }
     
     private func setUI() {
-
         view.backgroundColor = .white
 
+        view.addSubview(imageView)
         view.addSubview(animationView)
         view.addSubview(completeMessageLabel)
         view.addSubview(completeSubMessageLabel)
         view.addSubview(completeSubMessage2StackView)
         view.addSubview(gotoMeetingListSceneButton)
         completeSubMessage2StackView.addArrangedSubviews(completeSubMessage2Label, cloverImageView)
+
+        imageView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(20)
+            make.leading.trailing.equalToSuperview().inset(10)
+            make.height.equalTo(imageView.snp.width)
+        }
         animationView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
@@ -153,6 +162,9 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
             make.bottom.equalToSuperview().inset(40)
             make.centerX.equalToSuperview()
         }
+        
+        let i = UIImage.gifImageWithName("goodLuckGIF")
+        animationView.image = i
     }
 
     // MARK: Display Logic
