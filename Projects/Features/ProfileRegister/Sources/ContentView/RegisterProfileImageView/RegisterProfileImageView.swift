@@ -25,7 +25,7 @@ final class RegisterProfileImageView: UIView {
     
     let itemSize: CGSize = {
         let width = UIScreen.main.bounds.width - 80
-        return CGSize(width: width, height: (width * 3 / 4) + 56)
+        return CGSize(width: width, height: (width * 4 / 3) + 56)
     }()
     
     let itemSpacing = 16.0
