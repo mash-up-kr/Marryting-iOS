@@ -58,6 +58,7 @@ public enum Assets: String {
     case ic_matching_list_empty_view
     case ic_my_like_list_empty_view
     case good_luck
+    case ic_report
     case nice_completed
     
     public var image: UIImage? {
