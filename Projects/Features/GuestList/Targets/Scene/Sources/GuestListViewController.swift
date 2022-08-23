@@ -111,6 +111,15 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         v.shouldSwipeView = { _, _, _ in true }
         return v
     }()
+
+    lazy var reportButton: UIButton = {
+        let v = UIButton(type: .system)
+        v.isHidden = true
+        v.tintColor = Pallete.Light.grey400.color
+        v.setImage(.create(.ic_report), for: .normal)
+        v.addTarget(self, action: #selector(reportButtonDidTap), for: .touchUpInside)
+        return v
+    }()
     
     var guestCardView: GuestCardView? {
         if self.guestCardViewModels.isEmpty { return nil }
@@ -184,6 +193,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.firstTitleLabel)
         self.view.addSubview(self.secondTitleLabel)
         self.view.addSubview(self.guestSwipeableView)
+        self.view.addSubview(self.reportButton)
         self.navigationView.addSubview(self.logoImageView)
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
@@ -222,6 +232,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.trailing.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()
         }
+        self.reportButton.snp.makeConstraints { make in
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide).inset(10)
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(24)
+        }
     }
     
     // MARK: Display Logic
@@ -237,7 +252,24 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
                 make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
                 make.bottom.equalToSuperview().inset(84)
             }
+            self.reportButton.isHidden = false
         }
+    }
+
+    @objc
+    private func reportButtonDidTap() {
+        let alertViewController = UIAlertController(
+            title: "신고하기",
+            message: "다음 하객의 사진이나 설명이 불쾌해요.",
+            preferredStyle: .alert)
+        alertViewController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alertViewController.addAction(UIAlertAction(title: "신고할래요", style: .default, handler: { [weak self] _ in
+            let reportAlertViewController = UIAlertController(title: "신고됐어요.", message: nil, preferredStyle: .alert)
+            reportAlertViewController.addAction(UIAlertAction(title: "확인", style: .default))
+            self?.present(reportAlertViewController, animated: true)
+        }))
+
+        self.present(alertViewController, animated: true)
     }
 }
 
