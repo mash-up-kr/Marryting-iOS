@@ -16,15 +16,19 @@ import DataSource
 
 protocol GuestDetailWorkerProtocol {
     func fetchUser() -> User
+    func fetchMeetings() async throws -> [Meeting]
 }
 
 final class GuestDetailWorker: GuestDetailWorkerProtocol {
     private let guestDetailDataSource: GuestDetailDataSourceProtocol
+    private let meetingListDataSource: MeetingListDataSourceProtocol
     private let userLocalDataSourece: UserLocalDataSoureceProtocol
 
     init(guestDetailDataSource: GuestDetailDataSourceProtocol = GuestDetailDataSource(),
+         meetingListDataSource: MeetingListDataSourceProtocol = MeetingListDataSource(),
          userLocalDataSourece: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.guestDetailDataSource = guestDetailDataSource
+        self.meetingListDataSource = meetingListDataSource
         self.userLocalDataSourece = userLocalDataSourece
     }
 
@@ -36,5 +40,28 @@ final class GuestDetailWorker: GuestDetailWorkerProtocol {
 
     func convertToUser(_ user: LocalUser) -> User {
         return .init(id: user.id, name: user.name, gender: user.gender == .male ? .male : .female, career: user.career, birth: user.birth, age: user.age, address: user.address, pictures: user.pictures, answers: user.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: user.keyword.map { .init(id: $0.id, keyword: $0.keyword)})
+    }
+
+    func fetchMeetings() async throws -> [Meeting] {
+        do {
+            let dto = try await meetingListDataSource.getMeetingList(request: .init())
+            guard let meetingListDTO = dto.data else { return [] }
+            let meetingList = meetingListDTO.map { convertToMeeting($0) }
+            return meetingList
+        }
+        catch {
+            return []
+        }
+    }
+
+    private func convertToMeeting(_ dto: GetMeetingListDTO) -> Meeting {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        return .init(
+            id: dto.weddingID,
+            groomName: dto.groomName,
+            brideName: dto.brideName,
+            date: dateFormatter.date(from: dto.weddingDate) ?? Date()
+        )
     }
 }

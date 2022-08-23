@@ -37,11 +37,25 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
             }
 
             let user = worker.fetchUser()
+            self.fetchChangeMeetingButton()
             presenter?.presentGuest(response: .init(guest: .init(user: user, isLiked: false)))
-            
             return
         }
 
         presenter?.presentGuest(response: .init(guest: selectedGuest))
+    }
+
+    private func fetchChangeMeetingButton() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let meetings = try await worker.fetchMeetings()
+                presenter?.presentMeetingChangeButton(response: .init(meetings: meetings))
+            } catch {
+
+            }
+        }
     }
 }

@@ -26,4 +26,13 @@ enum GuestDetail {
             var guest: GuestDetailViewModel
         }
     }
+
+    enum GetMeetingCount {
+        struct Response {
+            var meetings: [Meeting]
+        }
+        struct ViewModel {
+            var isHidden: Bool
+        }
+    }
 }

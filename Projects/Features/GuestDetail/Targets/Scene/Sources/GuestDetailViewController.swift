@@ -20,6 +20,7 @@ import SnapKit
 
 protocol GuestDetailDisplayLogic: AnyObject {
     func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel)
+    func displayChangeMeetingButton(viewModel: GuestDetail.GetMeetingCount.ViewModel)
 }
 
 struct GuestDetailViewModel {
@@ -394,6 +395,13 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
 
     func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel) {
         self.viewModel = viewModel.guest
+    }
+
+    func displayChangeMeetingButton(viewModel: GuestDetail.GetMeetingCount.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.changeMeetingButton.isHidden = viewModel.isHidden
+        }
+
     }
 }
 
