@@ -24,23 +24,28 @@ protocol ProfileRegisterWorkerProtocol {
     func fetchKeywords() async throws -> [Keyword]
     func fetchQuestions() async throws -> [Question]
     func updateImage(image: UIImage) async throws -> String
-    func registerProfile() async throws -> Void
+    func registerProfile(oauthToken: String, selectedImageUrls: [String], userInfo: UserInfo, selectedAnswers: [Answer], selectedKeywords: [Keyword], thirdPartyToken: String) async throws -> Void
 }
 
 class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     private let keywordListDataSource: KeywordListDataSourceProtocol
     private let questiondDataSource: QuestiondDataSourceProtocol
     private let imageDataSource: ImageDataSourceProtocol
-//    private let signUpDataSource: SignUpDataSourceProtocol
+    private let signUpDataSource: SignUpDataSourceProtocol
+    private let userDataSource: UserDataSoureceProtocol
 
     init(
         keywordListDataSource: KeywordListDataSourceProtocol = KeywordListDataSource(),
         questiondDataSource: QuestiondDataSourceProtocol = QuestionDataSource(),
-        imageDataSource: ImageDataSourceProtocol = ImageDataSource()
+        imageDataSource: ImageDataSourceProtocol = ImageDataSource(),
+        signUpDataSource: SignUpDataSourceProtocol = SignUpDataSource(),
+        userDataSource: UserDataSoureceProtocol = UserDataSourece()
     ) {
         self.keywordListDataSource = keywordListDataSource
         self.questiondDataSource = questiondDataSource
         self.imageDataSource = imageDataSource
+        self.signUpDataSource = signUpDataSource
+        self.userDataSource = userDataSource
     }
 
     func fetchKeywords() async throws -> [Keyword] {
@@ -62,8 +67,31 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
         return imageURL.data
     }
 
-    func registerProfile() async throws -> Void {
-//        let userInfo = try await self.signUpDataSource.postSignUp(request: PostSignUpRequest(body: <#T##PostSignUpRequestBody#>))
+    func registerProfile(oauthToken: String, selectedImageUrls: [String], userInfo: UserInfo, selectedAnswers: [Answer], selectedKeywords: [Keyword], thirdPartyToken: String) async throws -> Void {
+
+
+        let user = try await signUpDataSource.postSignUp(
+            request: .init(
+                body: .init(
+                    oauthType: oauthToken,
+                    profile: .init(address: userInfo.address,
+                                   answers: selectedAnswers.map { .init(answer: $0.answer, questionId: $0.questionID) },
+                                   birth: convertDateFormat(birth: userInfo.birth),
+                                   career: userInfo.career,
+                                   gender: userInfo.gender == "남성" ? "MALE" : "FEMALE",
+                                   keywords: selectedKeywords.map { .init(keyword: $0.keyword, keywordId: $0.id) },
+                                   name: userInfo.name,
+                                   pictures: selectedImageUrls),
+                    thrdPartyToken: thirdPartyToken
+                )
+            )
+        )
         return
     }
+    
+    private func convertDateFormat(birth: String) -> String {
+        Formatter.dateFormatter.string(from: Formatter.koreanDateFormatter.date(from: birth)!)
+    }
+
+//    func convertToLocalUser(user: PostSignUpResponseBody) -> Local
 }

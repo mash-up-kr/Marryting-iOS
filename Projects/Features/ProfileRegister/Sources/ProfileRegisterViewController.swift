@@ -268,7 +268,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     // MARK: Action
     
     @objc func pressPrevButton(_ sender: UIButton) {
-        interactor?.fetchNextPage()
+        interactor?.fetchPrevPage()
 
     }
     
@@ -278,7 +278,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 
     func displayFirstPage() {
         DispatchQueue.main.async {
-            self.leftButton.isHidden = false
+            self.leftButton.isHidden = true
             self.rightButton.isEnabled = false
         }
     }
@@ -287,6 +287,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         DispatchQueue.main.async {
             self.updatePage(viewModel.pageNumber)
             self.rightButton.isEnabled = false
+            self.leftButton.isHidden = false
         }
     }
 
