@@ -14,18 +14,71 @@ import UIKit
 
 protocol ProfileRegisterPresentationLogic
 {
-  func presentSomething(response: ProfileRegister.Something.Response)
+    func presentLocalUserInfoPage(response: ProfileRegister.FetchFirstPage.Response)
+    func presentImagePage(response: ProfileRegister.FetchImagePage.Response)
+    func presentUploadImage(response: ProfileRegister.UploadImage.Response)
+    func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
+    func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
+    func presentDeleteImage(response: ProfileRegister.DeleteImage.Response)
+    func presentRegisterProfileComplete(response: ProfileRegister.RegisterProfile.ViewModel)
 }
 
 class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 {
-  weak var viewController: ProfileRegisterDisplayLogic?
-  
-  // MARK: Do something
-  
-  func presentSomething(response: ProfileRegister.Something.Response)
-  {
-    let viewModel = ProfileRegister.Something.ViewModel()
-    viewController?.displaySomething(viewModel: viewModel)
-  }
+    weak var viewController: ProfileRegisterDisplayLogic?
+
+    func presentLocalUserInfoPage(response: ProfileRegister.FetchFirstPage.Response) {
+        let userInfo = response.userInfo
+        viewController?.displayLocalUserInfoPage(
+            viewModel: .init(
+                enterUserInfoViewModel: .init(
+                    name: userInfo.name,
+                    gender: userInfo.gender,
+                    birth: userInfo.birth,
+                    address: userInfo.address,
+                    career: userInfo.career
+                ),
+                pageNumber: response.pageNumber
+            )
+        )
+    }
+
+    func presentImagePage(response: ProfileRegister.FetchImagePage.Response) {
+        viewController?.displayImagePage(viewModel:
+                .init(images: response.images, pageNumber: response.pageNumber)
+        )
+    }
+
+    func presentUploadImage(response: ProfileRegister.UploadImage.Response) {
+        viewController?.displayImage(viewModel: .init(image: response.image))
+    }
+
+    func presentDeleteImage(response: ProfileRegister.DeleteImage.Response) {
+        viewController?.displayDeleteImage(viewModel: .init(images: response.images))
+    }
+
+    func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response) {
+        viewController?.displayKeywordPage(
+            viewModel: .init(
+                keywords: response.keywords, selectedKeywords: response.selectedKeywords,
+                pageNumber: response.pageNumber
+            )
+        )
+    }
+
+    func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response) {
+        viewController?.displayQuestionPage(
+            viewModel: .init(
+                questionViewModels: response.questions.map {
+                    .init(question: $0.question, answer1: $0.answer1, answer2: $0.answer2, questionId: $0.questionId)
+                },
+                selectedAnswers: response.selectedAnswers.map { .init(answer: $0.answer, questionId: $0.questionID)},
+                pageNumber: response.pageNumber
+            )
+        )
+    }
+
+    func presentRegisterProfileComplete(response: ProfileRegister.RegisterProfile.ViewModel) {
+        viewController?.displayRegisterProfileComplete()
+    }
 }

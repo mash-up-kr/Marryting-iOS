@@ -21,6 +21,8 @@ let project = Project.make(
         .project(target: "DataSource", path: "../../DataSource"),
         .external(name: "SnapKit"),
         .external(name: "Kingfisher"),
+        .project(target: "ProfileRegisterCompleteScene", path: "../ProfileRegisterComplete"),
+        .external(name: "CropViewController")
       ]
     ),
     Target(

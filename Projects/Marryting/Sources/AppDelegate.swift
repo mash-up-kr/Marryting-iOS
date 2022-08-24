@@ -26,7 +26,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         navigationController.isNavigationBarHidden = true
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
-        navigationController.pushViewController(SplashViewController(), animated: true)
+        navigationController.pushViewController(ProfileRegisterViewController(), animated: true)
         return true
     }
 

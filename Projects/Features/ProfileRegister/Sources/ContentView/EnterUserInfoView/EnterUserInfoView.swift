@@ -10,18 +10,26 @@ import UIKit
 import DesignSystem
 import SnapKit
 
+struct EnterUserInfoViewModel {
+    var name: String
+    var gender: String
+    var birth: String
+    var address: String
+    var career: String
+}
+
 protocol ProfileRegisterContentView {
     func hideKeyboardAndSendUserInfo()
 }
 protocol EnterUserInfoViewDelegate: AnyObject {
-    func sendUserInfo(_ info: UserInfo, allEntered: Bool)
+    func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool)
 }
 final class EnterUserInfoView: UIView, ProfileRegisterContentView {
     weak var delegate: EnterUserInfoViewDelegate?
     // MARK: UI Properties
     let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
-        scrollView.contentInset.bottom = 108
+        scrollView.contentInset.bottom = 40
         scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
@@ -75,7 +83,17 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         super.init(coder: coder)
         configureUI()
     }
-    
+
+    var viewModel: EnterUserInfoViewModel? {
+        didSet {
+            nameTextField.text = viewModel?.name
+            addressTextField.text = viewModel?.address
+            jobTextField.text = viewModel?.career
+            birthTextField.text = viewModel?.birth
+            genderTextField.text = viewModel?.gender
+        }
+    }
+
     // MARK: Configure UI
     
     private func configureUI() {
@@ -146,14 +164,12 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         let textFieldArr = contentView.arrangedSubviews.compactMap { $0 as? UserInfoTextField }
         guard let currentTextField: UserInfoTextField = textFieldArr.first(where: { $0.isEditing}) else { return }
         let tag = currentTextField.type.tag
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            let frameOriginY = 80 * tag + 14 * (tag - 1)
-            let offset = CGPoint(x: 0, y: frameOriginY)
-            self?.scrollView.setContentOffset(offset, animated: false) // true로 하면 움직이지 않음
-        }
+        let frameOriginY = 80 * tag + 14 * (tag - 1)
+        let offset = CGPoint(x: 0, y: frameOriginY)
+        self.scrollView.setContentOffset(offset, animated: true)
         if let keyboardFrame: NSValue = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue {
-                          let keyboardRectangle = keyboardFrame.cgRectValue
-                          let keyboardHeight = keyboardRectangle.height
+            let keyboardRectangle = keyboardFrame.cgRectValue
+            let keyboardHeight = keyboardRectangle.height
             self.scrollView.contentInset.bottom = keyboardHeight + 56
         }
     }
@@ -178,6 +194,7 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
     
     @objc func keyboardWillHide(notification: NSNotification) {
         hideKeyboardAndSendUserInfo()
+        self.scrollView.contentInset.bottom = 40
     }
     
     func hideKeyboardAndSendUserInfo() {
@@ -188,11 +205,11 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         let gender = genderTextField.text ?? ""
         let birth = birthTextField.text ?? ""
         let address = addressTextField.text ?? ""
-        let job = jobTextField.text ?? ""
+        let career = jobTextField.text ?? ""
         
-        let allEntered = [name, gender, birth, address, job]
-        
-        delegate?.sendUserInfo(UserInfo(name: name, gender: gender, birth: birth, address: address, job: job), allEntered: allEntered.filter { $0.count == 0}.isEmpty)
+        let allEntered = [name, gender, birth, address, career]
+
+        delegate?.sendUserInfo(.init(name: name, gender: gender, birth: birth, address: address, career: career), allEntered: allEntered.filter { $0.count == 0}.isEmpty)
     }
     
     @objc func tapScrollView() {

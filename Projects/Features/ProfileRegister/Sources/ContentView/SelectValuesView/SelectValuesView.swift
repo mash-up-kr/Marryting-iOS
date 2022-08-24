@@ -10,11 +10,19 @@ import UIKit
 import DesignSystem
 
 protocol SelectValuesViewDelegate: AnyObject {
-    func sendAnswers(answers: [Answer])
+    func sendAnswers(answers: [AnswerViewModel])
 }
+
 final class SelectValuesView: UIView {
-    var question: [Question] = Question.tempDummy
-    private var selectedAnswers: [Answer] = []
+    
+    var question: [QuestionViewModel] = [] {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
+        }
+    }
+    var selectedAnswers: [AnswerViewModel] = []
     weak var delegate: SelectValuesViewDelegate?
     
     // MARK: UI Properties
@@ -71,7 +79,7 @@ extension SelectValuesView: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension SelectValuesView: SelectValuesCellDelegate {
-    func sendAnswer(answer: Answer) {
+    func sendAnswer(answer: AnswerViewModel) {
         selectedAnswers = selectedAnswers.filter { $0.questionId != answer.questionId }
         selectedAnswers.append(answer)
         delegate?.sendAnswers(answers: selectedAnswers)

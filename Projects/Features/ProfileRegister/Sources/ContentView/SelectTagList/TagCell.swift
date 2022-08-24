@@ -32,13 +32,22 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     // MARK: Properties
     
-    var isClicked: Bool = false {
-        didSet {
-            baseView.backgroundColor = isClicked ? Pallete.Dark.main300.color?.withAlphaComponent(0.16) : .clear
-            baseView.layer.borderColor = isClicked ? Pallete.Dark.main300.color?.cgColor : Pallete.Dark.grey500.color?.cgColor
-            titleLabel.font = isClicked ? .h5() : .body1()
-            titleLabel.textColor = isClicked ? Pallete.Dark.white.color : Pallete.Dark.grey200.color
-        }
+    var isClicked: Bool = false
+    
+    func click(backgroundColor: UIColor?, borderColor: UIColor?) {
+        baseView.backgroundColor = backgroundColor
+        baseView.layer.borderColor = borderColor?.cgColor
+        titleLabel.font = .h5()
+        titleLabel.textColor = Pallete.Dark.white.color
+        isClicked = true
+    }
+    
+    func unclick() {
+        baseView.backgroundColor = .clear
+        baseView.layer.borderColor = Pallete.Dark.grey500.color?.cgColor
+        titleLabel.font = .body1()
+        titleLabel.textColor = Pallete.Dark.grey200.color
+        isClicked = false
     }
     
     // MARK: Object lifecycle
@@ -58,7 +67,7 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     
     // MARK: Function
     
-    func setData(_ keyword: Keyword) {
+    func setData(_ keyword: SelectTagListKeywordModel) {
         titleLabel.text = keyword.keyword
         titleLabel.sizeToFit()
     }
@@ -66,7 +75,7 @@ final class TagCell: UICollectionViewCell, UICollectionViewDelegateFlowLayout {
     // MARK: Configure UI
     
     private func configureUI() {
-        isClicked = false
+        unclick()
         
         addSubview(baseView)
         baseView.addSubview(titleLabel)

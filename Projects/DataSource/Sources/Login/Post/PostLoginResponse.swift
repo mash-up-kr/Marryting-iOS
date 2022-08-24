@@ -26,11 +26,13 @@ public struct PostLoginProfileResponseBody: Response {
     public let pictures: [String]
     public let profileID: Int
     public let profileName: String
+    public let gender: String
 
     enum CodingKeys: String, CodingKey {
         case address, age, answers, career, keywords, pictures
         case profileID = "profileId"
         case profileName
+        case gender
     }
 }
 

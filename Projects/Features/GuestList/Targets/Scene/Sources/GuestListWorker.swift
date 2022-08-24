@@ -34,8 +34,6 @@ class GuestListWorker: GuestListWorkerProtocol {
             let dto = try await guestListDataSource.getGuestList(request: .init(weddingID: weddingID))
             guard let guestListDTO = dto.data else { return [] }
             let guestList = guestListDTO.map { self.convertToGuest($0) }
-            print("--------- 하객리스트 --------")
-            print(guestList)
             return guestList
         } catch {
             return []

@@ -9,21 +9,38 @@
 import UIKit
 import DesignSystem
 
-protocol SelectTagListViewDelegate: AnyObject {
-    func sendKeywords(keyword: [Keyword])
+struct SelectTagListKeywordModel {
+    var keywordID: Int
+    var keyword: String
 }
+
+struct SelectTagListViewModel {
+    var selectedKeywordList: [SelectTagListKeywordModel]
+    var keywordList: [SelectTagListKeywordModel]
+}
+
+protocol SelectTagListViewDelegate: AnyObject {
+    func sendKeywords(keyword: [SelectTagListKeywordModel])
+}
+
 final class SelectTagListView: UIView {
     // MARK: - Properties
-    var tagList: [Keyword] = [
-        Keyword(keyword: "긍정적이다", keywordId: "0"),
-        Keyword(keyword: "따듯하다", keywordId: "1"),
-        Keyword(keyword: "유머가 있다", keywordId: "2"),
-        Keyword(keyword: "다정하다", keywordId: "3"),
-        Keyword(keyword: "편안하다", keywordId: "4"),
-        Keyword(keyword: "친절하다", keywordId: "5"),
-        Keyword(keyword: "낙천적이다", keywordId: "6")
-    ]
-    private var checkedKeywords: [Keyword] = []
+
+    var viewModel: SelectTagListViewModel? {
+        didSet {
+            self.tempCheckedKeywords = []
+            self.checkedKeywords = viewModel?.selectedKeywordList ?? []
+            self.tagList = viewModel?.keywordList ?? []
+            DispatchQueue.main.async { [weak self] in
+                self?.collectionView.reloadData()
+            }
+        }
+    }
+    var checkedKeywords: [SelectTagListKeywordModel] = []
+    var tempCheckedKeywords: [SelectTagListKeywordModel] = []
+
+    private var tagList: [SelectTagListKeywordModel] = []
+
     
     weak var delegate: SelectTagListViewDelegate?
     
@@ -39,6 +56,8 @@ final class SelectTagListView: UIView {
         collectionView.backgroundColor = .clear
         return collectionView
     }()
+    
+    // 빨 보 노 파 초
     
     // MARK: CustomView Init
     override init(frame: CGRect) {
@@ -81,8 +100,28 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCell", for: indexPath) as? TagCell else {
             return UICollectionViewCell()
         }
-        
-        cell.setData(tagList[indexPath.row])
+
+        let tag = tagList[indexPath.row]
+        cell.setData(tag)
+        if let firstIndex = checkedKeywords.firstIndex(where: { $0.keywordID == tag.keywordID }) {
+            switch tempCheckedKeywords.count {
+                case 0:
+                    cell.click(backgroundColor: Pallete.Light.main300.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.main300.color)
+                case 1:
+                    cell.click(backgroundColor: Pallete.Light.subPurple.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subPurple.color)
+                case 2:
+                    cell.click(backgroundColor: Pallete.Light.subYellow.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subYellow.color)
+                case 3:
+                    cell.click(backgroundColor: Pallete.Light.subBlue.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subBlue.color)
+                case 4:
+                    cell.click(backgroundColor: Pallete.Light.subGreen.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subGreen.color)
+                default:
+                    break
+            }
+            tempCheckedKeywords.append(checkedKeywords[firstIndex])
+        } else {
+            cell.unclick()
+        }
         return cell
     }
     
@@ -91,18 +130,34 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
             fatalError()
         }
         
-        var isClicked = cell.isClicked
-        isClicked.toggle()
+        let isClicked = cell.isClicked
         
-        if isClicked && checkedKeywords.count >= 5 { return }
+        if !isClicked && checkedKeywords.count >= 5 { return }
         
-        cell.isClicked = isClicked
+        if isClicked {
+            cell.unclick()
+        } else {
+            switch checkedKeywords.count {
+                case 0:
+                    cell.click(backgroundColor: Pallete.Light.main300.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.main300.color)
+                case 1:
+                    cell.click(backgroundColor: Pallete.Light.subPurple.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subPurple.color)
+                case 2:
+                    cell.click(backgroundColor: Pallete.Light.subYellow.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subYellow.color)
+                case 3:
+                    cell.click(backgroundColor: Pallete.Light.subBlue.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subBlue.color)
+                case 4:
+                    cell.click(backgroundColor: Pallete.Light.subGreen.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subGreen.color)
+                default:
+                    break
+            }
+        }
         
         let keyword = tagList[indexPath.row]
         if cell.isClicked {
             checkedKeywords.append(keyword)
         } else {
-            checkedKeywords = checkedKeywords.filter { $0.keywordId != keyword.keywordId }
+            checkedKeywords = checkedKeywords.filter { $0.keywordID != keyword.keywordID }
         }
         delegate?.sendKeywords(keyword: self.checkedKeywords)
     }
@@ -155,24 +210,6 @@ final class CenterAlignedCollectionViewFlowLayout: UICollectionViewFlowLayout {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #if canImport(SwiftUI) && DEBUG

@@ -11,15 +11,190 @@
 //
 
 import UIKit
+import Models
 
 protocol ProfileRegisterBusinessLogic {
+    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request)
+    func selectAnswers(_ answers: ProfileRegister.SelectAnswers.Request)
+    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request)
+    func fetchPrevPage()
+    func fetchNextPage()
+    func uploadImage(_ image: ProfileRegister.UploadImage.Request)
+    func imageRemoved(_ image: UIImage)
 }
 
-protocol ProfileRegisterDataStore {
+public protocol ProfileRegisterDataStore {
+    var thirdPartyToken: String? { get set }
+    var oauthType: String? { get set }
 }
 
-class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore
-{
-  var presenter: ProfileRegisterPresentationLogic?
-  var worker: ProfileRegisterWorker?
+class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore {
+    var presenter: ProfileRegisterPresentationLogic?
+    var worker: ProfileRegisterWorker?
+
+    typealias URLString = String
+
+    var thirdPartyToken: String?
+    var oauthType: String? = "APPLE"
+    
+    private let pageSize: Int = 4
+    private var pageNumber: Int = 1
+
+    private var keywords: [Keyword] = []
+    private var selectedKeywords: [Keyword] = []
+    private var selectedImages: [UIImage] = []
+    private var selectedImageUrls: [String] = []
+    private var userInfo: UserInfo = .init()
+    private var selectedAnswers: [Answer] = []
+
+    init(worker: ProfileRegisterWorker = ProfileRegisterWorker()) {
+        self.worker = worker
+    }
+    
+    // Input Flow
+    
+    func didTapUserInfoPageNextButton(_ info: ProfileRegister.DidTapFirstPageNext.Request) {
+        self.userInfo = UserInfo(name: info.name, gender: info.gender, birth: info.birth, address: info.address, career: info.career)
+    }
+
+    func uploadImage(_ image: ProfileRegister.UploadImage.Request) {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let urlString = try await worker.updateImage(image: image.image)
+                selectedImages.append(image.image)
+                selectedImageUrls.append(urlString)
+                presenter?.presentUploadImage(response: .init(image: image.image))
+            }
+            catch {
+                print(error.localizedDescription)
+            }
+        }
+    }
+
+    func imageRemoved(_ image: UIImage) {
+        if let firstIndex = selectedImages.firstIndex(where: { $0 == image }) {
+            selectedImages.remove(at: firstIndex)
+            selectedImageUrls.remove(at: firstIndex)
+        }
+        presenter?.presentDeleteImage(response: .init(images: selectedImages))
+    }
+
+    func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request) {
+        selectedKeywords = keywords.keywords.map {
+            Keyword(id: $0.keywordID, keyword: $0.keyword)
+        }
+    }
+
+    func selectAnswers(_ answers: ProfileRegister.SelectAnswers.Request) {
+        selectedAnswers = answers.answers.map {
+            Answer(questionID: $0.questionId, answer: $0.answer)
+        }
+    }
+    
+    // Paging Flow
+    
+    func fetchPrevPage() {
+        if pageNumber >= 1 {
+            pageNumber -= 1
+            switch pageNumber {
+            case 1:
+                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
+            case 2:
+                self.presenter?.presentImagePage(response: .init(images: selectedImages, pageNumber: pageNumber))
+            default:
+                self.presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
+            }
+        }
+    }
+
+    func fetchNextPage() {
+        if pageNumber < pageSize {
+            pageNumber += 1
+            switch pageNumber {
+            case 1:
+                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
+            case 2:
+                self.fetchImages()
+            case 3:
+                self.fetchKeywords()
+            default:
+                self.fetchQuestions()
+            }
+        } else {
+            self.registerProfile()
+        }
+    }
+
+    private func fetchImages() {
+        presenter?.presentImagePage(
+            response: .init(
+                images: selectedImages, pageNumber: pageNumber
+            )
+        )
+    }
+
+    private func fetchKeywords() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let keywords = try await worker.fetchKeywords()
+                self.keywords = keywords
+                presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
+            } catch {
+
+            }
+        }
+    }
+
+    private func fetchQuestions() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                let questions = try await worker.fetchQuestions()
+                presenter?.presentQuestionPage(
+                    response: .init(
+                        questions: questions,
+                        selectedAnswers: selectedAnswers,
+                        pageNumber: pageNumber
+                    )
+                )
+            } catch {
+
+            }
+        }
+    }
+
+    private func registerProfile() {
+        guard let worker = worker else {
+            return
+        }
+
+        Task {
+            do {
+                if let thirdPartyToken = thirdPartyToken,
+                   let oauthType = oauthType {
+                    try await worker.registerProfile(
+                        oauthToken: oauthType,
+                        selectedImageUrls: selectedImageUrls,
+                        userInfo: userInfo,
+                        selectedAnswers: selectedAnswers,
+                        selectedKeywords: selectedKeywords,
+                        thirdPartyToken: thirdPartyToken
+                    )
+                    presenter?.presentRegisterProfileComplete(response: .init())
+                } else {
+                    return
+                }
+            } catch {
+
+            }
+        }
+    }
 }
