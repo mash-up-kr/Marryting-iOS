@@ -105,13 +105,34 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         return v
     }()
 
+    lazy var loginStackView: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.distribution = .fill
+        v.alignment = .center
+        v.spacing = 10
+        return v
+    }()
+
+    lazy var kakaoLoginButton: UIButton = {
+        $0.setBackgroundImage(.create(.btn_kakao_login), for: .normal)
+        $0.addTarget(self, action: #selector(kakaoLoginButtonPressed), for: .touchUpInside)
+        return $0
+    }(UIButton(type: .system))
+
     lazy var appleLoginButton: UIButton = {
         $0.setBackgroundImage(.create(.btn_apple_button), for: .normal)
         $0.addTarget(self, action: #selector(appleLoginButtonPressed), for: .touchUpInside)
         return $0
     }(UIButton(type: .system))
 
-    @objc private func appleLoginButtonPressed() {
+    @objc
+    private func kakaoLoginButtonPressed() {
+        interactor?.kakaoLogin()
+    }
+
+    @objc
+    private func appleLoginButtonPressed() {
         interactor?.appleLogin()
     }
 
@@ -128,7 +149,7 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     }
 
     func displaySignUp() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             [weak self] in
             self?.router?.routeToProfileRegisterViewController()
         }
@@ -144,7 +165,8 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
         self.view.backgroundColor = Pallete.Light.background.color
         self.view.addSubview(self.wholeStackView)
         self.wholeStackView.addArrangedSubviews(self.heartImageView, self.bottomStackView)
-        self.bottomStackView.addArrangedSubviews(self.vStackView, self.appleLoginButton)
+        self.bottomStackView.addArrangedSubviews(self.vStackView, self.loginStackView)
+        self.loginStackView.addArrangedSubviews(self.kakaoLoginButton, self.appleLoginButton)
         self.vStackView.addArrangedSubviews(self.findyourLabel, self.marrytingLabel)
 
         self.wholeStackView.snp.makeConstraints { make in

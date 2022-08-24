@@ -18,7 +18,9 @@ public struct GetQuestionsRequest: Request {
     public var endpoint: String = "/api/v1/questionnaire"
 
     public var method: HTTPMethod = .get
-    
+
+    public var header: HTTPHeader = [:]
+
     public init() {}
 
 }

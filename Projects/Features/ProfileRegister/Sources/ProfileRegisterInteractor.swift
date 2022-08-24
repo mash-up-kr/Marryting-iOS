@@ -34,8 +34,16 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     typealias URLString = String
 
-    var thirdPartyToken: String?
-    var oauthType: String? = "APPLE"
+    var thirdPartyToken: String? {
+        didSet {
+            print(thirdPartyToken)
+        }
+    }
+    var oauthType: String? {
+        didSet {
+            print(oauthType)
+        }
+    }
     
     private let pageSize: Int = 4
     private var pageNumber: Int = 1
@@ -98,30 +106,39 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     
     func fetchPrevPage() {
         if pageNumber >= 1 {
-            pageNumber -= 1
             switch pageNumber {
-            case 1:
-                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
             case 2:
+                self.pageNumber = 1
+                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
+            case 3:
+                self.pageNumber = 2
                 self.presenter?.presentImagePage(response: .init(images: selectedImages, pageNumber: pageNumber))
-            default:
+            case 4:
+                self.pageNumber = 3
                 self.presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
+            default:
+                break
             }
         }
     }
 
     func fetchNextPage() {
         if pageNumber < pageSize {
-            pageNumber += 1
             switch pageNumber {
+                // self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
             case 1:
-                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
-            case 2:
+                self.pageNumber = 2
                 self.fetchImages()
-            case 3:
+            case 2:
+                self.pageNumber = 3
                 self.fetchKeywords()
-            default:
+            case 3:
+                self.pageNumber = 4
                 self.fetchQuestions()
+            case 4:
+                self.pageNumber = 5
+            default:
+                break
             }
         } else {
             self.registerProfile()
@@ -138,6 +155,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     private func fetchKeywords() {
         guard let worker = worker else {
+            self.pageNumber = 2
             return
         }
         Task {
@@ -146,13 +164,14 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                 self.keywords = keywords
                 presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
             } catch {
-
+                self.pageNumber = 2
             }
         }
     }
 
     private func fetchQuestions() {
         guard let worker = worker else {
+            self.pageNumber = 3
             return
         }
         Task {
@@ -166,13 +185,14 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                     )
                 )
             } catch {
-
+                self.pageNumber = 3
             }
         }
     }
 
     private func registerProfile() {
         guard let worker = worker else {
+            self.pageNumber = 4
             return
         }
 
@@ -190,10 +210,11 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                     )
                     presenter?.presentRegisterProfileComplete(response: .init())
                 } else {
+                    self.pageNumber = 4
                     return
                 }
             } catch {
-
+                self.pageNumber = 4
             }
         }
     }

@@ -18,12 +18,13 @@ import NetworkProtocol
 
 protocol LoginWorkerProtocol {
     var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)? { get set }
-    
+    func kakaoLogin()
     func appleLogin()
 }
 
 class LoginWorker: LoginWorkerProtocol {
 
+    private let kakaoLoginManager: KakaoLoginManager
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
     private let testUserDatSource: TestTokenDataSourceProtocol
@@ -31,10 +32,14 @@ class LoginWorker: LoginWorkerProtocol {
 
     var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)?
 
-    init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
-         loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
-         testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource(),
-         userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
+    init(
+        kakaoLoginManager: KakaoLoginManager = KakaoLoginManagerImpl(),
+        appleLoginManager: AppleLoginManager = AppleLoginManager(),
+        loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
+        testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource(),
+        userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()
+    ) {
+        self.kakaoLoginManager = kakaoLoginManager
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
         self.testUserDatSource = testUserDataSource
@@ -43,6 +48,25 @@ class LoginWorker: LoginWorkerProtocol {
         appleLoginManager.delegate = self
     }
 
+    func kakaoLogin() {
+        kakaoLoginManager.kakaoLogin { [weak self] result in
+            guard let self = self else { return }
+            switch result {
+            case .success(let token):
+                Task {
+                    do {
+                        guard let token = token else { return }
+                        let result = try await self.login(token: token)
+                        self.fetchUser?(result)
+                    } catch {
+                        self.fetchUser?(.failure(.loginDataSourceError))
+                    }
+                }
+            case .failure(let _):
+                break
+            }
+        }
+    }
     func appleLogin() {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()

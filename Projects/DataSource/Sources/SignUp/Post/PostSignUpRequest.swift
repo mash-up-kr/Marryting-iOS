@@ -19,6 +19,8 @@ public struct PostSignUpRequest: Request {
     public var method: HTTPMethod = .post
     
     public var body: PostSignUpRequestBody?
+
+    public var header: HTTPHeader = [:]
     
     public init(body: PostSignUpRequestBody) {
         self.body = body

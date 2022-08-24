@@ -15,6 +15,7 @@ import LoginRoutingProtocol
 import Models
 
 protocol LoginBusinessLogic {
+    func kakaoLogin()
     func appleLogin()
 }
 
@@ -25,10 +26,33 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
 
     var thirdPartyToken: String?
 
+    var oauthType: String?
+
     init(worker: LoginWorkerProtocol = LoginWorker()) {
         self.worker = worker
     }
-    
+
+    func kakaoLogin() {
+        worker?.fetchUser = { [weak self] result in
+            switch result {
+            case .success(_):
+                self?.presenter?.presentLogin()
+            case .failure(let error):
+                switch error {
+                case .noUser(let token):
+                    self?.oauthType = "KAKAO"
+                    self?.thirdPartyToken = token
+                    self?.presenter?.presentSignUp()
+                default:
+                    self?.presenter?.failLogin()
+                }
+
+            }
+        }
+
+        worker?.kakaoLogin()
+    }
+
     func appleLogin() {
         worker?.fetchUser = { [weak self] result in
             switch result {
@@ -38,6 +62,7 @@ class LoginInteractor: LoginBusinessLogic, LoginDataStore {
                 switch error {
                 case .noUser(let token):
                     self?.thirdPartyToken = token
+                    self?.oauthType = "APPLE"
                     self?.presenter?.presentSignUp()
                 default:
                     self?.presenter?.failLogin()

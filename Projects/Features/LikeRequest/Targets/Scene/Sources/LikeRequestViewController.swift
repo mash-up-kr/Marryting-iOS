@@ -136,6 +136,7 @@ public class LikeRequestViewController: UIViewController, LikeRequestDisplayLogi
         v.textContainerInset = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
         v.delegate = self
         v.text = messageTextViewPlaceHolder
+        v.backgroundColor = Pallete.Light.white.color
         v.textColor = .lightGray
         v.font = .h3()
         return v
