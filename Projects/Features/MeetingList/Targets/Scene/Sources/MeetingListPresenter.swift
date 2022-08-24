@@ -42,7 +42,8 @@ final class MeetingListPresenter: MeetingListPresentationLogic {
         case 0:
             viewController?.displayAuthCode()
         case 1:
-            viewController?.displayGuestList(viewModel: .init(meetings: meetings))
+            viewController?.displayMeetings(viewModel: .init(meetings: meetings))
+            viewController?.displayGuestListScene()
         default:
             viewController?.displayMeetings(viewModel: .init(meetings: meetings))
         }

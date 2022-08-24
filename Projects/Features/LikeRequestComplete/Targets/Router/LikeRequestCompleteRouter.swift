@@ -26,10 +26,21 @@ public final class LikeRequestCompleteRouter: LikeRequestCompleteRoutingLogic, L
     }
     
     public func routeToGuestListScene() {
-        viewController?.navigationController?.popToRootViewController(animated: true)
+        viewController?.navigationController?.popViewControllers(viewsTo: 1)
     }
-    
+
     public func routeToMyGuestListScene() {
-        // TODO: 화면 전환
+        NotificationCenter.default.post(name: .init("routeToMyGuestListSceneFromLikeRequestCompleteScene"), object: nil)
+        viewController?.navigationController?.popViewControllers(viewsTo: 1)
     }
 }
+
+extension UINavigationController {
+    func popViewControllers(viewsTo: Int, animated: Bool = true) {
+       if viewControllers.count > viewsTo {
+         let vc = viewControllers[viewsTo]
+         popToViewController(vc, animated: animated)
+       }
+     }
+}
+

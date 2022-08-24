@@ -171,6 +171,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     public override func viewDidLoad() {
         super.viewDidLoad()
         self.setUI()
+        self.setNotificationCenter()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
@@ -238,7 +239,17 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.width.height.equalTo(24)
         }
     }
-    
+
+    private func setNotificationCenter() {
+        NotificationCenter.default.addObserver(self, selector: #selector(routeToMyGuestListSceneFromLikeRequestCompleteScene), name: .init("routeToMyGuestListSceneFromLikeRequestCompleteScene"), object: nil)
+    }
+
+    @objc
+    private func routeToMyGuestListSceneFromLikeRequestCompleteScene() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            self.router?.routeToMyGuestListScene()
+        }
+    }
     // MARK: Display Logic
     
     func displayGuests(viewModel: GuestList.FetchGuests.ViewModel) {
@@ -252,7 +263,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
                 make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
                 make.bottom.equalToSuperview().inset(84)
             }
-            self.reportButton.isHidden = false
+            self.reportButton.isHidden = viewModel.guestCardViewModels.isEmpty
         }
     }
 
