@@ -34,8 +34,6 @@ final class MeetingListWorker: MeetingListWorkerProtocol {
             let dto = try await meetingListDataSource.getMeetingList(request: .init())
             guard let meetingListDTO = dto.data else { return [] }
             let meetingList = meetingListDTO.map(Meeting.init)
-            print("--------- 결혼식 리스트 --------")
-            print(meetingList)
             return meetingList
         }
         catch {

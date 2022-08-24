@@ -34,8 +34,6 @@ final class SelectTagListView: UIView {
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
             }
-            print(tagList)
-            print(checkedKeywords)
         }
     }
     var checkedKeywords: [SelectTagListKeywordModel] = []

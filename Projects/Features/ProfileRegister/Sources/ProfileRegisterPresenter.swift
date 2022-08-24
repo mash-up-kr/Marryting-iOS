@@ -72,6 +72,7 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
                 questionViewModels: response.questions.map {
                     .init(question: $0.question, answer1: $0.answer1, answer2: $0.answer2, questionId: $0.questionId)
                 },
+                selectedAnswers: response.selectedAnswers.map { .init(answer: $0.answer, questionId: $0.questionID)},
                 pageNumber: response.pageNumber
             )
         )

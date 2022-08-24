@@ -126,11 +126,13 @@ enum ProfileRegister
     enum FetchQuestionPage {
         struct Response {
             var questions: [Question]
+            var selectedAnswers: [Answer]
             var pageNumber: Int
         }
 
         struct ViewModel {
             var questionViewModels: [QuestionViewModel]
+            var selectedAnswers: [AnswerViewModel]
             var pageNumber: Int
         }
     }

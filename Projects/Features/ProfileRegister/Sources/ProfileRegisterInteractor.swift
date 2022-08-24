@@ -99,7 +99,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     func fetchPrevPage() {
         if pageNumber >= 1 {
             pageNumber -= 1
-            print(pageNumber)
             switch pageNumber {
             case 1:
                 self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
@@ -114,7 +113,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     func fetchNextPage() {
         if pageNumber < pageSize {
             pageNumber += 1
-            print(pageNumber)
             switch pageNumber {
             case 1:
                 self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
@@ -160,7 +158,13 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         Task {
             do {
                 let questions = try await worker.fetchQuestions()
-                presenter?.presentQuestionPage(response: .init(questions: questions, pageNumber: pageNumber))
+                presenter?.presentQuestionPage(
+                    response: .init(
+                        questions: questions,
+                        selectedAnswers: selectedAnswers,
+                        pageNumber: pageNumber
+                    )
+                )
             } catch {
 
             }
@@ -184,7 +188,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                         selectedKeywords: selectedKeywords,
                         thirdPartyToken: thirdPartyToken
                     )
-                    print("데이터가 있습니다.")
                     presenter?.presentRegisterProfileComplete(response: .init())
                 } else {
                     return

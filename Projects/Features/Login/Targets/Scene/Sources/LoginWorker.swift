@@ -86,13 +86,8 @@ extension LoginWorker: AppleLoginManagerDelegate {
 
             let token = data.accessToken
             userLocalDataSource.saveToken(token, key: .token)
-            print("--------- 토큰 --------")
-            print(token)
-
-            let user = convertToUser(data)
-            print("--------- 유저 --------")
-            print(user)
-            return .success(.init(user: user))
+            userLocalDataSource.save(convertToLocalUser(data), key: .localUser)
+            return .success(.init(user: convertToUser(data)))
         } catch {
             return .failure(Login.LoginError.noUser(token))
         }
@@ -100,30 +95,33 @@ extension LoginWorker: AppleLoginManagerDelegate {
 
     private func convertToUser(_ body: PostLoginResponseBody) -> User {
         let profile = body.profile
-        return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
+        return .init(
+            id: profile.profileID,
+            name: profile.profileName,
+            gender: .male,
+            career: profile.career,
+            birth: .init(),
+            age: profile.age,
+            address: profile.address,
+            pictures: profile.pictures,
+            answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)},
+            keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
+        )
     }
 
     private func convertToLocalUser(_ body: PostLoginResponseBody) -> LocalUser {
         let profile = body.profile
-        return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
-    }
-}
-
-#if DEBUG
-private extension LoginWorker {
-    var dummyUser: User {
-        .init(
-            id: 1,
-            name: "박건우",
-            gender: .male,
-            career: "IT회사 개발자",
+        return .init(
+            id: profile.profileID,
+            name: profile.profileName,
+            gender: profile.gender == "MALE" ? .male : .female,
+            career: profile.career,
             birth: .init(),
-            age: 21,
-            address: "서울시 금천구",
-            pictures: ["https://img.sbs.co.kr/newsnet/etv/upload/2021/03/05/30000673929_1280.jpg"],
-            answers: [],
-            keyword: []
+            age: profile.age,
+            address: profile.address,
+            pictures: profile.pictures,
+            answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)},
+            keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
         )
     }
 }
-#endif

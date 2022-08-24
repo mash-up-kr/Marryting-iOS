@@ -79,7 +79,7 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     }
 
     func registerProfile(oauthToken: String, selectedImageUrls: [String], userInfo: UserInfo, selectedAnswers: [Answer], selectedKeywords: [Keyword], thirdPartyToken: String) async throws -> Void {
-        let user = try await signUpDataSource.postSignUp(
+        let responseBody = try await signUpDataSource.postSignUp(
             request: .init(
                 body: .init(
                     oauthType: oauthToken,
@@ -91,11 +91,13 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
                                    keywords: selectedKeywords.map { .init(keyword: $0.keyword, keywordId: $0.id) },
                                    name: userInfo.name,
                                    pictures: selectedImageUrls),
-                    thrdPartyToken: thirdPartyToken
+                    thirdPartyToken: thirdPartyToken
                 )
             )
         )
-//        userLocalDataSourece.save(<#T##data: Decodable & Encodable##Decodable & Encodable#>, key: .localUser)
+        guard let data = responseBody.data else { return }
+        userLocalDataSourece.saveToken(data.accessToken, key: .token)
+        userLocalDataSourece.save(convertToLocalUser(data.profile), key: .localUser)
         return
     }
     
@@ -103,8 +105,19 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
         Formatter.dateFormatter.string(from: Formatter.koreanDateFormatter.date(from: birth)!)
     }
 
-//    func convertToLocalUser(responseBody: PostSignUpResponseBody) -> LocalUser {
-//        let profile = responseBody.profileId
-//        return .init(id: user.profileId, name: user., gender: <#T##LocalGender#>, career: <#T##String#>, birth: <#T##Date#>, age: <#T##Int#>, address: <#T##String#>, pictures: <#T##[String]#>, answers: <#T##[LocalAnswer]#>, keyword: <#T##[LocalKeyword]#>)
-//    }
+
+    private func convertToLocalUser(_ profile: PostSignUpProfileResponseBody) -> LocalUser {
+        return .init(
+            id: profile.profileID,
+            name: profile.profileName,
+            gender: profile.gender == "MALE" ? .male : .female,
+            career: profile.career,
+            birth: .init(),
+            age: profile.age,
+            address: profile.address,
+            pictures: profile.pictures,
+            answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)},
+            keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
+        )
+    }
 }

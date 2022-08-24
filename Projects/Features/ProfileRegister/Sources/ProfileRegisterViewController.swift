@@ -127,8 +127,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     lazy var rightButton: MTButton = {
         let button = MTButton.create(.mainDark)
         button.title = "NEXT"
-#warning("dfasdf")
-        button.isEnabled = true
+        button.isEnabled = false
         button.addTarget(self, action: #selector(pressNextButton(_:)), for: .touchUpInside)
         return button
     }()
@@ -283,11 +282,11 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         DispatchQueue.main.async { [weak self] in
             self?.updatePage(viewModel.pageNumber)
             self?.leftButton.isHidden = true
-            self?.rightButton.isEnabled = true /*(!viewModel.enterUserInfoViewModel.name.isEmpty &&
+            self?.rightButton.isEnabled = (!viewModel.enterUserInfoViewModel.name.isEmpty &&
                                            !viewModel.enterUserInfoViewModel.address.isEmpty &&
                                            !viewModel.enterUserInfoViewModel.birth.isEmpty &&
                                            !viewModel.enterUserInfoViewModel.gender.isEmpty &&
-                                           !viewModel.enterUserInfoViewModel.career.isEmpty)*/
+                                           !viewModel.enterUserInfoViewModel.career.isEmpty)
             self?.enterUserInfoView.viewModel = viewModel.enterUserInfoViewModel
         }
     }
@@ -295,7 +294,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel) {
         DispatchQueue.main.async { [weak self] in
             self?.updatePage(viewModel.pageNumber)
-            self?.rightButton.isEnabled = true // !viewModel.images.isEmpty
+            self?.rightButton.isEnabled = !viewModel.images.isEmpty
             self?.leftButton.isHidden = false
         }
     }
@@ -316,7 +315,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
         DispatchQueue.main.async { [weak self] in
-            print(viewModel.selectedKeywords)
             self?.updatePage(viewModel.pageNumber)
             self?.selectTagListView.viewModel = .init(
                 selectedKeywordList: viewModel.selectedKeywords.map { .init(keywordID: $0.id, keyword: $0.keyword)},
@@ -330,8 +328,9 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel) {
         DispatchQueue.main.async { [weak self] in
             self?.updatePage(viewModel.pageNumber)
+            self?.selectValuesView.selectedAnswers = viewModel.selectedAnswers
             self?.selectValuesView.question = viewModel.questionViewModels
-            self?.rightButton.isEnabled = viewModel.questionViewModels.count == 3
+            self?.rightButton.isEnabled = viewModel.selectedAnswers.count == 3
             self?.rightButton.title = "DONE"
         }
     }
@@ -361,7 +360,6 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
                     }
                 }
             })
-            
             alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
                 guard let self = self else { return }
                 self.imagePicker.sourceType = .photoLibrary

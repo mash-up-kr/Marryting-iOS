@@ -31,7 +31,7 @@ public struct PostSignUpRequestBody: RequestBody {
     
     public var profile: Profile
     
-    public var thrdPartyToken: String
+    public var thirdPartyToken: String
     
     public struct Profile: Codable {
         
@@ -99,10 +99,10 @@ public struct PostSignUpRequestBody: RequestBody {
     public init(
         oauthType: String,
         profile: Profile,
-        thrdPartyToken: String
+        thirdPartyToken: String
     ) {
         self.oauthType = oauthType
         self.profile = profile
-        self.thrdPartyToken = thrdPartyToken
+        self.thirdPartyToken = thirdPartyToken
     }
 }

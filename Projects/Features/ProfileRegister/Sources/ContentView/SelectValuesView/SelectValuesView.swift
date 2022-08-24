@@ -17,11 +17,12 @@ final class SelectValuesView: UIView {
     
     var question: [QuestionViewModel] = [] {
         didSet {
-            self.tableView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
     }
-    
-    private var selectedAnswers: [AnswerViewModel] = []
+    var selectedAnswers: [AnswerViewModel] = []
     weak var delegate: SelectValuesViewDelegate?
     
     // MARK: UI Properties

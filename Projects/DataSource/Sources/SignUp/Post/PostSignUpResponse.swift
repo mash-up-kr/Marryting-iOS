@@ -13,8 +13,8 @@ public typealias PostSignUpResponse = BaseResponse<PostSignUpResponseBody>
  // MARK: - DataClass
  public struct PostSignUpResponseBody: Response {
      public let accessToken: String
-     public let profileId: String
-//     public let profile: PostSignUpProfileResponseBody
+//     public let profileId: String
+     public let profile: PostSignUpProfileResponseBody
  }
 
  // MARK: - Profile
@@ -27,11 +27,13 @@ public typealias PostSignUpResponse = BaseResponse<PostSignUpResponseBody>
      public let pictures: [String]
      public let profileID: Int
      public let profileName: String
+     public let gender: String
 
      enum CodingKeys: String, CodingKey {
          case address, age, answers, career, keywords, pictures
          case profileID = "profileId"
          case profileName
+         case gender
      }
  }
 

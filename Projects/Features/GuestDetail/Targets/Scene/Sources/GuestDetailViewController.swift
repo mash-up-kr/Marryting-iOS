@@ -460,7 +460,6 @@ extension GuestDetailViewController {
 
     @objc
     func changeMeetingButtonDidTap() {
-        print("changeMeetingButtonDidTap")
         router?.routeToMeetingListScene()
     }
 }
