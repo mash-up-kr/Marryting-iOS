@@ -10,4 +10,5 @@ import Models
 
 public protocol LoginDataStore {
     var thirdPartyToken: String? { get set }
+    var oauthType: String? { get set }
 }

@@ -12,7 +12,8 @@ let infoPlist: [String: InfoPlist.Value] = [
   "UISupportedInterfaceOrientations": ["UIInterfaceOrientationPortrait"],
   "NSCameraUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
   "NSPhotoLibraryUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
-  "NSPhotoLibraryAddUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다"
+  "NSPhotoLibraryAddUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
+  "LSApplicationQueriesSchemes": ["kakaokompassauth","kakaolink"]
 ]
 
 let project = Project.make(
@@ -30,7 +31,8 @@ let project = Project.make(
         .project(target: "DesignSystem", path: "../DesignSystem"),
         .project(target: "DataSource", path: "../DataSource"),
         .project(target: "FeatureKit", path: "../Features/FeatureKit"),
-        .project(target: "CoreKit", path: "../Core/CoreKit")
+        .project(target: "CoreKit", path: "../Core/CoreKit"),
+        .external(name: "KakaoSDKAuth")
       ]
     ),
     Target(

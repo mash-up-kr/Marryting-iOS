@@ -127,11 +127,12 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             self.guestCardIndex = 0
         }
         let v = GuestCardView(frame: self.guestSwipeableView.bounds)
+        v.tag = guestCardViewModels[self.guestCardIndex].id
         v.viewModel = self.guestCardViewModels[self.guestCardIndex]
         v.backgroundColor = self.getGuestCardViewColor(for: self.guestCardIndex)
         v.delegate = self
         self.guestCardIndex += 1
-        v.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(guestCardViewDidTap)))
+        v.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(guestCardViewDidTap(_:))))
         return v
     }
 
@@ -156,9 +157,9 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     }
 
     @objc
-    private func guestCardViewDidTap() {
-        guard self.guestCardIndex >= 0 else { return }
-        router?.routeToGuestDetailScene(targetId: self.guestCardIndex)
+    private func guestCardViewDidTap(_ sender: UITapGestureRecognizer) {
+        let targetID = sender.view?.tag ?? 0
+        router?.routeToGuestDetailScene(targetId: targetID)
     }
 
     @objc

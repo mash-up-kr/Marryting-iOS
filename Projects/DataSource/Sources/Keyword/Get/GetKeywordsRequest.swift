@@ -18,5 +18,7 @@ public struct GetKeywordsRequest: Request {
 
     public var method: HTTPMethod = .get
 
+    public var header: HTTPHeader = [:]
+
     public init() {}
 }
