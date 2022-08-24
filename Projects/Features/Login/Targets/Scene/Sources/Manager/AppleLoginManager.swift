@@ -10,7 +10,7 @@ import UIKit
 import AuthenticationServices
 
 protocol AppleLoginManagerDelegate: AnyObject {
-    func appleLoginFail()
+    func appleLoginFail(_ error: Login.LoginError)
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser)
 }
 
@@ -34,14 +34,14 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
     ) {
         if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
             let userIdentifier = appleIDCredential.identityToken
-            let userName = appleIDCredential.fullName
-            let userEmail = appleIDCredential.email
-            let userToken = appleIDCredential.authorizationCode
-            guard let userIdentifier = userIdentifier else {
+            guard let userIdentifier = userIdentifier,
+                  let userIdentifier = String(data: userIdentifier, encoding: .utf8) else {
+                delegate?.appleLoginFail(.parsing)
                 return
             }
-            let appleUser = dummyAppleUser
-            delegate?.appleLoginSuccess(appleUser)
+            delegate?.appleLoginSuccess(
+                AppleUser(userIdentifier: userIdentifier)
+            )
         }
     }
 
@@ -49,21 +49,12 @@ extension AppleLoginManager: ASAuthorizationControllerDelegate {
         controller: ASAuthorizationController,
         didCompleteWithError error: Error)
     {
-        delegate?.appleLoginFail()
+        delegate?.appleLoginFail(.appleLoginError)
     }
 }
 
 extension AppleLoginManager {
-
     struct AppleUser {
         let userIdentifier: String
-        let userName: String
-        let userEmail: String
-    }
-
-    fileprivate var dummyAppleUser: AppleUser {
-        .init(userIdentifier: "1234",
-              userName: "Gunwoo Park",
-              userEmail: "marryting0810@gmail.com")
     }
 }

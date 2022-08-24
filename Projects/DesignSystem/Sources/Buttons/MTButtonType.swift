@@ -20,5 +20,4 @@ public enum MTButtonType {
     case subLight
     case text
     case addImage
-
 }

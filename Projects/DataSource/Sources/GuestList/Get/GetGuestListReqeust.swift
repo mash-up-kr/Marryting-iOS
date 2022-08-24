@@ -14,9 +14,15 @@ public struct GetGuestListRequest: Request {
     
     public typealias Output = GetGuestListResponse
     
-    public var endpoint: String = "/api/v1/wedding/guests"
+    public var endpoint: String {
+        return "/api/v1/wedding/\(weddingID)/guests"
+    }
     
     public var method: HTTPMethod = .get
 
-    public init() {}
+    public var weddingID: Int = 1
+
+    public init(weddingID: Int) {
+        self.weddingID = weddingID
+    }
 }

@@ -37,8 +37,16 @@ final class MeetingListPresenter: MeetingListPresentationLogic {
                 date: dateFormatter.string(from: meeting.date)
             ))
         }
-        
-        viewController?.displayMeetings(viewModel: .init(meetings: meetings))
+
+        switch meetings.count {
+        case 0:
+            viewController?.displayAuthCode()
+        case 1:
+            viewController?.displayGuestList()
+        default:
+            viewController?.displayMeetings(viewModel: .init(meetings: meetings))
+        }
+
+
     }
-    
 }

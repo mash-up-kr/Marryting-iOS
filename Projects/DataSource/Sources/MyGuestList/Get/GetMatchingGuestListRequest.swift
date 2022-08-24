@@ -18,13 +18,7 @@ public struct GetMatchingGuestListRequest: Request {
 
     public var method: HTTPMethod = .get
 
-    public var header: HTTPHeader = [:]
-
-    private let authorizationKey: String = "Authorization"
-
-    public init(token: String) {
-        header[authorizationKey] = "Bearer" + " " + token
-    }
+    public init() {}
 }
 
 

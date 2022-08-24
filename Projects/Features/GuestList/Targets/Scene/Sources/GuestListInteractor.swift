@@ -38,7 +38,7 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
         }
         Task {
             do {
-                let guests = try await worker.fetchGuests()
+                let guests = try await worker.fetchGuests(weddingID: meetingId ?? 1)
                 self.guests = guests
                 self.presenter?.presentGuests(response: .init(guests: guests))
             }

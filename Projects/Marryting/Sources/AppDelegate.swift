@@ -8,6 +8,8 @@ import GuestDetailScene
 import MyGuestListScene
 import AuthCodeScene
 import LikeRequestCompleteScene
+import SplashScene
+import ProfileRegisterCompleteScene
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {

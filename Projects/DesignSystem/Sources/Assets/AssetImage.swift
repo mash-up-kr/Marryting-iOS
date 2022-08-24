@@ -55,6 +55,11 @@ public enum Assets: String {
     case ic_sharp_place_grey100
     case ic_symbols_work_grey100
     case img_header_code
+    case ic_matching_list_empty_view
+    case ic_my_like_list_empty_view
+    case good_luck
+    case ic_report
+    case nice_completed
     
     public var image: UIImage? {
         let bundle = Bundle(identifier: "kr.mash-up.DesignSystem")

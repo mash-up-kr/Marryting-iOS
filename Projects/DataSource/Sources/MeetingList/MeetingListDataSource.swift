@@ -22,6 +22,6 @@ public final class MeetingListDataSource: MeetingListDataSourceProtocol {
     }
 
     public func getMeetingList(request: GetMeetingListRequest) async throws -> GetMeetingListResponse {
-        try await network.send(request)
+        return try await network.send(request)
     }
 }

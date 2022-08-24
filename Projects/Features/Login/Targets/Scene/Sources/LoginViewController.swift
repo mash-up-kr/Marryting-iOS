@@ -21,6 +21,7 @@ import SnapKit
 protocol LoginDisplayLogic: AnyObject {
     func displayLoginSucees()
     func displayLoginFail()
+    func displaySignUp()
 }
 
 public class LoginViewController: UIViewController, LoginDisplayLogic {
@@ -117,20 +118,21 @@ public class LoginViewController: UIViewController, LoginDisplayLogic {
     // MARK: Routing
 
     func displayLoginSucees() {
-
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [weak self] in
-
-            // TODO: 라우팅 변경
-//            self?.router?.routeToGuestListViewController()
             self?.router?.routeToMeetingListViewController()
         }
-
     }
 
     func displayLoginFail() {
-        // TODO: Login 실패
+
     }
 
+    func displaySignUp() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+            [weak self] in
+            self?.router?.routeToProfileRegisterViewController()
+        }
+    }
     // MARK: View lifecycle
 
     public override func viewDidLoad() {

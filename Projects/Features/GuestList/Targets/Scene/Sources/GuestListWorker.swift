@@ -15,47 +15,150 @@ import Models
 import DataSource
 
 protocol GuestListWorkerProtocol {
-    func fetchGuests() async throws -> [Guest]
+    func fetchGuests(weddingID: Int) async throws -> [Guest]
 }
 
 class GuestListWorker: GuestListWorkerProtocol {
     
     private let guestListDataSource: GuestListDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userDataSource: UserLocalDataSoureceProtocol
     
     init(guestListDataSource: GuestListDataSourceProtocol = GuestListDataSource(),
-         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+         userDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.guestListDataSource = guestListDataSource
         self.userDataSource = userDataSource
     }
     
-    func fetchGuests() async throws -> [Guest] {
+    func fetchGuests(weddingID: Int) async throws -> [Guest] {
         do {
-            let dto = try await guestListDataSource.getGuestList(request: .init())
+            let dto = try await guestListDataSource.getGuestList(request: .init(weddingID: weddingID))
             guard let guestListDTO = dto.data else { return [] }
-            let guestList = guestListDTO.map(Guest.init)
+            let guestList = guestListDTO.map { self.convertToGuest($0) }
             return guestList
-        }
-        catch {
+        } catch {
             return []
         }
     }
-}
 
-extension Guest {
-    
-    init(_ dto: GetGuestResponseBody) {
-        let user = User(id: dto.profileID,
-                        name: dto.name,
-                        gender: dto.gender == "MALE" ? .male : .female,
-                        career: dto.career,
-                        birth: .init(),
-                        age: dto.age,
-                        address: dto.address,
-                        pictures: dto.profileURL,
-                        answers: dto.answers.map { .init(questionID: $0.questionId, answer: $0.answer) },
-                        keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) }
-        )
-        self.init(user: user, isLiked: false)
+    private func convertToGuest(_ dto: GetGuestResponseBody) -> Guest {
+        return .init(user: .init(id: dto.profileID, name: dto.name, gender: .male, career: dto.career, birth: .init(), age: dto.age, address: dto.address, pictures: dto.profileURL, answers: dto.answers.map { .init(questionID: $0.questionId, answer: $0.answer) }, keyword: dto.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword)}), isLiked: false)
     }
 }
+
+#if DEBUG
+private extension GuestListWorker {
+    var dummyGuests: [Guest] {
+        [
+            .init(
+                user: .init(
+                    id: 1,
+                    name: "박건우",
+                    gender: .male,
+                    career: "IT회사 개발자",
+                    birth: .init(),
+                    age: 21,
+                    address: "서울시 금천구",
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                               "https://user-images.githubusercontent.com/56102421/179951395-2fd37585-b2fe-4308-9fe4-1e1fd9c2006d.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png",
+                               "https://user-images.githubusercontent.com/56102421/179951845-1bc77f9d-0491-4c46-84b1-5b424d66bd60.png"],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
+                    keyword: [
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
+                    ]
+                ),
+                isLiked: false
+            ),
+            .init(
+                user: .init(
+                    id: 2,
+                    name: "이재용",
+                    gender: .male,
+                    career: "학생",
+                    birth: .init(),
+                    age: 25,
+                    address: "포항항",
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
+                               "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png",
+                               "https://user-images.githubusercontent.com/56102421/179954387-968f7152-23dc-496c-a6d6-48f49ac39700.png"],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
+                    keyword: [
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
+                    ]
+                ),
+                isLiked: false
+            ),
+            .init(
+                user: .init(
+                    id: 3,
+                    name: "박재민",
+                    gender: .male,
+                    career: "IT회사 개발자",
+                    birth: .init(),
+                    age: 25,
+                    address: "비공개",
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png",
+                               "https://user-images.githubusercontent.com/56102421/179954565-010e44d2-7bf9-40de-b2af-345a3967031d.png"],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
+                    keyword: [
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
+                    ]
+                ),
+                isLiked: true
+            ),
+            .init(
+                user: .init(
+                    id: 4,
+                    name: "강진호",
+                    gender: .male,
+                    career: "IT회사 개발자",
+                    birth: .init(),
+                    age: 30,
+                    address: "비공개",
+                    pictures: ["https://user-images.githubusercontent.com/56102421/179954903-b631811a-ac0c-48f2-9b1f-727e88e7cb3f.png"],
+                    answers: [
+                        .init(questionID: 1, answer: "생각을 정리하고 이야기"),
+                        .init(questionID: 2, answer: "자주 할수록 좋아요"),
+                        .init(questionID: 3, answer: "계획적인 데이트")
+                    ],
+                    keyword: [
+                        .init(id: 1, keyword: "활동적인"),
+                        .init(id: 2, keyword: "유머있는"),
+                        .init(id: 3, keyword: "논리적인"),
+                        .init(id: 4, keyword: "애교있는"),
+                        .init(id: 5, keyword: "낙천적인")
+                    ]
+                    
+                ),
+                isLiked: false
+            )
+        ]
+    }
+}
+#endif

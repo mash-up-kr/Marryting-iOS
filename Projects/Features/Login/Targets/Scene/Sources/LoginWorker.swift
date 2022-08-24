@@ -14,38 +14,33 @@ import DataSource
 import Models
 import UIKit
 import AuthenticationServices
+import NetworkProtocol
 
 protocol LoginWorkerProtocol {
-    var fetchUser: ((Result<User, Login.LoginError>) -> Void)? { get set }
-
+    var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)? { get set }
+    
     func appleLogin()
-
-    func loginWithoutAppleLogin() async
 }
 
 class LoginWorker: LoginWorkerProtocol {
+
     private let appleLoginManager: AppleLoginManager
     private let loginDataSource: LoginDataSourceProtocol
     private let testUserDatSource: TestTokenDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userLocalDataSource: UserLocalDataSoureceProtocol
 
-    var fetchUser: ((Result<User, Login.LoginError>) -> Void)?
+    var fetchUser: ((Result<Login.FetchUser.Response, Login.LoginError>) -> Void)?
 
     init(appleLoginManager: AppleLoginManager = AppleLoginManager(),
          loginDataSource: LoginDataSourceProtocol = LoginDataSource(),
          testUserDataSource: TestTokenDataSourceProtocol = TestTokenDataSource(),
-         userDataSource: UserDataSoureceProtocol = UserDataSourece()) {
+         userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()) {
         self.appleLoginManager = appleLoginManager
         self.loginDataSource = loginDataSource
         self.testUserDatSource = testUserDataSource
-        self.userDataSource = userDataSource
+        self.userLocalDataSource = userLocalDataSource
 
         appleLoginManager.delegate = self
-    }
-
-    func loginWithoutAppleLogin() async {
-        let testToken: String = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxIiwiZXhwIjoxNjYyMDA1NzI5fQ.Qa2V4A98Q1lOly_xg1ME-9Uj9AhMkKL4l_6f6fDIxw8"
-        userDataSource.save(DdipUser(self.dummyUser, testToken))
     }
 
     func appleLogin() {
@@ -63,36 +58,47 @@ class LoginWorker: LoginWorkerProtocol {
 
 extension LoginWorker: AppleLoginManagerDelegate {
 
-    func appleLoginFail() {
-        fetchUser?(.failure(.appleLoginError))
+    func appleLoginFail(_ error: Login.LoginError) {
+        fetchUser?(.failure(error))
     }
 
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
         Task {
             do {
-                #warning("테스트 리퀘스트입니다.")
-                let user = try await login()
-//                userDataSource.save(self.dummyUser)
-                fetchUser?(.success(user))
+                let result = try await login(token: user.userIdentifier)
+                fetchUser?(result)
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))
             }
         }
     }
 
-    private func login() async throws -> User {
+    private func login(token: String) async throws -> (Result<Login.FetchUser.Response, Login.LoginError>) {
         do {
-            let dto = try await loginDataSource.login(request: .init())
-            // TODO: dto 명세후 매핑 로직 작성
+            let dto = try await loginDataSource.login(
+                request: .init(
+                    body: .init(oauthType: "APPLE", thirdPartyToken: token)
+                )
+            )
+            guard let data = dto.data else {
+                return .failure(Login.LoginError.noUser(token))
+            }
 
-            return dummyUser
+            let token = data.accessToken
+            userLocalDataSource.saveToken(token, key: .token)
+            return .success(.init(user: convertToUser(data)))
         } catch {
-            return dummyUser
+            return .failure(Login.LoginError.noUser(token))
         }
+    }
+
+    private func convertToUser(_ body: PostLoginResponseBody) -> User {
+        let profile = body.profile
+        return .init(id: profile.profileID, name: profile.profileName, gender: .male, career: profile.career, birth: .init(), age: profile.age, address: profile.address, pictures: profile.pictures, answers: profile.answers.map { .init(questionID: $0.questionID, answer: $0.answer)}, keyword: profile.keywords.map { .init(id: $0.keywordID, keyword: $0.keyword) } )
     }
 }
 
-
+#if DEBUG
 private extension LoginWorker {
     var dummyUser: User {
         .init(
@@ -109,3 +115,4 @@ private extension LoginWorker {
         )
     }
 }
+#endif
