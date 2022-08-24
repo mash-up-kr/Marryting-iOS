@@ -14,6 +14,7 @@ import UIKit
 import SnapKit
 import DesignSystem
 import Photos
+import CropViewController
 
 protocol ProfileRegisterDisplayLogic: AnyObject {
     func displayFirstPage()
@@ -25,10 +26,11 @@ protocol ProfileRegisterDisplayLogic: AnyObject {
     func displayRegisterProfileComplete()
 }
 
-public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
+public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic, UINavigationControllerDelegate {
     var interactor: ProfileRegisterBusinessLogic?
     public var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
-
+    
+    private let imagePicker = UIImagePickerController()
     // MARK: Object lifecycle
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -165,7 +167,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        cropper.delegate = self
+        imagePicker.delegate = self
     }
 
     // MARK: Configure UI
@@ -339,27 +341,31 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 
 extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
-        cropper.picker = picker
         let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        alertController.popoverPresentationController?.sourceView = self.view
-        alertController.popoverPresentationController?.sourceRect = CGRect(origin: self.view.center, size: CGSize.zero)
-        cropper.cancelButtonText = "다시 선택"
         AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
             if granted {
                 DispatchQueue.main.async {
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { _ in
-                        self.picker.sourceType = .camera
-                        self.present(self.picker, animated: true, completion: nil)
+                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { [weak self] _ in
+                        guard let self = self else { return }
+                        self.imagePicker.sourceType = .camera
+                        self.present(self.imagePicker, animated: true, completion: nil)
                     })
                 }
             }
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Gallery", comment: ""), style: .default) { _ in
-            self.picker.sourceType = .photoLibrary
-            self.present(self.picker, animated: true, completion: nil)
+        
+        alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
+            guard let self = self else { return }
+            self.imagePicker.sourceType = .photoLibrary
+            self.imagePicker.allowsEditing = false
+            self.present(self.imagePicker, animated: true, completion: nil)
         })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in }))
-        self.present(alertController, animated: true, completion: nil)
+        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+        }))
+        
+        alertController.modalPresentationStyle = .popover
+        
+        present(alertController, animated: true, completion: nil)
     }
 
     func imageRemoved(image: UIImage) {
@@ -367,14 +373,29 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
     }
 }
 
-extension ProfileRegisterViewController: UIImageCropperProtocol {
-    public func didCropImage(originalImage: UIImage?, croppedImage: UIImage?) {
-        guard let croppedImage = croppedImage else { return }
-        self.interactor?.uploadImage(.init(image: croppedImage))
+extension ProfileRegisterViewController: UIImagePickerControllerDelegate {
+    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
+        
+        let cropController = CropViewController(image: image)
+        cropController.delegate = self
+        
+        cropController.customAspectRatio = CGSize(width: 3.0, height: 4.0)
+        cropController.aspectRatioLockEnabled = true // The crop box is locked to the aspect ratio and can't be resized away from it
+        cropController.resetAspectRatioEnabled = false // When tapping 'reset', the aspect ratio will NOT be reset back to default
+        cropController.aspectRatioPickerButtonHidden = true
+        
+        picker.dismiss(animated: true, completion: {
+            self.present(cropController, animated: true, completion: nil)
+        })
     }
+}
 
-    public func didCancel() {
-        picker.dismiss(animated: true, completion: nil)
+extension ProfileRegisterViewController: CropViewControllerDelegate {
+    public func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
+        self.interactor?.uploadImage(.init(image: image))
+        self.registerProfileImageView.images.append(image)
+        cropViewController.dismiss(animated: true, completion: nil)
     }
 }
 
