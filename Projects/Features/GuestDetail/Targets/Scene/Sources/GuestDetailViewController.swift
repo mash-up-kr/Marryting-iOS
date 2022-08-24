@@ -398,9 +398,10 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     }
 
     func displayChangeMeetingButton(viewModel: GuestDetail.GetMeetingCount.ViewModel) {
-        DispatchQueue.main.async { [weak self] in
-            self?.changeMeetingButton.isHidden = viewModel.isHidden
-        }
+        // MARK: 잠시 숨김 처리 - 기획 상의
+//        DispatchQueue.main.async { [weak self] in
+//            self?.changeMeetingButton.isHidden = viewModel.isHidden
+//        }
 
     }
 }

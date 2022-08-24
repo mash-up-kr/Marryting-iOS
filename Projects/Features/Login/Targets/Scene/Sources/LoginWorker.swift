@@ -86,8 +86,13 @@ extension LoginWorker: AppleLoginManagerDelegate {
 
             let token = data.accessToken
             userLocalDataSource.saveToken(token, key: .token)
-            userLocalDataSource.save(self.convertToLocalUser(data), key: .localUser)
-            return .success(.init(user: self.convertToUser(data)))
+            print("--------- 토큰 --------")
+            print(token)
+
+            let user = convertToUser(data)
+            print("--------- 유저 --------")
+            print(user)
+            return .success(.init(user: user))
         } catch {
             return .failure(Login.LoginError.noUser(token))
         }

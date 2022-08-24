@@ -48,6 +48,7 @@ public enum DesignSystemAsset {
     public static let icMainSmallDarkHighlight = DesignSystemImages(name: "ic_main_small_dark_highlight")
     public static let icMatchingListEmptyView = DesignSystemImages(name: "ic_matching_list_empty_view")
     public static let icMyLikeListEmptyView = DesignSystemImages(name: "ic_my_like_list_empty_view")
+    public static let icReport = DesignSystemImages(name: "ic_report")
     public static let icRightEnable = DesignSystemImages(name: "ic_right_enable")
     public static let icRightHighlight = DesignSystemImages(name: "ic_right_highlight")
     public static let icRing = DesignSystemImages(name: "ic_ring")
@@ -66,6 +67,7 @@ public enum DesignSystemAsset {
     public static let imgLogin = DesignSystemImages(name: "img_login")
     public static let imgYellowDongrami = DesignSystemImages(name: "img_yellow_dongrami")
     public static let logo = DesignSystemImages(name: "logo")
+    public static let niceCompleted = DesignSystemImages(name: "nice_completed")
   }
   public enum Colors {
     public static let background = DesignSystemColors(name: "Background")

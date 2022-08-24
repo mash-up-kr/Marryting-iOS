@@ -18,7 +18,7 @@ import MeetingListRouter
 
 protocol MeetingListDisplayLogic: AnyObject {
     func displayMeetings(viewModel: MeetingList.List.ViewModel)
-    func displayGuestList(viewModel: MeetingList.List.ViewModel)
+    func displayGuestListScene()
     func displayAuthCode()
 }
 
@@ -128,10 +128,9 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
         }
     }
 
-    func displayGuestList(viewModel: MeetingList.List.ViewModel) {
-        meetingViewModels = viewModel.meetings
+    func displayGuestListScene() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-            self?.router?.routeToGuestListScene()
+//            self?.router?.routeToGuestListScene()
         }
     }
 
