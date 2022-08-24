@@ -35,6 +35,7 @@ final class SplashWorker: SplashWorkerProtocol {
 
     func judgeIsTokenLocallyExisted() -> Bool {
         if userLocalDataSource.readToken(key: .token) != nil {
+            print(userLocalDataSource.readToken(key: .token))
             return true
         }
         return false

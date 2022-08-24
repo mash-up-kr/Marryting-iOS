@@ -14,6 +14,7 @@ import UIKit
 
 protocol GuestDetailPresentationLogic {
     func presentGuest(response: GuestDetail.GetGuest.Response)
+    func presentMeetingChangeButton(response: GuestDetail.GetMeetingCount.Response)
 }
 
 final class GuestDetailPresenter: GuestDetailPresentationLogic {
@@ -43,5 +44,10 @@ final class GuestDetailPresenter: GuestDetailPresentationLogic {
                 )
             )
         )
+    }
+
+    func presentMeetingChangeButton(response: GuestDetail.GetMeetingCount.Response) {
+        let meetings = response.meetings
+        self.viewController?.displayChangeMeetingButton(viewModel: .init(isHidden: meetings.count <= 1))
     }
 }
