@@ -360,18 +360,27 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
                     }
                 }
             })
-            alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
-                guard let self = self else { return }
-                self.imagePicker.sourceType = .photoLibrary
-                self.imagePicker.allowsEditing = false
-                self.present(self.imagePicker, animated: true, completion: nil)
+            PHPhotoLibrary.requestAuthorization( { status in
+                switch status {
+                case .authorized:
+                    DispatchQueue.main.async {
+                        alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
+                            guard let self = self else { return }
+                            self.imagePicker.sourceType = .photoLibrary
+                            self.imagePicker.allowsEditing = false
+                            self.present(self.imagePicker, animated: true, completion: nil)
+                        })
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+                        }))
+                        
+                        alertController.modalPresentationStyle = .popover
+                        
+                        self.present(alertController, animated: true, completion: nil)
+                    }
+                default:
+                    break
+                }
             })
-            alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
-            }))
-            
-            alertController.modalPresentationStyle = .popover
-            
-            self.present(alertController, animated: true, completion: nil)
         }
     }
 
