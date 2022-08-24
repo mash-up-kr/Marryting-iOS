@@ -21,6 +21,7 @@ protocol ProfileRegisterDisplayLogic: AnyObject {
     func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel)
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel)
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel)
+    func displayDelteImage(viewModel: ProfileRegister.DeleteImage.ViewModel)
 }
 
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
@@ -296,6 +297,13 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         }
     }
 
+    func displayDelteImage(viewModel: ProfileRegister.DeleteImage.ViewModel) {
+        DispatchQueue.main.async {
+            self.registerProfileImageView.images = viewModel.images
+            self.rightButton.isEnabled = self.registerProfileImageView.images.count > 1
+        }
+    }
+
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
         DispatchQueue.main.async {
             self.updatePage(viewModel.pageNumber)
@@ -347,8 +355,8 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
         self.present(alertController, animated: true, completion: nil)
     }
     
-    func imageRemoved(images: [UIImage]) {
-        self.interactor?.imageRemoved(images)
+    func imageRemoved(image: UIImage) {
+        self.interactor?.imageRemoved(image)
     }
 }
 

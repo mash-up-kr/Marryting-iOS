@@ -88,6 +88,18 @@ enum ProfileRegister
         }
     }
 
+    enum DeleteImage {
+        struct Request {
+            var image: UIImage
+        }
+        struct Response {
+            var images: [UIImage]
+        }
+        struct ViewModel {
+            var images: [UIImage]
+        }
+    }
+    
     enum SelectKeywords {
         struct Request {
             var keywords: [SelectTagListKeywordModel]

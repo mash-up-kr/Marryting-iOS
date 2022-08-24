@@ -20,7 +20,7 @@ let project = Project.make(
         .project(target: "Models", path: "../../Core/CoreKit"),
         .project(target: "DataSource", path: "../../DataSource"),
         .external(name: "SnapKit"),
-        .external(name: "Kingfisher"),
+        .external(name: "Kingfisher")
       ]
     ),
     Target(

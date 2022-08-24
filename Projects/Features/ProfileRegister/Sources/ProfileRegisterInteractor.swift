@@ -20,7 +20,7 @@ protocol ProfileRegisterBusinessLogic {
     func fetchPrevPage()
     func fetchNextPage()
     func uploadImage(_ image: ProfileRegister.UploadImage.Request)
-    func imageRemoved(_ images: [UIImage])
+    func imageRemoved(_ image: UIImage)
     func registerProfile()
 }
 
@@ -69,11 +69,15 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
             }
         }
     }
-    
-    func imageRemoved(_ images: [UIImage]) {
-        selectedImages = images
+
+    func imageRemoved(_ image: UIImage) {
+        if let firstIndex = selectedImages.firstIndex(where: { $0 == image }) {
+            selectedImages.remove(at: firstIndex)
+            selectedImageUrls.remove(at: firstIndex)
+        }
+        presenter?.presentDeleteImage(response: .init(images: selectedImages))
     }
-    
+
     func selectKeywords(_ keywords: ProfileRegister.SelectKeywords.Request) {
         selectedKeywords = keywords.keywords.map {
             Keyword(id: $0.keywordID, keyword: $0.keyword)
