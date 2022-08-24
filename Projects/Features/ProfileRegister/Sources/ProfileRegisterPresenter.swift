@@ -20,6 +20,7 @@ protocol ProfileRegisterPresentationLogic
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
     func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
     func presentDeleteImage(response: ProfileRegister.DeleteImage.Response)
+    func presentRegisterProfileComplete(response: ProfileRegister.RegisterProfile.ViewModel)
 }
 
 class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
@@ -41,7 +42,7 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
     }
 
     func presentDeleteImage(response: ProfileRegister.DeleteImage.Response) {
-        viewController?.displayDelteImage(viewModel: .init(images: response.images))
+        viewController?.displayDeleteImage(viewModel: .init(images: response.images))
     }
 
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response) {
@@ -64,4 +65,7 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
         )
     }
 
+    func presentRegisterProfileComplete(response: ProfileRegister.RegisterProfile.ViewModel) {
+        viewController?.displayRegisterProfileComplete()
+    }
 }

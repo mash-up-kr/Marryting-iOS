@@ -18,7 +18,8 @@ let project = Project.make(
       dependencies: [
         .project(target: "NetworkProtocol", path: "../Core/CoreKit"),
         .project(target: "Network", path: "../Core/CoreKit"),
-        .project(target: "Models", path: "../Core/CoreKit")
+        .project(target: "Models", path: "../Core/CoreKit"),
+        .external(name: "Alamofire")
       ]
     ),
     Target(
