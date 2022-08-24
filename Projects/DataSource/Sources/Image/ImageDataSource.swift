@@ -28,7 +28,9 @@ public final class ImageDataSource: ImageDataSourceProtocol {
     }
 
     private func alamofireRequest(request: PostImageRequest) async throws -> PostImageRequest.Output {
-        try await withUnsafeThrowingContinuation { continuation in
+        let loadingActor = LoadingActor()
+        loadingActor.start()
+        return try await withUnsafeThrowingContinuation { continuation in
             AF.upload(multipartFormData: { multipartFormData in
                 multipartFormData.append(request.multipartBody, withName: "image", fileName: "file.jpeg", mimeType: "image/jpeg")
 
@@ -38,17 +40,22 @@ public final class ImageDataSource: ImageDataSourceProtocol {
             .responseData { response in
                 if let err = response.error {
                     continuation.resume(throwing: err)
+                    loadingActor.stop()
+                    return
                 }
                 guard let data = response.data else {
                     continuation.resume(throwing: NetworkError.badServerResponse)
+                    loadingActor.stop()
                     return
                 }
 
                 do {
                     let imageURL = try JSONDecoder().decode(PostImageRequest.Output.self, from: data)
                     continuation.resume(returning: imageURL)
+                    loadingActor.stop()
                 } catch {
                     continuation.resume(throwing: error)
+                    loadingActor.stop()
                 }
             }
         }
