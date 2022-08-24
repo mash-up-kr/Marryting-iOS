@@ -19,33 +19,34 @@ protocol ProfileRegisterDisplayLogic: AnyObject {
     func displayFirstPage()
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel)
     func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel)
+    func displayDeleteImage(viewModel: ProfileRegister.DeleteImage.ViewModel)
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel)
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel)
-    func displayDelteImage(viewModel: ProfileRegister.DeleteImage.ViewModel)
+    func displayRegisterProfileComplete()
 }
 
 public final class ProfileRegisterViewController: UIViewController, ProfileRegisterDisplayLogic {
     var interactor: ProfileRegisterBusinessLogic?
-    var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
+    public var router: (NSObjectProtocol & ProfileRegisterRoutingLogic & ProfileRegisterDataPassing)?
 
     // MARK: Object lifecycle
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
         setup()
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
     }
-    
+
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?){
         self.view.endEditing(true)
     }
-    
+
     // MARK: Setup
-    
+
     private func setup() {
         let viewController = self
         let interactor = ProfileRegisterInteractor()
@@ -58,7 +59,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         router.viewController = viewController
         router.dataStore = interactor
     }
-    
+
     // MARK: Properties
 
     private let sideSpace = 32
@@ -70,18 +71,18 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
     private let titlehighlightStringList: [String] = ["기본정보", "매력적인", "키워드", "성향"]
     private let subTitleStringList: [String] = ["곧 만날 상대에게 이렇게 소개할게요", "2장 이상의 다양한 모습을 보고싶어요", "5개의 키워드로 당신을 알려주세요", "꼭 기억해서 맞춤 추천해드릴게요"]
-    
+
     lazy var contentViewArr: [UIView] = [enterUserInfoView, registerProfileImageView, selectTagListView, selectValuesView]
-    
+
     // MARK: UI Properties
-    
+
     lazy var titleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.font = .h3()
         return label
     }()
-    
+
     lazy var subTitleLabel: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -89,7 +90,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         label.textColor = .systemGray3
         return label
     }()
-    
+
     lazy var pageControl: UIPageControl = {
         let pageControl = UIPageControl(frame: CGRect(x: 0, y: 0, width: 50, height: 8))
         pageControl.numberOfPages = 4
@@ -102,17 +103,17 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         }
         return pageControl
     }()
-    
+
     lazy var contentView: UIView = {
         let view = UIView()
         return view
     }()
-    
+
     lazy var buttonView: UIView = {
         let view = UIView()
         return view
     }()
-    
+
     lazy var leftButton: MTButton = {
         let button = MTButton.create(.mainSmallDark)
         button.title = "PRE"
@@ -121,7 +122,7 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         button.addTarget(self, action: #selector(pressPrevButton(_:)), for: .touchUpInside)
         return button
     }()
-    
+
     lazy var rightButton: MTButton = {
         let button = MTButton.create(.mainDark)
         button.title = "NEXT"
@@ -129,13 +130,13 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         button.addTarget(self, action: #selector(pressNextButton(_:)), for: .touchUpInside)
         return button
     }()
-    
+
     lazy var selectTagListView: SelectTagListView = {
         let view = SelectTagListView()
         view.delegate = self
         return view
     }()
-    
+
     lazy var enterUserInfoView: EnterUserInfoView = {
         let view = EnterUserInfoView()
         view.delegate = self
@@ -146,36 +147,36 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         view.jobTextField.delegate = self
         return view
     }()
-    
+
     lazy var selectValuesView: SelectValuesView = {
         let view = SelectValuesView()
         view.delegate = self
         return view
     }()
-    
+
     lazy var registerProfileImageView: RegisterProfileImageView = {
         let view = RegisterProfileImageView()
         view.delegate = self
         return view
     }()
-    
+
     // MARK: View lifecycle
-    
+
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         cropper.delegate = self
     }
-    
+
     // MARK: Configure UI
-    
+
     private func configureUI() {
         configureUIObjectsLayout()
     }
-    
+
     private func configureUIObjectsLayout() {
         self.view.backgroundColor = Pallete.Dark.background.color
-        
+
         view.addSubview(pageControl)
         view.addSubview(titleLabel)
         view.addSubview(subTitleLabel)
@@ -183,44 +184,44 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
         view.addSubview(buttonView)
         buttonView.addSubview(leftButton)
         buttonView.addSubview(rightButton)
-        
+
         self.pageControl.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(sideSpace)
             make.top.equalToSuperview().offset(84)
         }
-        
+
         self.titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(sideSpace)
             make.trailing.equalToSuperview().offset(-sideSpace)
             make.top.equalTo(pageControl.snp.bottom).offset(20)
         }
-        
+
         self.subTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(sideSpace)
             make.trailing.equalToSuperview().offset(-sideSpace)
             make.top.equalTo(titleLabel.snp.bottom).offset(8)
         }
-        
+
         self.contentView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
             make.top.equalTo(subTitleLabel.snp.bottom).offset(42)
             make.bottom.equalToSuperview()
         }
-        
+
         self.buttonView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(sideSpace)
             make.trailing.equalToSuperview().offset(-sideSpace)
             make.bottom.equalToSuperview().offset(-40)
             make.height.equalTo(56)
         }
-        
+
         self.leftButton.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-        
+
         self.rightButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.top.equalToSuperview()
@@ -266,61 +267,69 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     }
 
     // MARK: Action
-    
+
     @objc func pressPrevButton(_ sender: UIButton) {
         interactor?.fetchPrevPage()
 
     }
-    
+
     @objc func pressNextButton(_ sender: UIButton) {
         interactor?.fetchNextPage()
     }
 
     func displayFirstPage() {
-        DispatchQueue.main.async {
-            self.leftButton.isHidden = true
-            self.rightButton.isEnabled = false
+        DispatchQueue.main.async { [weak self] in
+            self?.leftButton.isHidden = true
+            self?.rightButton.isEnabled = false
         }
     }
 
     func displayImagePage(viewModel: ProfileRegister.FetchImagePage.ViewModel) {
-        DispatchQueue.main.async {
-            self.updatePage(viewModel.pageNumber)
-            self.rightButton.isEnabled = false
-            self.leftButton.isHidden = false
+        DispatchQueue.main.async { [weak self] in
+            self?.updatePage(viewModel.pageNumber)
+            self?.rightButton.isEnabled = false
+            self?.leftButton.isHidden = false
         }
     }
 
     func displayImage(viewModel: ProfileRegister.UploadImage.ViewModel) {
-        DispatchQueue.main.async {
-            self.registerProfileImageView.images.append(viewModel.image)
-            self.rightButton.isEnabled = self.registerProfileImageView.images.count > 1
+        DispatchQueue.main.async { [weak self] in
+            self?.registerProfileImageView.images.append(viewModel.image)
+            self?.rightButton.isEnabled = (self?.registerProfileImageView.images.count ?? 0) > 1
         }
     }
 
-    func displayDelteImage(viewModel: ProfileRegister.DeleteImage.ViewModel) {
-        DispatchQueue.main.async {
-            self.registerProfileImageView.images = viewModel.images
-            self.rightButton.isEnabled = self.registerProfileImageView.images.count > 1
+    func displayDeleteImage(viewModel: ProfileRegister.DeleteImage.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.registerProfileImageView.images = viewModel.images
+            self?.rightButton.isEnabled = (self?.registerProfileImageView.images.count ?? 0) > 1
         }
     }
 
     func displayKeywordPage(viewModel: ProfileRegister.FetchKeywordPage.ViewModel) {
-        DispatchQueue.main.async {
-            self.updatePage(viewModel.pageNumber)
-            self.selectTagListView.viewModel = .init(
+        DispatchQueue.main.async { [weak self] in
+            self?.updatePage(viewModel.pageNumber)
+            self?.selectTagListView.viewModel = .init(
                 selectedKeywordList: viewModel.selectedKeywords.map { .init(keywordID: $0.id, keyword: $0.keyword)},
                 keywordList: viewModel.keywords.map { .init(keywordID: $0.id, keyword: $0.keyword) }
             )
-            self.rightButton.isEnabled = false
+            self?.rightButton.isEnabled = false
+            self?.rightButton.title = "NEXT"
         }
     }
-    
+
     func displayQuestionPage(viewModel: ProfileRegister.FetchQuestionPage.ViewModel) {
+        DispatchQueue.main.async { [weak self] in
+            self?.updatePage(viewModel.pageNumber)
+            self?.selectValuesView.question = viewModel.questionViewModels
+            self?.rightButton.isEnabled = false
+            self?.rightButton.title = "DONE"
+        }
+    }
+
+    func displayRegisterProfileComplete() {
         DispatchQueue.main.async {
-            self.updatePage(viewModel.pageNumber)
-            self.selectValuesView.question = viewModel.questionViewModels
-            self.rightButton.isEnabled = false
+            self.router?.routeToRegisterComplete()
         }
     }
 

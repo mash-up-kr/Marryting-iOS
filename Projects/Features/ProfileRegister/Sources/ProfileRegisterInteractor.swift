@@ -23,7 +23,7 @@ protocol ProfileRegisterBusinessLogic {
     func imageRemoved(_ image: UIImage)
 }
 
-protocol ProfileRegisterDataStore {
+public protocol ProfileRegisterDataStore {
     var thirdPartyToken: String? { get set }
     var oauthType: String? { get set }
 }
@@ -110,7 +110,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
             case 1:
                 self.fetchFirstPage()
             case 2:
-                print(userInfo)
                 self.fetchImages()
             case 3:
                 self.fetchKeywords()
@@ -143,7 +142,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         Task {
             do {
                 let keywords = try await worker.fetchKeywords()
-                print(keywords)
                 presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
             } catch {
 
@@ -174,7 +172,20 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
             do {
                 if let thirdPartyToken = thirdPartyToken,
                    let oauthType = oauthType {
-//                    try await worker.registerProfile()
+                    try await worker.registerProfile(
+                        oauthToken: oauthType,
+                        selectedImageUrls: selectedImageUrls,
+                        userInfo: userInfo,
+                        selectedAnswers: selectedAnswers,
+                        selectedKeywords: selectedKeywords,
+                        thirdPartyToken: thirdPartyToken
+                    )
+                    print("데이터가 있습니다.")
+                    presenter?.presentRegisterProfileComplete(response: .init())
+                } else {
+                    print("nil입니다.")
+                    print("thirdPartyToken " , thirdPartyToken)
+                    print("oauthType ", oauthType)
                 }
 
 

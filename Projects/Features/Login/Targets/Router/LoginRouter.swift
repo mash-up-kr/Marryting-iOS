@@ -44,6 +44,8 @@ public class LoginRouter: NSObject, LoginRoutingLogic, LoginDataPassing {
         }
 
         let destinationVC = ProfileRegisterViewController()
+        destinationVC.router?.dataStore?.thirdPartyToken = dataStore.thirdPartyToken
+
         // ✅ 이거 가져가세용 : dataStore.thirdPartyToken
         viewController?.navigationController?.setViewControllers([destinationVC], animated: true)
     }

@@ -32,20 +32,20 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     private let questiondDataSource: QuestiondDataSourceProtocol
     private let imageDataSource: ImageDataSourceProtocol
     private let signUpDataSource: SignUpDataSourceProtocol
-    private let userDataSource: UserDataSoureceProtocol
+    private let userLocalDataSourece: UserLocalDataSoureceProtocol
 
     init(
         keywordListDataSource: KeywordListDataSourceProtocol = KeywordListDataSource(),
         questiondDataSource: QuestiondDataSourceProtocol = QuestionDataSource(),
         imageDataSource: ImageDataSourceProtocol = ImageDataSource(),
         signUpDataSource: SignUpDataSourceProtocol = SignUpDataSource(),
-        userDataSource: UserDataSoureceProtocol = UserDataSourece()
+        userLocalDataSourece: UserLocalDataSoureceProtocol = UserLocalDataSourece()
     ) {
         self.keywordListDataSource = keywordListDataSource
         self.questiondDataSource = questiondDataSource
         self.imageDataSource = imageDataSource
         self.signUpDataSource = signUpDataSource
-        self.userDataSource = userDataSource
+        self.userLocalDataSourece = userLocalDataSourece
     }
 
     func fetchKeywords() async throws -> [Keyword] {
@@ -68,8 +68,6 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     }
 
     func registerProfile(oauthToken: String, selectedImageUrls: [String], userInfo: UserInfo, selectedAnswers: [Answer], selectedKeywords: [Keyword], thirdPartyToken: String) async throws -> Void {
-
-
         let user = try await signUpDataSource.postSignUp(
             request: .init(
                 body: .init(
@@ -86,6 +84,7 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
                 )
             )
         )
+//        userLocalDataSourece.save(<#T##data: Decodable & Encodable##Decodable & Encodable#>, key: .localUser)
         return
     }
     
@@ -93,5 +92,8 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
         Formatter.dateFormatter.string(from: Formatter.koreanDateFormatter.date(from: birth)!)
     }
 
-//    func convertToLocalUser(user: PostSignUpResponseBody) -> Local
+//    func convertToLocalUser(responseBody: PostSignUpResponseBody) -> LocalUser {
+//        let profile = responseBody.profileId
+//        return .init(id: user.profileId, name: user., gender: <#T##LocalGender#>, career: <#T##String#>, birth: <#T##Date#>, age: <#T##Int#>, address: <#T##String#>, pictures: <#T##[String]#>, answers: <#T##[LocalAnswer]#>, keyword: <#T##[LocalKeyword]#>)
+//    }
 }

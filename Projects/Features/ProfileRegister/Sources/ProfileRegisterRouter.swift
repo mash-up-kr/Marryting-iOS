@@ -10,51 +10,26 @@
 //  see http://clean-swift.com
 //
 
-import UIKit
+import Foundation
+import ProfileRegisterCompleteScene
 
-@objc protocol ProfileRegisterRoutingLogic
-{
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
+@objc public protocol ProfileRegisterRoutingLogic {
+    func routeToRegisterComplete()
 }
 
-protocol ProfileRegisterDataPassing
-{
-  var dataStore: ProfileRegisterDataStore? { get }
+public protocol ProfileRegisterDataPassing {
+    var dataStore: ProfileRegisterDataStore? { get set }
 }
 
-class ProfileRegisterRouter: NSObject, ProfileRegisterRoutingLogic, ProfileRegisterDataPassing
-{
-  weak var viewController: ProfileRegisterViewController?
-  var dataStore: ProfileRegisterDataStore?
-  
-  // MARK: Routing
-  
-  //func routeToSomewhere(segue: UIStoryboardSegue?)
-  //{
-  //  if let segue = segue {
-  //    let destinationVC = segue.destination as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //  } else {
-  //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-  //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-  //    var destinationDS = destinationVC.router!.dataStore!
-  //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-  //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-  //  }
-  //}
+public class ProfileRegisterRouter: NSObject, ProfileRegisterRoutingLogic, ProfileRegisterDataPassing {
+    weak var viewController: ProfileRegisterViewController?
+    public var dataStore: ProfileRegisterDataStore?
 
-  // MARK: Navigation
-  
-  //func navigateToSomewhere(source: ProfileRegisterViewController, destination: SomewhereViewController)
-  //{
-  //  source.show(destination, sender: nil)
-  //}
-  
-  // MARK: Passing data
-  
-  //func passDataToSomewhere(source: ProfileRegisterDataStore, destination: inout SomewhereDataStore)
-  //{
-  //  destination.name = source.name
-  //}
+    // MARK: Routing
+
+    public func routeToRegisterComplete() {
+        let destinationController = ProfileRegisterCompleteViewController()
+        self.viewController?.navigationController?.setViewControllers([destinationController], animated: true)
+    }
+
 }
