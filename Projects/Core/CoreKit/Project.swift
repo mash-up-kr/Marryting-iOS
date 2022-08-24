@@ -45,8 +45,11 @@ let project = Project.make(
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["../Network/Sources/**"],
+      resources: ["../Network/Resources/**"],
       dependencies: [
-        .target(name: "NetworkProtocol")
+        .target(name: "NetworkProtocol"),
+        .external(name: "Lottie"),
+        .external(name: "SnapKit")
       ]
     ),
     Target(
