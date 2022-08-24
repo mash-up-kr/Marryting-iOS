@@ -12,7 +12,10 @@ let dependencies = Dependencies(
         .remote(
             url: "https://github.com/onevcat/Kingfisher.git",
             requirement: .upToNextMajor(from: "7.0.0")
-        )
+        ),
+        .remote(
+            url: "https://github.com/Alamofire/Alamofire.git",
+            requirement: .upToNextMajor(from: "5.6.1"))
     ],
     platforms: [.iOS]
 )

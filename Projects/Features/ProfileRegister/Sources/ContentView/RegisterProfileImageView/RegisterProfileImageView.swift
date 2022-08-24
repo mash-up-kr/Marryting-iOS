@@ -12,7 +12,7 @@ import SnapKit
 
 protocol RegisterProfileImageViewDelegate: AnyObject {
     func tapRegisterimageButton(_ sender: UIButton)
-    func imageRemoved(images: [UIImage])
+    func imageRemoved(image: UIImage)
 }
 final class RegisterProfileImageView: UIView {
     weak var delegate: RegisterProfileImageViewDelegate?
@@ -124,7 +124,7 @@ extension RegisterProfileImageView: RegisterProfileImageCellDelegate {
         delegate?.tapRegisterimageButton(sender)
     }
     func deleteImage(for image: UIImage) {
-        images = images.filter { $0 != image }
-        delegate?.imageRemoved(images: images)
+//        images = images.filter { $0 != image }
+        delegate?.imageRemoved(image: image)
     }
 }

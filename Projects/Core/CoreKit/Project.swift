@@ -45,7 +45,9 @@ let project = Project.make(
       deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .default,
       sources: ["../Network/Sources/**"],
-      dependencies: [.target(name: "NetworkProtocol")]
+      dependencies: [
+        .target(name: "NetworkProtocol")
+      ]
     ),
     Target(
       name: "Models",

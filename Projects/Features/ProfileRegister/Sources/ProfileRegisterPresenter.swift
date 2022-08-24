@@ -19,6 +19,7 @@ protocol ProfileRegisterPresentationLogic
     func presentUploadImage(response: ProfileRegister.UploadImage.Response)
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
     func presentQuestionPage(response: ProfileRegister.FetchQuestionPage.Response)
+    func presentDeleteImage(response: ProfileRegister.DeleteImage.Response)
 }
 
 class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
@@ -38,6 +39,10 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 
     func presentUploadImage(response: ProfileRegister.UploadImage.Response) {
         viewController?.displayImage(viewModel: .init(image: response.image))
+    }
+
+    func presentDeleteImage(response: ProfileRegister.DeleteImage.Response) {
+        viewController?.displayDelteImage(viewModel: .init(images: response.images))
     }
 
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response) {

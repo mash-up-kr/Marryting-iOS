@@ -21,10 +21,9 @@ public struct PostImageRequest: Request {
     
     public var contentType: String = "multipart/form-data"
     
-    public var multipartBody: Data?
+    public var multipartBody: Data
 
     public init(imageData: Data) {
         multipartBody = imageData
     }
 }
-

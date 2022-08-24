@@ -13,6 +13,7 @@
 import DataSource
 import Models
 import UIKit
+import Alamofire
 
 //private var selectedKeywords: [Keyword] = []
 //private var selectedImages: [UIImage] = []
@@ -54,24 +55,15 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
         guard let data = questions.data else { return [] }
         return data.map { Question(questionId: $0.questionID, question: $0.question, answer1: $0.answer1, answer2: $0.answer2) }
     }
-    
+
     func updateImage(image: UIImage) async throws -> String {
-        guard let imageData = image.pngData() else { return "" }
-        var body = Data()
-        let boundaryPrefix = "--Boundary\r\n"
-        body.append(boundaryPrefix.data(using: .utf8)!)
-        body.append("Content-Disposition: form-data; name=\"images[]\"; filename=\"\(Date())\"\r\n".data(using: .utf8)!)
-        body.append("Content-Type: image/png\r\n\r\n".data(using: .utf8)!)
-        body.append(imageData)
-        body.append("\r\n".data(using: .utf8)!)
-        body.append(boundaryPrefix.data(using: .utf8)!)
-        let success = try await self.imageDataSource.postImage(request: PostImageRequest(imageData: imageData))
-        return success.data
+        let imageData = image.jpegData(compressionQuality: 1.0)!
+        let imageURL = try await self.imageDataSource.postImage(request: .init(imageData: imageData))
+        return imageURL.data
     }
 
     func registerProfile() async throws -> Void {
 //        let userInfo = try await self.signUpDataSource.postSignUp(request: PostSignUpRequest(body: <#T##PostSignUpRequestBody#>))
         return
     }
-
 }
