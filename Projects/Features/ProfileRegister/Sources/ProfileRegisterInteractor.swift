@@ -113,11 +113,11 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                 self.fetchImages()
             case 3:
                 self.fetchKeywords()
-            case 4:
-                self.fetchQuestions()
             default:
-                self.registerProfile()
+                self.fetchQuestions()
             }
+        } else {
+            self.registerProfile()
         }
     }
 
@@ -134,11 +134,9 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     }
 
     private func fetchKeywords() {
-        print("Hello")
         guard let worker = worker else {
             return
         }
-        print("a")
         Task {
             do {
                 let keywords = try await worker.fetchKeywords()
