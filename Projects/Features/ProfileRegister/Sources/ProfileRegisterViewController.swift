@@ -67,7 +67,6 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
     private let sideSpace = 32
 
     private let picker = UIImagePickerController()
-    private let cropper = UIImageCropper(cropRatio: 3/4)
 
 
     private let titleStringList: [String] = ["당신의 기본정보를\n알려주세요", "당신의 매력적인 모습을\n보여주세요", "당신을 키워드로\n표현해보세요", "내가 쓰는\n나의 성향 소개서"]
@@ -341,31 +340,33 @@ public final class ProfileRegisterViewController: UIViewController, ProfileRegis
 
 extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
     func tapRegisterimageButton(_ sender: UIButton) {
-        let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
-        AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
-            if granted {
-                DispatchQueue.main.async {
-                    alertController.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { [weak self] _ in
-                        guard let self = self else { return }
-                        self.imagePicker.sourceType = .camera
-                        self.present(self.imagePicker, animated: true, completion: nil)
-                    })
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+            AVCaptureDevice.requestAccess(for: .video, completionHandler: { (granted: Bool) in
+                if granted {
+                    DispatchQueue.main.async {
+                        alertController.addAction(UIAlertAction(title: NSLocalizedString("Camera", comment: ""), style: .default) { [weak self] _ in
+                            guard let self = self else { return }
+                            self.imagePicker.sourceType = .camera
+                            self.present(self.imagePicker, animated: true, completion: nil)
+                        })
+                    }
                 }
-            }
-        })
-        
-        alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
-            guard let self = self else { return }
-            self.imagePicker.sourceType = .photoLibrary
-            self.imagePicker.allowsEditing = false
-            self.present(self.imagePicker, animated: true, completion: nil)
-        })
-        alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
-        }))
-        
-        alertController.modalPresentationStyle = .popover
-        
-        present(alertController, animated: true, completion: nil)
+            })
+            
+            alertController.addAction(UIAlertAction(title: "Gallery", style: .default) { [weak self] action in
+                guard let self = self else { return }
+                self.imagePicker.sourceType = .photoLibrary
+                self.imagePicker.allowsEditing = false
+                self.present(self.imagePicker, animated: true, completion: nil)
+            })
+            alertController.addAction(UIAlertAction(title: NSLocalizedString("Cancel", comment: ""), style: .cancel, handler: { _ in
+            }))
+            
+            alertController.modalPresentationStyle = .popover
+            
+            self.present(alertController, animated: true, completion: nil)
+        }
     }
 
     func imageRemoved(image: UIImage) {
@@ -375,27 +376,30 @@ extension ProfileRegisterViewController: RegisterProfileImageViewDelegate {
 
 extension ProfileRegisterViewController: UIImagePickerControllerDelegate {
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
-        
-        let cropController = CropViewController(image: image)
-        cropController.delegate = self
-        
-        cropController.customAspectRatio = CGSize(width: 3.0, height: 4.0)
-        cropController.aspectRatioLockEnabled = true // The crop box is locked to the aspect ratio and can't be resized away from it
-        cropController.resetAspectRatioEnabled = false // When tapping 'reset', the aspect ratio will NOT be reset back to default
-        cropController.aspectRatioPickerButtonHidden = true
-        
-        picker.dismiss(animated: true, completion: {
-            self.present(cropController, animated: true, completion: nil)
-        })
+        DispatchQueue.main.async {
+            guard let image = (info[UIImagePickerController.InfoKey.originalImage] as? UIImage) else { return }
+            
+            let cropController = CropViewController(image: image)
+            cropController.delegate = self
+            
+            cropController.customAspectRatio = CGSize(width: 3.0, height: 4.0)
+            cropController.aspectRatioLockEnabled = true // The crop box is locked to the aspect ratio and can't be resized away from it
+            cropController.resetAspectRatioEnabled = false // When tapping 'reset', the aspect ratio will NOT be reset back to default
+            cropController.aspectRatioPickerButtonHidden = true
+            
+            picker.dismiss(animated: true, completion: {
+                self.present(cropController, animated: true, completion: nil)
+            })
+        }
     }
 }
 
 extension ProfileRegisterViewController: CropViewControllerDelegate {
     public func cropViewController(_ cropViewController: CropViewController, didCropToImage image: UIImage, withRect cropRect: CGRect, angle: Int) {
         self.interactor?.uploadImage(.init(image: image))
-        self.registerProfileImageView.images.append(image)
-        cropViewController.dismiss(animated: true, completion: nil)
+        DispatchQueue.main.async {
+            cropViewController.dismiss(animated: true, completion: nil)
+        }
     }
 }
 
@@ -404,7 +408,9 @@ extension ProfileRegisterViewController: CropViewControllerDelegate {
 extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
     func sendUserInfo(_ userInfo: ProfileRegister.DidTapFirstPageNext.Request, allEntered: Bool) {
         interactor?.didTapUserInfoPageNextButton(userInfo)
-        rightButton.isEnabled = allEntered
+        DispatchQueue.main.async {
+            self.rightButton.isEnabled = allEntered
+        }
     }
 }
 
@@ -413,7 +419,9 @@ extension ProfileRegisterViewController: EnterUserInfoViewDelegate {
 extension ProfileRegisterViewController: SelectTagListViewDelegate {
     func sendKeywords(keyword keywords: [SelectTagListKeywordModel]) {
         interactor?.selectKeywords(.init(keywords: keywords))
-        rightButton.isEnabled = keywords.count == 5
+        DispatchQueue.main.async {
+            self.rightButton.isEnabled = keywords.count == 5
+        }
     }
 }
 
@@ -422,7 +430,9 @@ extension ProfileRegisterViewController: SelectTagListViewDelegate {
 extension ProfileRegisterViewController: SelectValuesViewDelegate {
     func sendAnswers(answers: [AnswerViewModel]) {
         interactor?.selectAnswers(.init(answers: answers))
-        rightButton.isEnabled = answers.count == 3
+        DispatchQueue.main.async {
+            self.rightButton.isEnabled = answers.count == 3
+        }
     }
 }
 

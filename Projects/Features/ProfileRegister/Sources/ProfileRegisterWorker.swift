@@ -62,7 +62,18 @@ class ProfileRegisterWorker: ProfileRegisterWorkerProtocol {
     }
 
     func updateImage(image: UIImage) async throws -> String {
-        let imageData = image.jpegData(compressionQuality: 1.0)!
+        
+        guard let tmpImageData = image.jpegData(compressionQuality: 1.0) else {
+            return ""
+        }
+        var imageData: Data? = tmpImageData
+        if tmpImageData.count > 10000000 {
+            imageData = image.jpegData(compressionQuality: CGFloat(10000000.0 / Double(tmpImageData.count)))
+        }
+        guard let imageData = imageData else {
+            return ""
+        }
+
         let imageURL = try await self.imageDataSource.postImage(request: .init(imageData: imageData))
         return imageURL.data
     }
