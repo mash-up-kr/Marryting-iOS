@@ -21,11 +21,11 @@ protocol ProfileRegisterBusinessLogic {
     func fetchNextPage()
     func uploadImage(_ image: ProfileRegister.UploadImage.Request)
     func imageRemoved(_ image: UIImage)
-    func registerProfile()
 }
 
 protocol ProfileRegisterDataStore {
-
+    var thirdPartyToken: String? { get set }
+    var oauthType: String? { get set }
 }
 
 class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore {
@@ -34,6 +34,9 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     typealias URLString = String
 
+    var thirdPartyToken: String?
+    var oauthType: String? = "APPLE"
+    
     private let pageSize: Int = 4
     private var pageNumber: Int = 1
 
@@ -95,6 +98,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     func fetchPrevPage() {
         if pageNumber > 1 {
             pageNumber -= 1
+            presenter?.presentFirstPage()
         }
     }
 
@@ -105,11 +109,14 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
             case 1:
                 self.fetchFirstPage()
             case 2:
+                print(userInfo)
                 self.fetchImages()
             case 3:
                 self.fetchKeywords()
-            default:
+            case 4:
                 self.fetchQuestions()
+            default:
+                self.registerProfile()
             }
         }
     }
@@ -141,7 +148,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         }
     }
 
-    func fetchQuestions() {
+    private func fetchQuestions() {
         guard let worker = worker else {
             return
         }
@@ -155,7 +162,22 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         }
     }
 
-    func registerProfile() {
+    private func registerProfile() {
+        guard let worker = worker else {
+            return
+        }
 
+        Task {
+            do {
+                if let thirdPartyToken = thirdPartyToken,
+                   let oauthType = oauthType {
+//                    try await worker.registerProfile()
+                }
+
+
+            } catch {
+
+            }
+        }
     }
 }

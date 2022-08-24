@@ -24,7 +24,6 @@ protocol ProfileRegisterPresentationLogic
 
 class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 {
-
     weak var viewController: ProfileRegisterDisplayLogic?
 
     func presentFirstPage() {
