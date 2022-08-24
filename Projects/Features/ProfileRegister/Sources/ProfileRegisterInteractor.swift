@@ -64,8 +64,8 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         Task {
             do {
                 let urlString = try await worker.updateImage(image: image.image)
-                selectedImageUrls.append(urlString)
                 selectedImages.append(image.image)
+                selectedImageUrls.append(urlString)
                 presenter?.presentUploadImage(response: .init(image: image.image))
             }
             catch {
