@@ -14,7 +14,7 @@ import UIKit
 
 protocol ProfileRegisterPresentationLogic
 {
-    func presentFirstPage()
+    func presentLocalUserInfoPage(response: ProfileRegister.FetchFirstPage.Response)
     func presentImagePage(response: ProfileRegister.FetchImagePage.Response)
     func presentUploadImage(response: ProfileRegister.UploadImage.Response)
     func presentKeywordPage(response: ProfileRegister.FetchKeywordPage.Response)
@@ -27,10 +27,22 @@ class ProfileRegisterPresenter: ProfileRegisterPresentationLogic
 {
     weak var viewController: ProfileRegisterDisplayLogic?
 
-    func presentFirstPage() {
-        viewController?.displayFirstPage()
+    func presentLocalUserInfoPage(response: ProfileRegister.FetchFirstPage.Response) {
+        let userInfo = response.userInfo
+        viewController?.displayLocalUserInfoPage(
+            viewModel: .init(
+                enterUserInfoViewModel: .init(
+                    name: userInfo.name,
+                    gender: userInfo.gender,
+                    birth: userInfo.birth,
+                    address: userInfo.address,
+                    career: userInfo.career
+                ),
+                pageNumber: response.pageNumber
+            )
+        )
     }
-    
+
     func presentImagePage(response: ProfileRegister.FetchImagePage.Response) {
         viewController?.displayImagePage(viewModel:
                 .init(images: response.images, pageNumber: response.pageNumber)

@@ -40,6 +40,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     private let pageSize: Int = 4
     private var pageNumber: Int = 1
 
+    private var keywords: [Keyword] = []
     private var selectedKeywords: [Keyword] = []
     private var selectedImages: [UIImage] = []
     private var selectedImageUrls: [String] = []
@@ -96,9 +97,17 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
     // Paging Flow
     
     func fetchPrevPage() {
-        if pageNumber > 1 {
+        if pageNumber >= 1 {
             pageNumber -= 1
-            presenter?.presentFirstPage()
+            print(pageNumber)
+            switch pageNumber {
+            case 1:
+                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
+            case 2:
+                self.presenter?.presentImagePage(response: .init(images: selectedImages, pageNumber: pageNumber))
+            default:
+                self.presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
+            }
         }
     }
 
@@ -108,7 +117,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
             print(pageNumber)
             switch pageNumber {
             case 1:
-                self.fetchFirstPage()
+                self.presenter?.presentLocalUserInfoPage(response: .init(userInfo: userInfo, pageNumber: pageNumber))
             case 2:
                 self.fetchImages()
             case 3:
@@ -119,10 +128,6 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         } else {
             self.registerProfile()
         }
-    }
-
-    private func fetchFirstPage() {
-        presenter?.presentFirstPage()
     }
 
     private func fetchImages() {
@@ -140,6 +145,7 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
         Task {
             do {
                 let keywords = try await worker.fetchKeywords()
+                self.keywords = keywords
                 presenter?.presentKeywordPage(response: .init(keywords: keywords, selectedKeywords: selectedKeywords, pageNumber: pageNumber))
             } catch {
 
@@ -181,12 +187,8 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
                     print("데이터가 있습니다.")
                     presenter?.presentRegisterProfileComplete(response: .init())
                 } else {
-                    print("nil입니다.")
-                    print("thirdPartyToken " , thirdPartyToken)
-                    print("oauthType ", oauthType)
+                    return
                 }
-
-
             } catch {
 
             }

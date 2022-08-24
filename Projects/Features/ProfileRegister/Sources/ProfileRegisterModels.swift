@@ -31,6 +31,7 @@ enum ProfileRegister
     enum FetchFirstPage {
         struct Response {
             var userInfo: UserInfo
+            var pageNumber: Int
         }
 
         struct ViewModel {

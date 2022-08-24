@@ -28,14 +28,18 @@ final class SelectTagListView: UIView {
 
     var viewModel: SelectTagListViewModel? {
         didSet {
+            self.tempCheckedKeywords = []
             self.checkedKeywords = viewModel?.selectedKeywordList ?? []
             self.tagList = viewModel?.keywordList ?? []
             DispatchQueue.main.async { [weak self] in
                 self?.collectionView.reloadData()
             }
+            print(tagList)
+            print(checkedKeywords)
         }
     }
     var checkedKeywords: [SelectTagListKeywordModel] = []
+    var tempCheckedKeywords: [SelectTagListKeywordModel] = []
 
     private var tagList: [SelectTagListKeywordModel] = []
 
@@ -98,8 +102,28 @@ extension SelectTagListView: UICollectionViewDataSource, UICollectionViewDelegat
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCell", for: indexPath) as? TagCell else {
             return UICollectionViewCell()
         }
-        
-        cell.setData(tagList[indexPath.row])
+
+        let tag = tagList[indexPath.row]
+        cell.setData(tag)
+        if let firstIndex = checkedKeywords.firstIndex(where: { $0.keywordID == tag.keywordID }) {
+            switch tempCheckedKeywords.count {
+                case 0:
+                    cell.click(backgroundColor: Pallete.Light.main300.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.main300.color)
+                case 1:
+                    cell.click(backgroundColor: Pallete.Light.subPurple.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subPurple.color)
+                case 2:
+                    cell.click(backgroundColor: Pallete.Light.subYellow.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subYellow.color)
+                case 3:
+                    cell.click(backgroundColor: Pallete.Light.subBlue.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subBlue.color)
+                case 4:
+                    cell.click(backgroundColor: Pallete.Light.subGreen.color?.withAlphaComponent(0.16), borderColor: Pallete.Light.subGreen.color)
+                default:
+                    break
+            }
+            tempCheckedKeywords.append(checkedKeywords[firstIndex])
+        } else {
+            cell.unclick()
+        }
         return cell
     }
     
