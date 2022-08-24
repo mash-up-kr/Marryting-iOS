@@ -21,15 +21,12 @@ public final class Network: NetworkProtocol {
     }
     
     public func send<T: Request>(_ request: T) async throws -> T.Output {
-        let loadingActor = LoadingActor()
         return try await withCheckedThrowingContinuation { continuation in
             do {
-                loadingActor.start()
                 let urlRequest = try RequestFactory(request: request).makeURLRequest()
                 let task = session.dataTask(with: urlRequest) { data, response, error in
                     if let error = error {
                         continuation.resume(with: .failure(error))
-                        loadingActor.stop()
                         return
                     }
                     guard let data = data,
@@ -38,22 +35,18 @@ public final class Network: NetworkProtocol {
                     else {
                         print(response as! HTTPURLResponse)
                         continuation.resume(with: .failure(NetworkError.badServerResponse))
-                        loadingActor.stop()
                         return
                     }
                     do {
                         let output = try JSONDecoder().decode(T.Output.self, from: data)
                         continuation.resume(with: .success(output))
-                        loadingActor.stop()
                     } catch {
                         continuation.resume(with: .failure(error))
-                        loadingActor.stop()
                     }
                 }
                 task.resume()
             } catch {
                 continuation.resume(with: .failure(error))
-                loadingActor.stop()
             }
         }
     }
