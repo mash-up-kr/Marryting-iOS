@@ -6,6 +6,7 @@ import ProjectDescriptionHelpers
 let infoPlist: [String: InfoPlist.Value] = [
   "CFBundleShortVersionString": "1.0",
   "CFBundleVersion": "1",
+  "CFBundleDisplayName": "메리팅",
   "UIMainStoryboardFile": "",
   "UILaunchStoryboardName": "LaunchScreen",
   "NSAppTransportSecurity": ["NSAllowsArbitraryLoads": true],
@@ -13,7 +14,8 @@ let infoPlist: [String: InfoPlist.Value] = [
   "NSCameraUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
   "NSPhotoLibraryUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
   "NSPhotoLibraryAddUsageDescription": "프로필 사진 등록을 위해 카메라 접근 권한이 필요합니다",
-  "LSApplicationQueriesSchemes": ["kakaokompassauth","kakaolink"]
+  "LSApplicationQueriesSchemes": ["kakaokompassauth","kakaolink"],
+  "CFBundleURLTypes": [["CFBundleTypeRole": "Editor","CFBundleURLSchemes":["kakaobd614625345b00170f51b167c97e96e9"]]]
 ]
 
 let project = Project.make(
@@ -24,6 +26,7 @@ let project = Project.make(
       platform: .iOS,
       product: .app,
       bundleId: "kr.mash-up.Marryting",
+      deploymentTarget: .iOS(targetVersion: "13.0", devices: [.iphone]),
       infoPlist: .extendingDefault(with: infoPlist),
       sources: ["Sources/**"],
       resources: ["Resources/**"],
