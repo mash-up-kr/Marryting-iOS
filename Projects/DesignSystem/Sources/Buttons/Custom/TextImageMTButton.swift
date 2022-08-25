@@ -65,12 +65,15 @@ extension TextImageMTButton {
     // MARK: 버튼 타입
 
     public enum CustomButtonType {
+        case mainPlusDark
         case mainDark
         case mainLight
         case mainSmallDark
 
         var contentAttribute:  UISemanticContentAttribute {
             switch self {
+            case .mainPlusDark:
+                return .forceRightToLeft
             case .mainDark:
                 return .forceRightToLeft
             case .mainLight:
@@ -82,6 +85,8 @@ extension TextImageMTButton {
 
         var enabledBackgroundColor: UIColor? {
             switch self {
+            case .mainPlusDark:
+                return Pallete.Dark.subGreen.color
             case .mainDark:
                 return Pallete.Dark.subGreen.color
             case .mainLight:
@@ -93,6 +98,8 @@ extension TextImageMTButton {
 
         var disabledBackgroundColor: UIColor?  {
             switch self {
+            case .mainPlusDark:
+                return Pallete.Dark.grey300.color
             case .mainDark:
                 return Pallete.Dark.grey300.color
             case .mainLight:
@@ -104,6 +111,8 @@ extension TextImageMTButton {
 
         var enabledTextColor: UIColor?  {
             switch self {
+            case .mainPlusDark:
+                return Pallete.Dark.grey800.color
             case .mainDark:
                 return Pallete.Dark.grey800.color
             case .mainLight:
@@ -115,6 +124,8 @@ extension TextImageMTButton {
 
         var disabledTextColor: UIColor?  {
             switch self {
+            case .mainPlusDark:
+                return Pallete.Dark.grey200.color
             case .mainDark:
                 return Pallete.Dark.grey200.color
             case .mainLight:
@@ -130,6 +141,8 @@ extension TextImageMTButton {
 
         var highlightedBackgroundColor: UIColor? {
             switch self {
+            case .mainPlusDark:
+                return Pallete.Dark.subGreen.color
             case .mainDark:
                 return Pallete.Dark.subGreen.color
             case .mainLight:
@@ -141,6 +154,8 @@ extension TextImageMTButton {
 
         var enableImage: UIImage? {
             switch self {
+            case .mainPlusDark:
+                return .create(.ic_plus_enable)
             case .mainDark:
                 return .create(.ic_main_dark_enable)
             case .mainLight:
@@ -152,6 +167,8 @@ extension TextImageMTButton {
 
         var highlightImage: UIImage? {
             switch self {
+            case .mainPlusDark:
+                return .create(.ic_plus_highlight)
             case .mainDark:
                 return .create(.ic_main_dark_highlight)
             case .mainLight:
@@ -163,6 +180,8 @@ extension TextImageMTButton {
 
         var disableImage: UIImage? {
             switch self {
+            case .mainPlusDark:
+                return .create(.ic_plus_disable)
             case .mainDark:
                 return .create(.ic_main_dark_disable)
             case .mainLight:
@@ -174,6 +193,8 @@ extension TextImageMTButton {
 
         var imagePadding: CGFloat {
             switch self {
+            case .mainPlusDark:
+                return 22
             case .mainDark:
                 return 22
             case .mainLight:
@@ -185,6 +206,8 @@ extension TextImageMTButton {
 
         var contentLeftPadding: CGFloat {
             switch self {
+            case .mainPlusDark:
+                return 36
             case .mainDark:
                 return 36
             case .mainLight:
@@ -196,6 +219,8 @@ extension TextImageMTButton {
 
         var contentRightPadding: CGFloat {
             switch self {
+            case .mainPlusDark:
+                return 8
             case .mainDark:
                 return 8
             case .mainLight:
@@ -204,9 +229,9 @@ extension TextImageMTButton {
                 return 24
             }
         }
+
         var imageViewWidth: CGFloat {
             return 40
         }
-
     }
 }

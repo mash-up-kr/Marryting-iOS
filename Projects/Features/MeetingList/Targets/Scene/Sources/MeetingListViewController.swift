@@ -74,7 +74,7 @@ public final class MeetingListViewController: UIViewController, MeetingListDispl
     }()
     
     lazy var addButton: MTButton = {
-        let button = MTButton.create(.mainDark)
+        let button = MTButton.create(.mainPlusDark)
         button.title = "ADD"
         button.addTarget(self, action: #selector(didTapAddButton), for: .touchUpInside)
         return button
