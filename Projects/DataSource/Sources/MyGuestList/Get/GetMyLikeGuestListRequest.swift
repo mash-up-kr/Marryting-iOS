@@ -14,10 +14,16 @@ public struct GetMyLikeGuestListRequest: Request {
 
     public typealias Output = GetMyLikeGuestListResponse
 
-    public var endpoint: String = "/api/v1/like/profiles"
+    public var endpoint: String {
+        return "/api/v1/wedding/\(weddingID)/profiles/like"
+    }
 
     public var method: HTTPMethod = .get
-    
-    public init() {}
+
+    public var weddingID: Int = 1
+
+    public init(weddingID: Int) {
+        self.weddingID = weddingID
+    }
 }
 

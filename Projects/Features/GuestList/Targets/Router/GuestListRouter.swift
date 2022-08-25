@@ -39,6 +39,7 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
             return
         }
         let destinationVC = MyGuestListViewController()
+        destinationVC.router?.dataStore?.meetingId = dataStore.meetingId
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 

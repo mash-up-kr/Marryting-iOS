@@ -14,8 +14,8 @@ import DataSource
 import Models
 
 protocol MyGuestListWorkerProtocol {
-    func fetchMyLikeGuests() async throws -> [Guest]
-    func fetchMatchingGuests() async throws -> [MatchedGuest]
+    func fetchMyLikeGuests(weddingID: Int) async throws -> [Guest]
+    func fetchMatchingGuests(weddingID: Int) async throws -> [MatchedGuest]
 }
 
 final class MyGuestListWorker: MyGuestListWorkerProtocol {
@@ -28,10 +28,10 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
         self.userDataSource = userDataSource
     }
 
-    func fetchMyLikeGuests() async throws -> [Guest] {
+    func fetchMyLikeGuests(weddingID: Int) async throws -> [Guest] {
         do {
 
-            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init())
+            let dto = try await myGuestListDataSource.getMyLikeGuestList(request: .init(weddingID: weddingID))
             guard let myLikeGuestListDTO = dto.data else { return [] }
             let myLikeGuestList = myLikeGuestListDTO.map { Guest($0) }
             return myLikeGuestList
@@ -40,9 +40,9 @@ final class MyGuestListWorker: MyGuestListWorkerProtocol {
         }
     }
 
-    func fetchMatchingGuests() async throws -> [MatchedGuest] {
+    func fetchMatchingGuests(weddingID: Int) async throws -> [MatchedGuest] {
         do {
-            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init())
+            let dto = try await myGuestListDataSource.getMatchingGuestList(request: .init(weddingID: weddingID))
             guard let matchingGuestListDTO = dto.data else { return [] }
             let matchingGuestList = matchingGuestListDTO.map { MatchedGuest($0) }
             return matchingGuestList

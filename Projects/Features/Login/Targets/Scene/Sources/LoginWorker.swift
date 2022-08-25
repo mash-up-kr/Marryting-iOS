@@ -56,7 +56,7 @@ class LoginWorker: LoginWorkerProtocol {
                 Task {
                     do {
                         guard let token = token else { return }
-                        let result = try await self.login(token: token)
+                        let result = try await self.login(oauthType: "KAKAO", token: token)
                         self.fetchUser?(result)
                     } catch {
                         self.fetchUser?(.failure(.loginDataSourceError))
@@ -89,7 +89,7 @@ extension LoginWorker: AppleLoginManagerDelegate {
     func appleLoginSuccess(_ user: AppleLoginManager.AppleUser) {
         Task {
             do {
-                let result = try await login(token: user.userIdentifier)
+                let result = try await login(oauthType: "APPLE", token: user.userIdentifier)
                 fetchUser?(result)
             } catch {
                 fetchUser?(.failure(.loginDataSourceError))
@@ -97,11 +97,11 @@ extension LoginWorker: AppleLoginManagerDelegate {
         }
     }
 
-    private func login(token: String) async throws -> (Result<Login.FetchUser.Response, Login.LoginError>) {
+    private func login(oauthType: String,token: String) async throws -> (Result<Login.FetchUser.Response, Login.LoginError>) {
         do {
             let dto = try await loginDataSource.login(
                 request: .init(
-                    body: .init(oauthType: "APPLE", thirdPartyToken: token)
+                    body: .init(oauthType: oauthType, thirdPartyToken: token)
                 )
             )
             guard let data = dto.data else {

@@ -15,4 +15,5 @@ import Models
 public protocol MyGuestListDataStore {
     var myLikeGuests: [Guest] { get set }
     var matchingGuests: [MatchedGuest] { get set }
+    var meetingId: Int? { get set }
 }
