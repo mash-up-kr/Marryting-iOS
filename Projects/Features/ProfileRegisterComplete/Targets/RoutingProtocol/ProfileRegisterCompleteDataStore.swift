@@ -12,4 +12,5 @@
 
 public protocol ProfileRegisterCompleteDataStore {
 //    var storeGuest: Guest? { get set }
+    var name: String? { get set }
 }

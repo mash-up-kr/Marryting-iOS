@@ -246,9 +246,21 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     }
 
     @objc
-    private func routeToMyGuestListSceneFromLikeRequestCompleteScene() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-            self.router?.routeToMyGuestListScene()
+    private func routeToMyGuestListSceneFromLikeRequestCompleteScene(_ notification: Notification) {
+        guard let userInfo = notification.userInfo as? [String: Int],
+              let routeTo = userInfo["routeTo"] else { return }
+
+        switch routeTo {
+        case 0: // 0 : 하객 리스트
+            self.router?.routeToSelf()
+        case 1: // 1 : 내가 좋아요한 하객 리스트
+            self.router?.routeToSelf()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                self.router?.routeToMyGuestListScene()
+            }
+        default:
+            break
+
         }
     }
     // MARK: Display Logic

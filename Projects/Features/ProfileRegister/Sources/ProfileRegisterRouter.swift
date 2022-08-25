@@ -28,7 +28,12 @@ public class ProfileRegisterRouter: NSObject, ProfileRegisterRoutingLogic, Profi
     // MARK: Routing
 
     public func routeToRegisterComplete() {
+        guard let dataStore = dataStore else {
+            return
+        }
+
         let destinationController = ProfileRegisterCompleteViewController()
+        destinationController.router?.dataStore?.name = dataStore.name
         self.viewController?.navigationController?.setViewControllers([destinationController], animated: true)
     }
 

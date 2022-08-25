@@ -20,7 +20,9 @@ protocol ProfileRegisterCompleteBusinessLogic {
 final class ProfileRegisterCompleteInteractor: ProfileRegisterCompleteBusinessLogic, ProfileRegisterCompleteDataStore {
     var presenter: ProfileRegisterCompletePresentationLogic?
     var worker: ProfileRegisterCompleteWorkerProtocol?
-    
+
+    var name: String?
+
     init(worker: ProfileRegisterCompleteWorkerProtocol = ProfileRegisterCompleteWorker()) {
         self.worker = worker
     }
@@ -32,7 +34,7 @@ final class ProfileRegisterCompleteInteractor: ProfileRegisterCompleteBusinessLo
             return
         }
         presenter?.presentMyName(
-            response: ProfileRegisterComplete.FetchMyName.Response(name: worker.getMyName())
+            response: ProfileRegisterComplete.FetchMyName.Response(name: (name ?? "") + "님")
         )
     }
 

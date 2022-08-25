@@ -28,6 +28,8 @@ final class MyGuestListInteractor: MyGuestListBusinessLogic, MyGuestListDataStor
 
     var matchingGuests: [MatchedGuest] = []
 
+    var meetingId: Int?
+
     init(worker: MyGuestListWorkerProtocol = MyGuestListWorker()) {
         self.worker = worker
     }
@@ -40,7 +42,7 @@ final class MyGuestListInteractor: MyGuestListBusinessLogic, MyGuestListDataStor
         }
         Task {
             do {
-                let guests = try await worker.fetchMyLikeGuests()
+                let guests = try await worker.fetchMyLikeGuests(weddingID: meetingId ?? 1)
                 self.myLikeGuests = guests
                 presenter?.presentMyLikeGuests(response: .init(guests: guests))
             } catch {
@@ -55,7 +57,7 @@ final class MyGuestListInteractor: MyGuestListBusinessLogic, MyGuestListDataStor
         }
         Task {
             do {
-                let guests = try await worker.fetchMatchingGuests()
+                let guests = try await worker.fetchMatchingGuests(weddingID: meetingId ?? 1)
                 self.matchingGuests = guests
                 presenter?.presentMatchingGuests(response: .init(guests: guests))
             } catch {

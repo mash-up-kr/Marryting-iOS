@@ -14,11 +14,17 @@ public struct GetMatchingGuestListRequest: Request {
 
     public typealias Output = GetMatchingGuestListResponse
 
-    public var endpoint: String = "/api/v1/like/matching-profiles"
+    public var endpoint: String {
+        return "/api/v1/wedding/\(weddingID)/matching-profiles"
+    }
 
     public var method: HTTPMethod = .get
 
-    public init() {}
+    public var weddingID: Int = 1
+
+    public init(weddingID: Int) {
+        self.weddingID = weddingID
+    }
 }
 
 
