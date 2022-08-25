@@ -30,6 +30,7 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
             return
         }
         let destinationVC = LikeRequestViewController()
+        destinationVC.router?.dataStore?.weddingId = dataStore.meetingId
         destinationVC.router?.dataStore?.targetGuest = guest
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
