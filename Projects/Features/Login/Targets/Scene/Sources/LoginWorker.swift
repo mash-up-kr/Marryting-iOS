@@ -56,7 +56,7 @@ class LoginWorker: LoginWorkerProtocol {
                 Task {
                     do {
                         guard let token = token else { return }
-                        let result = try await self.login(oauthType: "KAKAO", token: token)
+                        let result = try await self.login(oauthType: "", token: token)
                         self.fetchUser?(result)
                     } catch {
                         self.fetchUser?(.failure(.loginDataSourceError))

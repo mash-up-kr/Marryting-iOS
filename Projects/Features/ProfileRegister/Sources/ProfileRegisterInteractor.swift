@@ -26,6 +26,7 @@ protocol ProfileRegisterBusinessLogic {
 public protocol ProfileRegisterDataStore {
     var thirdPartyToken: String? { get set }
     var oauthType: String? { get set }
+    var name: String? { get }
 }
 
 class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDataStore {
@@ -36,13 +37,17 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     var thirdPartyToken: String? {
         didSet {
-            print(thirdPartyToken)
+//            print(thirdPartyToken)
         }
     }
     var oauthType: String? {
         didSet {
-            print(oauthType)
+//            print(oauthType)
         }
+    }
+
+    var name: String? {
+        return userInfo.name
     }
     
     private let pageSize: Int = 4

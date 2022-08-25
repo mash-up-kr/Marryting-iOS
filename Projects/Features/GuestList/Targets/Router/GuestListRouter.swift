@@ -53,41 +53,17 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 
+    public func routeToSelf() {
+        if let viewController = viewController {
+            viewController.navigationController?.popToViewController(viewController, animated: true)
+        }
+    }
     public func routeToMyProfile() {
-        guard let dataStore = dataStore else {
+        guard let _ = dataStore else {
             return
         }
         let destinationVC = GuestDetailViewController(profileDetailType: .myProfile)
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 
-
-    //func routeToSomewhere(segue: UIStoryboardSegue?)
-    //{
-    //  if let segue = segue {
-    //    let destinationVC = segue.destination as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //  } else {
-    //    let storyboard = UIStoryboard(name: "Main", bundle: nil)
-    //    let destinationVC = storyboard.instantiateViewController(withIdentifier: "SomewhereViewController") as! SomewhereViewController
-    //    var destinationDS = destinationVC.router!.dataStore!
-    //    passDataToSomewhere(source: dataStore!, destination: &destinationDS)
-    //    navigateToSomewhere(source: viewController!, destination: destinationVC)
-    //  }
-    //}
-    
-    // MARK: Navigation
-    
-    //func navigateToSomewhere(source: GuestListViewController, destination: SomewhereViewController)
-    //{
-    //  source.show(destination, sender: nil)
-    //}
-    
-    // MARK: Passing data
-    
-    //func passDataToSomewhere(source: GuestListDataStore, destination: inout SomewhereDataStore)
-    //{
-    //  destination.name = source.name
-    //}
 }
