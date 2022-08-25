@@ -136,6 +136,12 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         return v
     }
 
+    private lazy var emptyView: EmptyView = {
+        let v = EmptyView()
+        v.isHidden = true
+        return v
+    }()
+
     private func getGuestCardViewColor(for index: Int) -> UIColor? {
         switch index % 4 {
         case 0:
@@ -196,6 +202,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.secondTitleLabel)
         self.view.addSubview(self.guestSwipeableView)
         self.view.addSubview(self.reportButton)
+        self.view.addSubview(self.emptyView)
         self.navigationView.addSubview(self.logoImageView)
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
@@ -239,6 +246,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.centerX.equalToSuperview()
             make.width.height.equalTo(24)
         }
+        self.emptyView.snp.makeConstraints { make in
+            make.top.equalTo(self.navigationView.snp.bottom)
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
     }
 
     private func setNotificationCenter() {
@@ -260,7 +272,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             }
         default:
             break
-
         }
     }
     // MARK: Display Logic
@@ -276,6 +287,9 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
                 make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
                 make.bottom.equalToSuperview().inset(84)
             }
+            self.firstTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
+            self.secondTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
+            self.emptyView.isHidden = !viewModel.guestCardViewModels.isEmpty
             self.reportButton.isHidden = viewModel.guestCardViewModels.isEmpty
         }
     }
