@@ -87,7 +87,15 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
         v.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         return v
     }()
-    
+
+    lazy var leftButton: MTButton = {
+        let button = MTButton.create(.mainSmallDark)
+        button.title = "PRE"
+        button.isEnabled = true
+        button.addTarget(self, action: #selector(pressPrevButton(_:)), for: .touchUpInside)
+        return button
+    }()
+
     lazy var rightButton: MTButton = {
         let button = MTButton.create(.mainDark)
         button.title = "NEXT"
@@ -111,6 +119,7 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
         self.view.addSubview(self.titleLabel)
         self.view.addSubview(self.subtitleLabel)
         self.view.addSubview(self.authCodeTextField)
+        self.view.addSubview(self.leftButton)
         self.view.addSubview(self.rightButton)
         
         self.headerImageView.snp.makeConstraints { make in
@@ -133,7 +142,12 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
             make.leading.trailing.equalToSuperview().inset(32)
             make.height.equalTo(79)
         }
-        
+
+        self.leftButton.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(32)
+            make.bottom.equalToSuperview().inset(40)
+            make.height.equalTo(56)
+        }
         self.rightButton.snp.makeConstraints { make in
             make.trailing.equalToSuperview().offset(-32)
             make.bottom.equalToSuperview().inset(40)
@@ -165,9 +179,23 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
     }
     
     func displayWeddingCodeError(viewModel: AuthCode.RequestWeddingCode.ViewModel.Error) {
-        // TODO: 에러 처리
+        DispatchQueue.main.async {
+            let alertViewController = UIAlertController(
+                title: "인증코드 오류",
+                message: "\(viewModel.message)",
+                preferredStyle: .alert)
+            alertViewController.addAction(UIAlertAction(title: "다시 입력하기", style: .default, handler: nil))
+
+            self.present(alertViewController, animated: true)
+        }
     }
-    
+
+    @objc func pressPrevButton(_ sender: UIButton) {
+        DispatchQueue.main.async { [weak self] in
+            self?.router?.removeFromParent()
+        }
+    }
+
     @objc func didTapRightButton() {
         guard let weddingCode = authCodeTextField.text else {
             return
@@ -191,6 +219,9 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
                 self.headerImageView.snp.updateConstraints { make in
                     make.top.equalTo(self.view.safeAreaLayoutGuide).inset(46 - keyboardHeight)
                 }
+                self.leftButton.snp.updateConstraints { make in
+                    make.bottom.equalToSuperview().inset(40 + keyboardHeight)
+                }
                 self.rightButton.snp.updateConstraints { make in
                     make.bottom.equalToSuperview().inset(40 + keyboardHeight)
                 }
@@ -204,6 +235,9 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
         UIView.animate(withDuration: 1) {
             self.headerImageView.snp.updateConstraints { make in
                 make.top.equalTo(self.view.safeAreaLayoutGuide).inset(46)
+            }
+            self.leftButton.snp.updateConstraints { make in
+                make.bottom.equalToSuperview().inset(40)
             }
             self.rightButton.snp.updateConstraints { make in
                 make.bottom.equalToSuperview().inset(40)

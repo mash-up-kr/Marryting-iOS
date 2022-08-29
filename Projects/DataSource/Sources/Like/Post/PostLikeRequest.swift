@@ -32,14 +32,18 @@ public struct PostLikeRequestBody: RequestBody {
     public var receiverProfileId: Int
     
     public var senderProfileId: Int
-    
+
+    public var weddingId: Int
+
     public init(
         message: String,
         receiverProfileId: Int,
-        senderProfileId: Int
+        senderProfileId: Int,
+        weddingId: Int
     ) {
         self.message = message
         self.receiverProfileId = receiverProfileId
         self.senderProfileId = senderProfileId
+        self.weddingId = weddingId
     }
 }

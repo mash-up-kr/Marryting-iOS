@@ -136,7 +136,12 @@ public final class MyGuestListViewController: UIViewController, MyGuestListDispl
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.interactor?.fetchMyLikeGuests()
+        switch displayType {
+        case .myLike:
+            self.interactor?.fetchMyLikeGuests()
+        case .matching:
+            self.interactor?.fetchMatchingGuests()
+        }
     }
     
     private func setUI() {
