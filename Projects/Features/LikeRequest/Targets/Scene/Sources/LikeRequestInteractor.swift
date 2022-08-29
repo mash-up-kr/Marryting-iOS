@@ -53,8 +53,6 @@ class LikeRequestInteractor: LikeRequestBusinessLogic, LikeRequestDataStore {
 
         Task {
             do {
-
-                print(weddingId)
                 let _ = try await worker.requestLike(message: request.message, receiverProfileId: receiverProfileId, weddingId: weddingId)
                 presenter?.presentLikeRequestSuccess()
             }
