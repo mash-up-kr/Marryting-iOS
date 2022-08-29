@@ -40,4 +40,8 @@ public final class GuestDetailRouter: GuestDetailRoutingLogic, GuestDetailDataPa
     public func routeToMeetingListScene() {
         viewController?.navigationController?.popToRootViewController(animated: true)
     }
+    
+    public func routeToLoginScene() {
+        NotificationCenter.default.post(name: Notification.Name("LogoutNotification"), object: nil)
+    }
 }

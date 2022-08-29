@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     ) -> Bool {
         KakaoSDK.initSDK(appKey: "bd614625345b00170f51b167c97e96e9")
         Font.registerFonts()
+        registerNotification()
         window = UIWindow(frame: UIScreen.main.bounds)
         let navigationController = UINavigationController()
         navigationController.isNavigationBarHidden = true
@@ -40,5 +41,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
 
         return false
+    }
+    
+    func registerNotification() {
+        NotificationCenter.default.addObserver(self, selector: #selector(logout(_:)), name: NSNotification.Name("LogoutNotification"), object: nil)
+    }
+    
+    @objc func logout(_ notification: Notification) {
+        DispatchQueue.main.async {
+            let loginViewController = LoginViewController()
+            let navigationController = UINavigationController(rootViewController: loginViewController)
+            navigationController.isNavigationBarHidden = true
+            self.window?.rootViewController = navigationController
+        }
     }
 }

@@ -21,6 +21,7 @@ import SnapKit
 protocol GuestDetailDisplayLogic: AnyObject {
     func displayGuest(viewModel: GuestDetail.GetGuest.ViewModel)
     func displayChangeMeetingButton(viewModel: GuestDetail.GetMeetingCount.ViewModel)
+    func displayWithdrawResult()
 }
 
 struct GuestDetailViewModel {
@@ -234,6 +235,16 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         v.title = "WHO I AM"
         return v
     }()
+    
+    private lazy var withdrawLabel: UILabel = {
+        let lb = UILabel()
+        lb.text = "탈퇴하기"
+        lb.font = .body2()
+        lb.textColor = Pallete.Light.grey300.color
+        lb.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapWithdraw)))
+        lb.isUserInteractionEnabled = true
+        return lb
+    }()
 
     var viewModel: GuestDetailViewModel? {
         didSet {
@@ -298,7 +309,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.contentView.addSubviews(self.topHeaderStackView)
         self.contentView.addSubviews(self.addressStackView, self.careerStackView)
         self.contentView.addSubviews(self.collectionView, self.pageControl)
-        self.contentView.addSubviews(self.keywordContainerView, self.whoIAmContainerView)
+        self.contentView.addSubviews(self.keywordContainerView, self.whoIAmContainerView, self.withdrawLabel)
         self.scrollView.addSubview(self.contentView)
         self.navigationView.addSubview(self.backButton)
         self.navigationView.addSubview(self.changeMeetingButton)
@@ -371,7 +382,11 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         self.whoIAmContainerView.snp.makeConstraints { make in
             make.top.equalTo(self.keywordContainerView.snp.bottom)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(20)
+        }
+        self.withdrawLabel.snp.makeConstraints { make in
+            make.top.equalTo(self.whoIAmContainerView.snp.bottom)
+            make.leading.equalToSuperview().inset(40)
+            make.bottom.equalToSuperview().inset(90)
         }
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(careerStackView.snp.bottom).offset(50)
@@ -403,6 +418,10 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
 //            self?.changeMeetingButton.isHidden = viewModel.isHidden
 //        }
 
+    }
+    
+    func displayWithdrawResult() {
+        self.router?.routeToLoginScene()
     }
 }
 
@@ -461,6 +480,20 @@ extension GuestDetailViewController {
     @objc
     func changeMeetingButtonDidTap() {
         router?.routeToMeetingListScene()
+    }
+    
+    @objc func didTapWithdraw() {
+        let alertViewController = UIAlertController(
+            title: "탈퇴하기",
+            message: "현재 계정을 탈퇴합니다.",
+            preferredStyle: .alert
+        )
+        alertViewController.addAction(UIAlertAction(title: "취소", style: .cancel, handler: nil))
+        alertViewController.addAction(UIAlertAction(title: "탈퇴할래요", style: .default, handler: { [weak self] _ in
+            self?.interactor?.withdraw()
+        }))
+
+        self.present(alertViewController, animated: true)
     }
 }
 

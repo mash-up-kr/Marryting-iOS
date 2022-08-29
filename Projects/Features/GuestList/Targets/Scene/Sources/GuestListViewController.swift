@@ -68,12 +68,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         return v
     }()
     
-    lazy var logoImageView: UIImageView = {
-        let v = UIImageView()
-        v.image = .create(.logo)
-        return v
-    }()
-    
     lazy var likeListButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_heart)
@@ -108,7 +102,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     lazy var guestSwipeableView: ZLSwipeableView = {
         let v = ZLSwipeableView()
-        v.shouldSwipeView = { _, _, _ in true }
+        v.onlySwipeTopCard = true
         return v
     }()
 
@@ -196,7 +190,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.secondTitleLabel)
         self.view.addSubview(self.guestSwipeableView)
         self.view.addSubview(self.reportButton)
-        self.navigationView.addSubview(self.logoImageView)
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
         
@@ -217,12 +210,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.leading.trailing.equalToSuperview().inset(32)
             make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
             make.bottom.equalToSuperview().inset(84)
-        }
-        self.logoImageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().inset(20)
-            make.centerY.equalToSuperview()
-            make.height.equalTo(25)
-            make.width.equalTo(81)
         }
         self.likeListButton.snp.makeConstraints { make in
             make.height.width.equalTo(40)
