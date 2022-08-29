@@ -15,4 +15,5 @@ public protocol GuestDetailRoutingLogic {
 
     func routeToLikeRequestScene(targetId id: Int)
     func routeToMeetingListScene()
+    func routeToLoginScene()
 }

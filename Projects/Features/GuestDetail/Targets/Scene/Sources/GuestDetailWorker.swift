@@ -17,6 +17,7 @@ import DataSource
 protocol GuestDetailWorkerProtocol {
     func fetchUser() -> User
     func fetchMeetings() async throws -> [Meeting]
+    func withdraw() async throws
 }
 
 final class GuestDetailWorker: GuestDetailWorkerProtocol {
@@ -33,9 +34,10 @@ final class GuestDetailWorker: GuestDetailWorkerProtocol {
     }
 
     func fetchUser() -> User {
-        userLocalDataSourece.read(key: .localUser).map { [weak self] localUser in
-            return self!.convertToUser(localUser)
-        }!
+        let defaultUser: User = .init(id: 0, name: "", gender: .male, career: "", birth: Date(), age: 0, address: "", pictures: [], answers: [], keyword: [])
+        return userLocalDataSourece.read(key: .localUser).map { [weak self] localUser in
+            return self?.convertToUser(localUser) ?? defaultUser
+        } ?? defaultUser
     }
 
     func convertToUser(_ user: LocalUser) -> User {
@@ -52,6 +54,12 @@ final class GuestDetailWorker: GuestDetailWorkerProtocol {
         catch {
             return []
         }
+    }
+    
+    func withdraw() async throws {
+        _ = try await userLocalDataSourece.deleteUser(request: .init(userId: fetchUser().id))
+        userLocalDataSourece.removeAll(key: .token)
+        userLocalDataSourece.removeAll(key: .localUser)
     }
 
     private func convertToMeeting(_ dto: GetMeetingListDTO) -> Meeting {

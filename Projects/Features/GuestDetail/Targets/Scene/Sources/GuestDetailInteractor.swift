@@ -15,6 +15,7 @@ import Models
 
 protocol GuestDetailBusinessLogic {
     func fetchGuest()
+    func withdraw()
 }
 
 final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStore {
@@ -45,6 +46,20 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
         }
 
         presenter?.presentGuest(response: .init(guest: selectedGuest))
+    }
+    
+    func withdraw() {
+        guard let worker = worker else {
+            return
+        }
+        Task {
+            do {
+                try await worker.withdraw()
+                presenter?.presentWithdrawResult()
+            } catch {
+                
+            }
+        }
     }
 
     private func fetchChangeMeetingButton() {

@@ -8,6 +8,7 @@
 
 import Foundation
 import NetworkProtocol
+import Network
 
 public enum LocalStorageKey: String {
     case token
@@ -20,11 +21,16 @@ public protocol UserLocalDataSoureceProtocol {
     func read(key: LocalStorageKey) -> LocalUser?
     func save<T: Codable>(_ data: T, key: LocalStorageKey)
     func removeAll(key: LocalStorageKey)
+    func deleteUser(request: DeleteUserRequest) async throws -> DeleteUserResponse
 }
 
 public final class UserLocalDataSourece: UserLocalDataSoureceProtocol {
 
-    public init() {}
+    private let network: NetworkProtocol
+
+    public init(network: NetworkProtocol = Network(session: .shared)) {
+        self.network = network
+    }
 
     public func saveToken(_ token: String, key: LocalStorageKey) {
         UserDefaults.standard.set(token, forKey: key.rawValue)
@@ -56,5 +62,9 @@ public final class UserLocalDataSourece: UserLocalDataSoureceProtocol {
 
     public func removeAll(key: LocalStorageKey) {
         UserDefaults.standard.removeObject(forKey: key.rawValue)
+    }
+    
+    public func deleteUser(request: DeleteUserRequest) async throws -> DeleteUserResponse {
+        return try await network.send(request)
     }
 }

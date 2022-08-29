@@ -67,7 +67,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         let v = UIView()
         return v
     }()
-
+    
     lazy var likeListButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_heart)
@@ -102,7 +102,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     lazy var guestSwipeableView: ZLSwipeableView = {
         let v = ZLSwipeableView()
-        v.shouldSwipeView = { _, _, _ in true }
+        v.onlySwipeTopCard = true
         return v
     }()
 
@@ -215,7 +215,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.guestSwipeableView)
         self.view.addSubview(self.reportButton)
         self.view.addSubview(self.emptyView)
-//        self.view.addSubview(self.refreshGuestListButton)
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
         
