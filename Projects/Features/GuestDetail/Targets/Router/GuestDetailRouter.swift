@@ -33,6 +33,7 @@ public final class GuestDetailRouter: GuestDetailRoutingLogic, GuestDetailDataPa
         }
 
         let destinationVC = LikeRequestViewController()
+        destinationVC.router?.dataStore?.weddingId = dataStore.meetingID
         destinationVC.router?.dataStore?.targetGuest = guest
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }

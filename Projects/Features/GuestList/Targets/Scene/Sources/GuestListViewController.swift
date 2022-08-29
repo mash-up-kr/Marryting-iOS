@@ -136,6 +136,19 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         return v
     }()
 
+//    private lazy var refreshGuestListButton: UIButton = {
+//        let v = UIButton(type: .system)
+//        v.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
+//        v.setTitleColor(Pallete.Light.grey500.color, for: .normal)
+//        v.setTitle("결혼식 변경", for: .normal)
+//        v.layer.cornerRadius = 8
+//        v.layer.borderWidth = 1
+//        v.layer.borderColor = Pallete.Light.grey100.color?.cgColor
+//        v.isHidden = true
+//        v.addTarget(self, action: #selector(refreshGuestListButtonDidTap), for: .touchUpInside)
+//        return v
+//    }()
+
     private func getGuestCardViewColor(for index: Int) -> UIColor? {
         switch index % 4 {
         case 0:
@@ -167,6 +180,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         router?.routeToMyProfile()
     }
 
+//    @objc
+//    private func refreshGuestListButtonDidTap() {
+//        interactor?.fetchGuests()
+//    }
+
     // MARK: View lifecycle
     
     public override func viewDidLoad() {
@@ -197,6 +215,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.guestSwipeableView)
         self.view.addSubview(self.reportButton)
         self.view.addSubview(self.emptyView)
+//        self.view.addSubview(self.refreshGuestListButton)
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
         
@@ -238,6 +257,10 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
+//        self.refreshGuestListButton.snp.makeConstraints { make in
+//            make.top.equalTo(self.emptyView.imageView.snp.bottom).offset(29)
+//            make.centerX.equalToSuperview()
+//        }
     }
 
     private func setNotificationCenter() {
@@ -277,6 +300,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             self.firstTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
             self.secondTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
             self.emptyView.isHidden = !viewModel.guestCardViewModels.isEmpty
+//            self.refreshGuestListButton.isHidden = !viewModel.guestCardViewModels.isEmpty
             self.reportButton.isHidden = viewModel.guestCardViewModels.isEmpty
         }
     }

@@ -23,6 +23,8 @@ final class GuestDetailInteractor: GuestDetailBusinessLogic, GuestDetailDataStor
 
     var targetGuest: Guest?
 
+    var meetingID: Int?
+    
     init(worker: GuestDetailWorkerProtocol = GuestDetailWorker()) {
         self.worker = worker
     }

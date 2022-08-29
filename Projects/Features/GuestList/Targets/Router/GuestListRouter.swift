@@ -51,6 +51,7 @@ public class GuestListRouter: GuestListRoutingLogic, GuestListDataPassing {
         }
         let destinationVC = GuestDetailViewController(profileDetailType: .guestProfile)
         destinationVC.router?.dataStore?.targetGuest = guest
+        destinationVC.router?.dataStore?.meetingID = dataStore.meetingId
         viewController?.navigationController?.pushViewController(destinationVC, animated: true)
     }
 
