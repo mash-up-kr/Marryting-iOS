@@ -15,11 +15,11 @@ import DataSource
 
 protocol LikeRequestWorkerProtocol {
     func getMyName() -> String
-    func requestLike(message: String, receiverProfileId: Int) async throws
+    func requestLike(message: String, receiverProfileId: Int, weddingId: Int) async throws
 }
 
 class LikeRequestWorker: LikeRequestWorkerProtocol {
-    
+
     let userLocalDataSource: UserLocalDataSoureceProtocol
     let likeDataSource: LikeDataSourceProtocol
     
@@ -38,13 +38,14 @@ class LikeRequestWorker: LikeRequestWorkerProtocol {
         return user.name
     }
     
-    func requestLike(message: String, receiverProfileId: Int) async throws {
+    func requestLike(message: String, receiverProfileId: Int, weddingId: Int) async throws {
         let senderProfileId = userLocalDataSource.read(key: .localUser)?.id ?? 0
         let request = PostLikeRequest(
             body: .init(
                 message: message,
                 receiverProfileId: receiverProfileId,
-                senderProfileId: senderProfileId
+                senderProfileId: senderProfileId,
+                weddingId: weddingId
             )
         )
         do {

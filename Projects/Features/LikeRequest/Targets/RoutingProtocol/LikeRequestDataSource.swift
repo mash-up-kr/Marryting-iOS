@@ -10,4 +10,5 @@ import Models
 
 public protocol LikeRequestDataStore {
     var targetGuest: Guest? { get set }
+    var weddingId: Int? { get set }
 }

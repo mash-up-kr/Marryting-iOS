@@ -24,7 +24,8 @@ class LikeRequestInteractor: LikeRequestBusinessLogic, LikeRequestDataStore {
     var worker: LikeRequestWorkerProtocol?
     
     var targetGuest: Guest?
-    
+    var weddingId: Int?
+
     init(worker: LikeRequestWorkerProtocol = LikeRequestWorker()) {
         self.worker = worker
     }
@@ -43,12 +44,18 @@ class LikeRequestInteractor: LikeRequestBusinessLogic, LikeRequestDataStore {
             return
         }
         // TODO: 좋아요 요청 통신
-        
+
         let receiverProfileId = targetGuest?.user.id ?? 0
-        
+        guard let weddingId = weddingId else {
+            presenter?.presentLikeRequestError(response: .init(message: "좋아요 보내기 실패"))
+            return
+        }
+
         Task {
             do {
-                let _ = try await worker.requestLike(message: request.message, receiverProfileId: receiverProfileId)
+
+                print(weddingId)
+                let _ = try await worker.requestLike(message: request.message, receiverProfileId: receiverProfileId, weddingId: weddingId)
                 presenter?.presentLikeRequestSuccess()
             }
             catch {

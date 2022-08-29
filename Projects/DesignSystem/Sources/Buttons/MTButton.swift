@@ -36,6 +36,8 @@ extension MTButton {
 
     public static func create(_ type: MTButtonType) -> MTButton {
         switch type {
+        case .mainPlusDark:
+            return TextImageMTButton(customButtonType: .mainPlusDark)
         case .mainDark:
             return TextImageMTButton(customButtonType: .mainDark)
         case .mainLight:

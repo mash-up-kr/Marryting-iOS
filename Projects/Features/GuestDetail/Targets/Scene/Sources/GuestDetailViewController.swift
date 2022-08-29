@@ -188,7 +188,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
     private let careerDescriptionLabel: UILabel = {
         $0.font = .subtitle2()
         $0.textColor = Pallete.Light.grey400.color
-        $0.text = "로 일해요"
+        $0.text = "(으)로 일해요"
         return $0
     }(UILabel())
 

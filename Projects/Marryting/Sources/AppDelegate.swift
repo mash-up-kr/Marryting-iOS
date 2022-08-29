@@ -22,6 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
+        for framework in Bundle.allBundles {
+            print(framework)
+        }
         KakaoSDK.initSDK(appKey: "bd614625345b00170f51b167c97e96e9")
         Font.registerFonts()
         registerNotification()
@@ -36,7 +39,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         if (AuthApi.isKakaoTalkLoginUrl(url)) {
-            print(url.query)
             return AuthController.handleOpenUrl(url: url)
         }
 

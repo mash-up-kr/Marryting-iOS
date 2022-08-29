@@ -9,6 +9,7 @@
 import Foundation
 
 public enum MTButtonType {
+    case mainPlusDark
     case mainDark
     case mainLight
     case mainSmallDark

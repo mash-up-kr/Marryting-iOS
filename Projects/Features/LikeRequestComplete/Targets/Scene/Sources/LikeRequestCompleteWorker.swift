@@ -10,14 +10,25 @@
 //  see http://clean-swift.com
 //
 
-import UIKit
+import DataSource
 
 protocol LikeRequestCompleteWorkerProtocol {
     func getMyName() -> String
 }
 
 final class LikeRequestCompleteWorker: LikeRequestCompleteWorkerProtocol {
+
+    private let userLocalDataSource: UserLocalDataSoureceProtocol
+
+    init(
+        _ userLocalDataSource: UserLocalDataSoureceProtocol = UserLocalDataSourece()
+    ) {
+        self.userLocalDataSource = userLocalDataSource
+    }
+
     func getMyName() -> String {
-        "박우인"
+        guard let user = userLocalDataSource.read(key: .localUser) else { return "" }
+        return user.name
+
     }
 }
