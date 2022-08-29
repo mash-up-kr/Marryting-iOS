@@ -67,11 +67,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         let v = UIView()
         return v
     }()
-<<<<<<< HEAD
     
-=======
-
->>>>>>> develop
     lazy var likeListButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_heart)
