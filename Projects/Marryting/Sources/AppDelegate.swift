@@ -22,9 +22,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
-        for framework in Bundle.allBundles {
-            print(framework)
-        }
         KakaoSDK.initSDK(appKey: "bd614625345b00170f51b167c97e96e9")
         Font.registerFonts()
         window = UIWindow(frame: UIScreen.main.bounds)

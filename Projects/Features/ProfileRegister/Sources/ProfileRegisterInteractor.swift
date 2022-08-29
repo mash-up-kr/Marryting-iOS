@@ -37,12 +37,12 @@ class ProfileRegisterInteractor: ProfileRegisterBusinessLogic, ProfileRegisterDa
 
     var thirdPartyToken: String? {
         didSet {
-            print(thirdPartyToken)
+//            print(thirdPartyToken)
         }
     }
     var oauthType: String? {
         didSet {
-            print(oauthType)
+//            print(oauthType)
         }
     }
 
