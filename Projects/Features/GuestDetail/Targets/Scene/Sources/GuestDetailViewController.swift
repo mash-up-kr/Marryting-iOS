@@ -41,15 +41,6 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
 
     // MARK: Object lifecycle
 
-    public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        setup()
-    }
-
-    public required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        setup()
-    }
 
     // MARK: Setup
 
@@ -243,6 +234,7 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         lb.textColor = Pallete.Light.grey300.color
         lb.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapWithdraw)))
         lb.isUserInteractionEnabled = true
+        lb.isHidden = profileDetailType == .guestProfile
         return lb
     }()
 
@@ -282,15 +274,20 @@ public final class GuestDetailViewController: UIViewController, GuestDetailDispl
         case guestProfile
     }
 
-    private var profileDetailType: ProfileDetailType?
+    private var profileDetailType: ProfileDetailType
 
     // MARK: View lifecycle
 
     public init(profileDetailType: ProfileDetailType = .guestProfile) {
-        self.init()
         self.profileDetailType = profileDetailType
+        super.init(nibName: nil, bundle: nil)
+        setup()
     }
-
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
         setUI()
