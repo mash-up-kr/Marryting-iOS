@@ -40,7 +40,17 @@ class GuestListInteractor: GuestListBusinessLogic, GuestListDataStore {
             do {
                 let guests = try await worker.fetchGuests(weddingID: meetingId ?? 1)
                 self.guests = guests
-                self.presenter?.presentGuests(response: .init(guests: guests))
+                var lessIndexGuests: [Guest] = []
+                var greaterIndexGuests: [Guest] = []
+                for guest in guests {
+                    if guest.user.id < GuestListModule.shared.guestListIndex {
+                        lessIndexGuests.append(guest)
+                    }
+                    else {
+                        greaterIndexGuests.append(guest)
+                    }
+                }
+                self.presenter?.presentGuests(response: .init(guests: greaterIndexGuests + lessIndexGuests))
             }
             catch {
                 // TODO: 에러처리

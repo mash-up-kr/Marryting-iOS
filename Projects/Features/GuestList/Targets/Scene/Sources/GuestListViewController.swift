@@ -100,11 +100,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         return v
     }()
     
-    lazy var guestSwipeableView: ZLSwipeableView = {
-        let v = ZLSwipeableView()
-        v.onlySwipeTopCard = true
-        return v
-    }()
+    var guestSwipeableView: ZLSwipeableView = ZLSwipeableView()
 
     lazy var reportButton: UIButton = {
         let v = UIButton(type: .system)
@@ -117,6 +113,11 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     var guestCardView: GuestCardView? {
         if self.guestCardViewModels.isEmpty { return nil }
+        
+        let topId = self.guestSwipeableView.topView()?.tag ?? 0
+        
+        GuestListModule.shared.guestListIndex = topId
+        
         if self.guestCardIndex >= self.guestCardViewModels.count {
             self.guestCardIndex = 0
         }
@@ -126,7 +127,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         v.backgroundColor = self.getGuestCardViewColor(for: self.guestCardIndex)
         v.delegate = self
         self.guestCardIndex += 1
-        v.addGestureRecognizer( UITapGestureRecognizer(target: self, action: #selector(guestCardViewDidTap(_:))))
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(guestCardViewDidTap(_:))))
         return v
     }
 
@@ -195,14 +196,15 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.guestCardIndex = 0
         self.interactor?.fetchGuests()
     }
     
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        self.guestSwipeableView.nextView = {
-            return self.guestCardView
+        self.guestSwipeableView.nextView = { [weak self] in
+            return self?.guestCardView
         }
     }
     
@@ -212,7 +214,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.navigationView)
         self.view.addSubview(self.firstTitleLabel)
         self.view.addSubview(self.secondTitleLabel)
-        self.view.addSubview(self.guestSwipeableView)
         self.view.addSubview(self.reportButton)
         self.view.addSubview(self.emptyView)
         self.navigationView.addSubview(self.likeListButton)
@@ -230,11 +231,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.secondTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(self.firstTitleLabel.snp.bottom)
             make.centerX.equalToSuperview()
-        }
-        self.guestSwipeableView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(32)
-            make.top.equalTo(self.secondTitleLabel.snp.bottom).offset(32)
-            make.bottom.equalToSuperview().inset(84)
         }
         self.likeListButton.snp.makeConstraints { make in
             make.height.width.equalTo(40)
@@ -290,6 +286,21 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         
         DispatchQueue.main.async {
             self.guestSwipeableView.removeFromSuperview()
+            self.guestSwipeableView = ZLSwipeableView()
+            self.guestSwipeableView.allowedDirection = .Horizontal
+            if self.guestCardViewModels.count == 1 {
+                self.guestSwipeableView.numberOfActiveView = 1
+                self.guestSwipeableView.allowedDirection = .None
+            }
+            else {
+                if self.guestCardViewModels.count < 4 {
+                    self.guestSwipeableView.numberOfActiveView = UInt(self.guestCardViewModels.count)
+                }
+                else {
+                    self.guestSwipeableView.numberOfActiveView = 4
+                }
+            }
+            self.guestSwipeableView.onlySwipeTopCard = true
             self.view.addSubview(self.guestSwipeableView)
             self.guestSwipeableView.snp.makeConstraints { make in
                 make.leading.trailing.equalToSuperview().inset(32)

@@ -102,6 +102,11 @@ final class GuestCardView: UIView {
         super.init(coder: aDecoder)
         setUI()
     }
+    
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        print("dfadsfdsa")
+    }
 
     private func setUI() {
         self.layer.cornerRadius = 16

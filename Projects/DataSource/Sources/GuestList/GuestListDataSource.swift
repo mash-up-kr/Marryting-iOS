@@ -6,6 +6,7 @@
 //  Copyright © 2022 kr.mash-up. All rights reserved.
 //
 
+import Foundation
 import NetworkProtocol
 import Network
 
@@ -23,5 +24,19 @@ public final class GuestListDataSource: GuestListDataSourceProtocol {
     
     public func getGuestList(request: GetGuestListRequest) async throws -> GetGuestListResponse {
         return try await network.send(request)
+    }
+}
+
+public final class GuestListLocalDataSource {
+    
+    public static let shared: GuestListLocalDataSource = .init()
+    
+    public var guestListIndex: Int {
+        get {
+            UserDefaults.standard.integer(forKey: "guestListIndex")
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: "guestListIndex")
+        }
     }
 }
