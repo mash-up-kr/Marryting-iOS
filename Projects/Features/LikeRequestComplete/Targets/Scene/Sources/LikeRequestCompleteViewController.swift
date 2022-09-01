@@ -55,24 +55,25 @@ public final class LikeRequestCompleteViewController: UIViewController, LikeRequ
     // MARK: UI
     
     lazy var animationView: UIImageView = {
-        let v = UIImageView(frame: .init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
-        guard let path = Bundle.module.path(forResource: "complete", ofType: "gif") else {
-            fatalError("Gif does not exist at that path")
-        }
-        let url = URL(fileURLWithPath: path)
-        guard let gifData = try? Data(contentsOf: url),
-              let source =  CGImageSourceCreateWithData(gifData as CFData, nil) else {
-            fatalError("Gif does not exist at that path")
-        }
-        var images = [UIImage]()
-        let imageCount = CGImageSourceGetCount(source)
-        for i in 0 ..< imageCount {
-            if let image = CGImageSourceCreateImageAtIndex(source, i, nil) {
-                images.append(UIImage(cgImage: image))
-            }
-        }
-        v.animationImages = images
-        v.startAnimating()
+        let v = UIImageView(asset: .like_complete)
+//        let v = UIImageView(frame: .init(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.width))
+//        guard let path = Bundle.module.path(forResource: "complete", ofType: "gif") else {
+//            fatalError("Gif does not exist at that path")
+//        }
+//        let url = URL(fileURLWithPath: path)
+//        guard let gifData = try? Data(contentsOf: url),
+//              let source =  CGImageSourceCreateWithData(gifData as CFData, nil) else {
+//            fatalError("Gif does not exist at that path")
+//        }
+//        var images = [UIImage]()
+//        let imageCount = CGImageSourceGetCount(source)
+//        for i in 0 ..< imageCount {
+//            if let image = CGImageSourceCreateImageAtIndex(source, i, nil) {
+//                images.append(UIImage(cgImage: image))
+//            }
+//        }
+//        v.animationImages = images
+//        v.startAnimating()
         return v
     }()
     
