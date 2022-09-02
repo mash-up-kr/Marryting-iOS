@@ -462,5 +462,21 @@ extension ProfileRegisterViewController: UITextFieldDelegate {
         }
         return false
     }
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        switch textField {
+            case enterUserInfoView.nameTextField:
+                enterUserInfoView.nameTextField.resignFirstResponder()
+                enterUserInfoView.genderTextField.becomeFirstResponder()
+            case enterUserInfoView.addressTextField:
+                enterUserInfoView.addressTextField.resignFirstResponder()
+                enterUserInfoView.jobTextField.becomeFirstResponder()
+            case enterUserInfoView.jobTextField:
+                enterUserInfoView.jobTextField.resignFirstResponder()
+            default:
+                break
+        }
+        return true
+    }
 }
 
