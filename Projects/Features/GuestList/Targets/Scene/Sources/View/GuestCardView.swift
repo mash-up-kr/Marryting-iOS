@@ -105,7 +105,6 @@ final class GuestCardView: UIView {
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
-        print("dfadsfdsa")
     }
 
     private func setUI() {

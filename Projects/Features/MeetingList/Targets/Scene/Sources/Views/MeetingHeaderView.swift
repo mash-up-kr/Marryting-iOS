@@ -11,7 +11,13 @@ import DesignSystem
 import SnapKit
 
 final class MeetingHeaderView: UICollectionReusableView {
-    
+
+    lazy var startImageView: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_union)
+        return v
+    }()
+
     lazy var titleLabel: UILabel = {
         let v = UILabel()
         v.text = "Select\nan Wedding"
@@ -49,14 +55,19 @@ final class MeetingHeaderView: UICollectionReusableView {
     }
     
     private func setUI() {
-        addSubviews(
+        self.addSubviews(
             titleLabel,
+            startImageView,
             subtitleLabel
         )
         
         titleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(32)
             make.top.equalTo(safeAreaLayoutGuide).inset(60)
+        }
+        startImageView.snp.makeConstraints { make in
+            make.leading.equalTo(self.titleLabel.snp.trailing).offset(2)
+            make.bottom.equalTo(self.titleLabel).offset(-20)
         }
         subtitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(32)

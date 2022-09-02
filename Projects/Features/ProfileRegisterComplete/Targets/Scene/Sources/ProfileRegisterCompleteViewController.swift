@@ -60,6 +60,7 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
     }()
     lazy var animationView: UIImageView = {
         let v = UIImageView()
+        v.image = .create(.good_luck)
         return v
     }()
 
@@ -139,9 +140,7 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
             make.height.equalTo(imageView.snp.width)
         }
         animationView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(animationView.snp.width)
+            make.edges.equalTo(imageView)
         }
         completeMessageLabel.snp.makeConstraints { make in
             make.top.equalTo(animationView.snp.bottom).offset(32)
