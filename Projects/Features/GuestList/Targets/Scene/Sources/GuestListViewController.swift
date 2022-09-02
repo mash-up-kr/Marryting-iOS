@@ -149,18 +149,16 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         return v
     }()
 
-//    private lazy var refreshGuestListButton: UIButton = {
-//        let v = UIButton(type: .system)
-//        v.setImage(<#T##image: UIImage?##UIImage?#>, for: <#T##UIControl.State#>)
-//        v.setTitleColor(Pallete.Light.grey500.color, for: .normal)
-//        v.setTitle("결혼식 변경", for: .normal)
-//        v.layer.cornerRadius = 8
-//        v.layer.borderWidth = 1
-//        v.layer.borderColor = Pallete.Light.grey100.color?.cgColor
-//        v.isHidden = true
-//        v.addTarget(self, action: #selector(refreshGuestListButtonDidTap), for: .touchUpInside)
-//        return v
-//    }()
+    lazy var tutorialView: UIImageView = {
+        let v = UIImageView(asset: .tutorial_11promax)
+        if DeviceManager.getDeviceKind() == ._9_16 {
+            v.image = .create(.tutorial_8plus)
+        }
+        v.contentMode = .scaleAspectFill
+        v.isUserInteractionEnabled = true
+        v.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(tutorialViewDidTap)))
+        return v
+    }()
 
     private func getGuestCardViewColor(for index: Int) -> UIColor? {
         switch index % 4 {
@@ -193,10 +191,18 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         router?.routeToMyProfile()
     }
 
-//    @objc
-//    private func refreshGuestListButtonDidTap() {
-//        interactor?.fetchGuests()
-//    }
+    @objc
+    func tutorialViewDidTap() {
+        UIView.animate(
+            withDuration: 0.22,
+            delay: 0,
+            options: .allowAnimatedContent,
+            animations: { [weak self] in
+                self?.tutorialView.alpha = 0
+            }, completion: { [weak self] _ in
+                self?.tutorialView.isHidden = true
+            })
+    }
 
     // MARK: View lifecycle
     
@@ -219,7 +225,19 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             return self?.guestCardView
         }
     }
-    
+
+    private func judgeTutorial() {
+        if UserDefaults.standard.bool(forKey: "tutorial") == false {
+            UserDefaults.standard.set(true, forKey: "tutorial")
+            self.view.addSubview(self.tutorialView)
+            self.tutorialView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            self.tutorialView.alpha = 1
+            self.tutorialView.isHidden = false
+        }
+    }
+
     private func setUI() {
         self.view.backgroundColor = Pallete.Light.background.color
         
@@ -230,6 +248,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.addSubview(self.secondTitleLabel)
         self.view.addSubview(self.reportButton)
         self.view.addSubview(self.emptyView)
+
         self.navigationView.addSubview(self.likeListButton)
         self.navigationView.addSubview(self.myInfoButton)
         
@@ -276,10 +295,6 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
-//        self.refreshGuestListButton.snp.makeConstraints { make in
-//            make.top.equalTo(self.emptyView.imageView.snp.bottom).offset(29)
-//            make.centerX.equalToSuperview()
-//        }
     }
 
     private func setNotificationCenter() {
@@ -334,8 +349,8 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             self.firstTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
             self.secondTitleLabel.isHidden = viewModel.guestCardViewModels.isEmpty
             self.emptyView.isHidden = !viewModel.guestCardViewModels.isEmpty
-//            self.refreshGuestListButton.isHidden = !viewModel.guestCardViewModels.isEmpty
             self.reportButton.isHidden = viewModel.guestCardViewModels.isEmpty
+            self.judgeTutorial()
         }
     }
 

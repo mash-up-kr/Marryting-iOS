@@ -5,7 +5,7 @@ import ProjectDescriptionHelpers
 
 let infoPlist: [String: InfoPlist.Value] = [
   "CFBundleDevelopmentRegion": "ko_KR",
-  "CFBundleShortVersionString": "1.0.2",
+  "CFBundleShortVersionString": "1.0.3",
   "CFBundleVersion": "1",
   "CFBundleDisplayName": "메리팅",
   "UIMainStoryboardFile": "",
