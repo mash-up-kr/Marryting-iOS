@@ -5,8 +5,8 @@ import ProjectDescriptionHelpers
 
 let infoPlist: [String: InfoPlist.Value] = [
   "CFBundleDevelopmentRegion": "ko_KR",
-  "CFBundleShortVersionString": "1.0.1",
-  "CFBundleVersion": "3",
+  "CFBundleShortVersionString": "1.0.2",
+  "CFBundleVersion": "1",
   "CFBundleDisplayName": "메리팅",
   "UIMainStoryboardFile": "",
   "UILaunchStoryboardName": "LaunchScreen",

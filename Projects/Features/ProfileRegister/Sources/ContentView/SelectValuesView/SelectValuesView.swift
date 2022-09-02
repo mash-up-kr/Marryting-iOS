@@ -32,6 +32,7 @@ final class SelectValuesView: UIView {
         tableView.contentInset.bottom = 108 - 32 // 32: cell안의 아래 빈 공간
         tableView.showsVerticalScrollIndicator = false
         tableView.allowsSelection = false
+        tableView.separatorStyle = .none
         return tableView
     }()
     
