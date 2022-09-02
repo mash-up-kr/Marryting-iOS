@@ -67,7 +67,19 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         let v = UIView()
         return v
     }()
-    
+
+    lazy var starImageView1: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_star)
+        return v
+    }()
+
+    lazy var starImageView2: UIImageView = {
+        let v = UIImageView()
+        v.image = .create(.ic_star)
+        return v
+    }()
+
     lazy var likeListButton: UIImageView = {
         let v = UIImageView()
         v.image = .create(.ic_heart)
@@ -212,6 +224,8 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         self.view.backgroundColor = Pallete.Light.background.color
         
         self.view.addSubview(self.navigationView)
+        self.view.addSubview(self.starImageView1)
+        self.view.addSubview(self.starImageView2)
         self.view.addSubview(self.firstTitleLabel)
         self.view.addSubview(self.secondTitleLabel)
         self.view.addSubview(self.reportButton)
@@ -223,6 +237,16 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(56)
+        }
+        self.starImageView1.snp.makeConstraints { make in
+            make.trailing.equalTo(self.secondTitleLabel.snp.leading)
+            make.bottom.equalTo(self.firstTitleLabel.snp.firstBaseline)
+            make.width.height.equalTo(40)
+        }
+        self.starImageView2.snp.makeConstraints { make in
+            make.leading.equalTo(self.firstTitleLabel.snp.trailing).offset(18)
+            make.centerY.equalTo(self.secondTitleLabel.snp.bottom).offset(-10)
+            make.width.height.equalTo(40)
         }
         self.firstTitleLabel.snp.makeConstraints { make in
             make.top.equalTo(self.navigationView.snp.bottom).offset(30)
