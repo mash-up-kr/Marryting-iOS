@@ -64,7 +64,7 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
         let v = UILabel()
         var attributedText: NSMutableAttributedString = .init(string: "")
         attributedText.append(NSAttributedString(string: "인증코드", attributes: [
-            .font: UIFont.h3(), .foregroundColor: Pallete.Light.subGreen.color ?? UIColor.white
+            .font: UIFont.h3(), .foregroundColor: Pallete.Dark.subGreen.color ?? UIColor.white
         ]))
         attributedText.append(NSAttributedString(string: "를\n입력해주세요", attributes: [
             .font: UIFont.h3(), .foregroundColor: UIColor.white
@@ -77,7 +77,8 @@ public final class AuthCodeViewController: UIViewController, AuthCodeDisplayLogi
     lazy var subtitleLabel: UILabel = {
         let v = UILabel()
         v.font = .body1()
-        v.textColor = Pallete.Light.grey300.color
+        v.textColor = Pallete.Dark.grey300.color
+        v.text = "인증코드는 숫자와 문자로 이루어져 있어요"
         return v
     }()
     
