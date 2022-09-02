@@ -15,6 +15,7 @@ struct GuestCardViewModel {
     var id: Int
     var imageUrl: String
     var name: String
+    var age: String
     var info: String
     var isLiked: Bool
 }
@@ -38,6 +39,13 @@ final class GuestCardView: UIView {
         let v = UILabel()
         v.font = .h3()
         v.textColor = .white
+        return v
+    }()
+    
+    lazy var ageLabel: UILabel = {
+        let v = UILabel()
+        v.font = .h4()
+        v.textColor = Pallete.Light.grey100.color?.withAlphaComponent(0.4)
         return v
     }()
     
@@ -80,9 +88,8 @@ final class GuestCardView: UIView {
     
     var viewModel: GuestCardViewModel? {
         didSet {
-            // TODO: Image KF 사용 로드
-            _ = self.profileImageView
             self.nameLabel.text = viewModel?.name ?? ""
+            self.ageLabel.text = viewModel?.age ?? ""
             self.infoLabel.text = viewModel?.info ?? ""
             if let urlString = viewModel?.imageUrl,
                let url = URL(string: urlString) {
@@ -118,6 +125,7 @@ final class GuestCardView: UIView {
         self.addSubview(self.profileImageView)
         self.addSubview(self.likeButton)
         self.profileImageView.addSubview(self.nameLabel)
+        self.profileImageView.addSubview(self.ageLabel)
         self.profileImageView.addSubview(self.infoLabel)
         
         self.profileImageView.snp.makeConstraints { make in
@@ -134,6 +142,10 @@ final class GuestCardView: UIView {
         self.nameLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().inset(24)
             make.bottom.equalTo(self.infoLabel.snp.top).offset(2)
+        }
+        self.ageLabel.snp.makeConstraints { make in
+            make.leading.equalTo(self.nameLabel.snp.trailing).offset(4)
+            make.top.equalTo(self.nameLabel.snp.top).offset(4)
         }
         self.infoLabel.snp.makeConstraints { make in
             make.leading.bottom.equalToSuperview().inset(24)

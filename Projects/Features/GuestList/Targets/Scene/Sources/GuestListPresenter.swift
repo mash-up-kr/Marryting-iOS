@@ -34,6 +34,7 @@ class GuestListPresenter: GuestListPresentationLogic {
                             id: $0.user.id,
                             imageUrl: $0.user.picture,
                             name: $0.user.name,
+                            age: "\($0.user.age)",
                             info: "\($0.user.address)  ∙  \($0.user.career)",
                             isLiked: $0.isLiked
                         )
