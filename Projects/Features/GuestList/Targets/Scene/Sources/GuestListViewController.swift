@@ -311,7 +311,7 @@ public class GuestListViewController: UIViewController, GuestListDisplayLogic {
         DispatchQueue.main.async {
             self.guestSwipeableView.removeFromSuperview()
             self.guestSwipeableView = ZLSwipeableView()
-            self.guestSwipeableView.allowedDirection = .Horizontal
+            self.guestSwipeableView.allowedDirection = .All
             if self.guestCardViewModels.count == 1 {
                 self.guestSwipeableView.numberOfActiveView = 1
                 self.guestSwipeableView.allowedDirection = .None
