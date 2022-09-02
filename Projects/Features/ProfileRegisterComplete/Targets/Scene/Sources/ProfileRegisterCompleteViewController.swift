@@ -162,9 +162,6 @@ public final class ProfileRegisterCompleteViewController: UIViewController, Prof
             make.bottom.equalToSuperview().inset(40)
             make.centerX.equalToSuperview()
         }
-        
-        let i = UIImage.gifImageWithName("goodLuckGIF")
-        animationView.image = i
     }
 
     // MARK: Display Logic

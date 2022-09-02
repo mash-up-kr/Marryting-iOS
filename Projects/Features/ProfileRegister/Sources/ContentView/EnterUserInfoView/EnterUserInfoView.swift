@@ -41,9 +41,10 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         return stackView
     }()
     
-    let nameTextField: UserInfoTextField = {
+    lazy var nameTextField: UserInfoTextField = {
         let textField = UserInfoTextField()
         textField.type = .name
+        textField.returnKeyType = .continue
         return textField
     }()
     
@@ -61,15 +62,17 @@ final class EnterUserInfoView: UIView, ProfileRegisterContentView {
         return textField
     }()
     
-    let addressTextField: UserInfoTextField = {
+    lazy var addressTextField: UserInfoTextField = {
         let textField = UserInfoTextField()
         textField.type = .address
+        textField.returnKeyType = .continue
         return textField
     }()
     
-    let jobTextField: UserInfoTextField = {
+    lazy var jobTextField: UserInfoTextField = {
         let textField = UserInfoTextField()
         textField.type = .job
+        textField.returnKeyType = .done
         return textField
     }()
     
