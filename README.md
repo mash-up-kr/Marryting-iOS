@@ -1,8 +1,6 @@
-# Marryting Project (메리팅)
 
-
-
-<p align="center"> 결혼식 소개팅 서비스 "결혼식은 너의 시작이자, 나의 시작이야"</p>
+<h1 align="center">👰‍♀️ 결혼식 소개팅 서비스, 메리팅 🤵</h1>
+<h3 align="center">"결혼식은 너의 시작이자, 나의 시작이야"</h3>
 
 <br />
 
