@@ -32,9 +32,7 @@
 
 ### ✨ 매칭 !
 
-**설명**
-
-<img width="600" alt="표지5" src="https://user-images.githubusercontent.com/56102421/191398446-0e7a98f2-72c0-4e5c-b6ea-ae555d542b0e.png">
+**사진 생략**
 
 ## Tuist Build 
 
@@ -141,9 +139,9 @@ Projects
             <a href="https://github.com/p41155a"><I>p41155a</I></a>
         </td>
         <td>
-            <img src="https://github.com/wody-d.png?size=120">
+            <img src="https://github.com/samsung-ga.png?size=120">
             <br>
-            <a href="https://github.com/wody-d"><I>wody-d</I></a>
+            <a href="https://github.com/samsung-ga"><I>samsung-ga</I></a>
         </td>
     </tr>
 </table>
